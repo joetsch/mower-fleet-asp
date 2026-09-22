@@ -1,0 +1,119 @@
+scenario,seed_tag,area,requested_start,requested_mower,outcome,detail,n_kept_total,parent_optimal,n_kept_relevant,refute_status,refute_time_s,raw_core_size,min_core_size,min_steps,min_time_s,min_hit_budget,stability_repeats,stable,pruning_missed
+balanced-four-hole,seed0,H1_FW,159,M4,blocked_statically,overlaps this area's own kept task at hour 142,6,False,0,,,,,0,0.0,False,0,,False
+balanced-four-hole,seed0,H1_SR1,23,M1,free_but_untaken,could have been kept alongside everything else,6,False,2,sat,6.796369583986234,,,0,0.0,False,0,,False
+balanced-four-hole,seed0,H1_SR1,54,M1,blocked_statically,mower 'M1' already serving 'H2_FW' at that hour,6,False,0,,,,,0,0.0,False,0,,False
+balanced-four-hole,seed0,H1_SR2,149,M5,blocked_statically,mower 'M5' already serving 'H1_SR2' at that hour,6,False,0,,,,,0,0.0,False,0,,False
+balanced-four-hole,seed0,H2_FW,54,M1,free_but_untaken,could have been kept alongside everything else,6,False,3,sat,4.282175499945879,,,0,0.0,False,0,,False
+balanced-four-hole,seed0,H2_FW,32,M3,free_but_untaken,could have been kept alongside everything else,6,False,2,sat,3.001515374984592,,,0,0.0,False,0,,False
+balanced-four-hole,seed0,H2_SR2,89,M1,free_but_untaken,could have been kept alongside everything else,6,False,2,sat,0.07927262492012233,,,0,0.0,False,0,,False
+balanced-four-hole,seed0,H2_SR2,68,M3,free_but_untaken,could have been kept alongside everything else,6,False,0,sat,0.08092208293965086,,,0,0.0,False,0,,False
+balanced-four-hole,seed0,H3_FW,7,M4,free_but_untaken,could have been kept alongside everything else,6,False,1,sat,3.8496129590203054,,,0,0.0,False,0,,False
+balanced-four-hole,seed0,H3_FW,51,M2,free_but_untaken,could have been kept alongside everything else,6,False,3,sat,1.607600999996066,,,0,0.0,False,0,,False
+balanced-four-hole,seed0,H3_FW,134,M4,free_but_untaken,could have been kept alongside everything else,6,False,1,sat,0.08292095805518329,,,0,0.0,False,0,,False
+balanced-four-hole,seed0,H3_FW,152,M2,blocked_statically,mower 'M2' already serving 'H1_FW' at that hour,6,False,0,,,,,0,0.0,False,0,,False
+balanced-four-hole,seed0,H3_SR1,130,M5,free_but_untaken,could have been kept alongside everything else,6,False,1,sat,0.6948117919964716,,,0,0.0,False,0,,False
+balanced-four-hole,seed0,H3_SR1,114,M1,blocked_statically,mower 'M1' already serving 'H2_FW' at that hour,6,False,0,,,,,0,0.0,False,0,,False
+balanced-four-hole,seed0,H3_SR2,153,M4,free_but_untaken,could have been kept alongside everything else,6,False,0,sat,0.46771108300890774,,,0,0.0,False,0,,False
+balanced-four-hole,seed0,H3_SR3,167,M3,free_but_untaken,could have been kept alongside everything else,6,False,0,sat,0.08547808299772441,,,0,0.0,False,0,,False
+balanced-four-hole,seed0,H3_SR3,97,M3,free_but_untaken,could have been kept alongside everything else,6,False,0,sat,0.8431911249645054,,,0,0.0,False,0,,False
+balanced-four-hole,seed0,H3_SR3,1,M3,free_but_untaken,could have been kept alongside everything else,6,False,0,sat,0.20596729195676744,,,0,0.0,False,0,,False
+balanced-four-hole,seed0,H4_FW,1,M1,free_but_untaken,could have been kept alongside everything else,6,False,2,sat,1.0172206250135787,,,0,0.0,False,0,,False
+balanced-four-hole,seed0,H4_SR1,7,M2,free_but_untaken,could have been kept alongside everything else,6,False,3,sat,1.9882787090609781,,,0,0.0,False,0,,False
+balanced-four-hole,seed0,H4_SR1,94,M2,blocked_statically,mower 'M2' already serving 'H3_FW' at that hour,6,False,0,,,,,0,0.0,False,0,,False
+balanced-four-hole,seed0,H4_SR1,161,M4,free_but_untaken,could have been kept alongside everything else,6,False,0,sat,0.9306869999272749,,,0,0.0,False,0,,False
+balanced-four-hole,seed0,H4_SR2,155,M3,free_but_untaken,could have been kept alongside everything else,6,False,0,sat,0.634045957995113,,,0,0.0,False,0,,False
+balanced-four-hole,seed0,H4_SR3,57,M4,free_but_untaken,could have been kept alongside everything else,6,False,1,sat,0.48410441604210064,,,0,0.0,False,0,,False
+balanced-four-hole,seed0,H4_SR3,32,M4,free_but_untaken,could have been kept alongside everything else,6,False,1,sat,0.38228899997193366,,,0,0.0,False,0,,False
+balanced-four-hole,seed2,H1_FW,71,M3,free_but_untaken,could have been kept alongside everything else,4,False,3,sat,4.187696209002752,,,0,0.0,False,0,,False
+balanced-four-hole,seed2,H1_FW,165,M2,free_but_untaken,could have been kept alongside everything else,4,False,2,sat,0.07354004099033773,,,0,0.0,False,0,,False
+balanced-four-hole,seed2,H1_FW,112,M4,free_but_untaken,could have been kept alongside everything else,4,False,1,sat,3.754573874990456,,,0,0.0,False,0,,False
+balanced-four-hole,seed2,H1_SR1,22,M1,free_but_untaken,could have been kept alongside everything else,4,False,0,sat,0.85002066596644,,,0,0.0,False,0,,False
+balanced-four-hole,seed2,H1_SR1,3,M1,free_but_untaken,could have been kept alongside everything else,4,False,0,sat,0.07762404199456796,,,0,0.0,False,0,,False
+balanced-four-hole,seed2,H1_SR2,118,M5,free_but_untaken,could have been kept alongside everything else,4,False,0,sat,0.3544184999773279,,,0,0.0,False,0,,False
+balanced-four-hole,seed2,H2_FW,50,M2,free_but_untaken,could have been kept alongside everything else,4,False,3,sat,2.450346624071244,,,0,0.0,False,0,,False
+balanced-four-hole,seed2,H2_FW,47,M3,blocked_statically,mower 'M3' already serving 'H1_FW' at that hour,4,False,0,,,,,0,0.0,False,0,,False
+balanced-four-hole,seed2,H2_FW,150,M1,blocked_statically,overlaps this area's own kept task at hour 148,4,False,0,,,,,0,0.0,False,0,,False
+balanced-four-hole,seed2,H2_FW,53,M1,free_but_untaken,could have been kept alongside everything else,4,False,2,sat,0.6293084579519928,,,0,0.0,False,0,,False
+balanced-four-hole,seed2,H2_SR1,124,M3,free_but_untaken,could have been kept alongside everything else,4,False,3,sat,1.111567915941123,,,0,0.0,False,0,,False
+balanced-four-hole,seed2,H2_SR1,100,M1,free_but_untaken,could have been kept alongside everything else,4,False,0,sat,0.6425405000336468,,,0,0.0,False,0,,False
+balanced-four-hole,seed2,H2_SR1,129,M3,free_but_untaken,could have been kept alongside everything else,4,False,3,sat,0.07797641801880673,,,0,0.0,False,0,,False
+balanced-four-hole,seed2,H3_FW,79,M5,free_but_untaken,could have been kept alongside everything else,4,False,0,sat,0.5774712919956073,,,0,0.0,False,0,,False
+balanced-four-hole,seed2,H3_SR1,124,M1,free_but_untaken,could have been kept alongside everything else,4,False,0,sat,0.07559229101752862,,,0,0.0,False,0,,False
+balanced-four-hole,seed2,H3_SR2,93,M2,free_but_untaken,could have been kept alongside everything else,4,False,1,sat,0.0760433339746669,,,0,0.0,False,0,,False
+balanced-four-hole,seed2,H3_SR2,103,M3,free_but_untaken,could have been kept alongside everything else,4,False,3,sat,0.7635648330324329,,,0,0.0,False,0,,False
+balanced-four-hole,seed2,H3_SR3,144,M3,blocked_statically,mower 'M3' already serving 'H2_FW' at that hour,4,False,0,,,,,0,0.0,False,0,,False
+balanced-four-hole,seed2,H4_FW,140,M3,free_but_untaken,could have been kept alongside everything else,4,False,4,sat,0.03910704195732251,,,0,0.0,False,0,,False
+balanced-four-hole,seed2,H4_FW,75,M1,free_but_untaken,could have been kept alongside everything else,4,False,1,sat,0.9399771669995971,,,0,0.0,False,0,,False
+balanced-four-hole,seed2,H4_SR1,93,M4,free_but_untaken,could have been kept alongside everything else,4,False,0,sat,0.7720080409781076,,,0,0.0,False,0,,False
+balanced-four-hole,seed2,H4_SR2,167,M3,free_but_untaken,could have been kept alongside everything else,4,False,3,sat,0.26718399999663234,,,0,0.0,False,0,,False
+balanced-four-hole,seed2,H4_SR2,164,M2,free_but_untaken,could have been kept alongside everything else,4,False,1,sat,0.08403208298841491,,,0,0.0,False,0,,False
+balanced-four-hole,seed2,H4_SR3,147,M5,free_but_untaken,could have been kept alongside everything else,4,False,0,sat,0.9804442910244688,,,0,0.0,False,0,,False
+balanced-four-hole,seed2,H4_SR3,82,M3,free_but_untaken,could have been kept alongside everything else,4,False,3,sat,0.43894599901977926,,,0,0.0,False,0,,False
+six-hole-course,seed0,H2_FW,73,M3,conflicts_with,conflicts with 2 kept task(s),28,False,5,unsat,0.20964854100020602,29,2,42,0.9473749560420401,False,5,True,True
+six-hole-course,seed0,H2_FW,26,M3,conflicts_with,conflicts with 2 kept task(s),28,False,5,unsat,0.31232049904065207,29,2,42,0.8388458718545735,False,5,True,True
+six-hole-course,seed0,H2_FW,150,M3,blocked_statically,mower 'M3' already serving 'H3_SR2' at that hour,28,False,0,,,,,0,0.0,False,0,,False
+six-hole-course,seed0,H2_FW,150,M3,blocked_statically,mower 'M3' already serving 'H3_SR2' at that hour,28,False,0,,,,,0,0.0,False,0,,False
+six-hole-course,seed0,H2_SR1,130,M5,conflicts_with,conflicts with 2 kept task(s),28,False,6,unsat,0.0976866670534946,29,2,42,0.866382542939391,False,5,True,True
+six-hole-course,seed0,H3_SR1,96,M3,conflicts_with,conflicts with 2 kept task(s),28,False,5,unsat,0.134655999019742,29,2,42,0.8606542870984413,False,5,True,True
+six-hole-course,seed0,H3_SR1,130,M1,blocked_statically,mower 'M1' already serving 'H1_SR1' at that hour,28,False,0,,,,,0,0.0,False,0,,False
+six-hole-course,seed0,H3_SR1,36,M5,blocked_statically,mower 'M5' already serving 'H1_FW' at that hour,28,False,0,,,,,0,0.0,False,0,,False
+six-hole-course,seed0,H3_SR2,11,M5,conflicts_with,conflicts with 2 kept task(s),28,False,7,unsat,0.15276099898619577,29,2,42,0.9148885441827588,False,5,True,True
+six-hole-course,seed0,H3_SR2,90,M5,blocked_statically,mower 'M5' already serving 'H1_SR1' at that hour,28,False,0,,,,,0,0.0,False,0,,False
+six-hole-course,seed0,H4_FW,155,M3,blocked_statically,mower 'M3' already serving 'H3_SR2' at that hour,28,False,0,,,,,0,0.0,False,0,,False
+six-hole-course,seed0,H4_FW,159,M3,conflicts_with,conflicts with 2 kept task(s),28,False,5,unsat,0.3829888330074027,29,2,42,0.874465708155185,False,5,True,True
+six-hole-course,seed0,H4_FW,84,M3,conflicts_with,conflicts with 2 kept task(s),28,False,5,unsat,0.04950004199054092,29,2,42,0.8749247461091727,False,5,True,True
+six-hole-course,seed0,H4_FW,0,M5,conflicts_with,conflicts with 2 kept task(s),28,False,6,unsat,0.10806674906052649,29,2,42,0.8792032548808493,False,5,True,True
+six-hole-course,seed0,H4_SR1,80,M5,conflicts_with,conflicts with 2 kept task(s),28,False,6,unsat,0.27047258301172405,29,2,42,0.8838129958603531,False,5,True,True
+six-hole-course,seed0,H4_SR2,69,M1,conflicts_with,conflicts with 2 kept task(s),28,False,1,unsat,0.1840154569945298,29,2,42,0.8976922942092642,False,5,True,True
+six-hole-course,seed0,H4_SR2,28,M1,conflicts_with,conflicts with 2 kept task(s),28,False,1,unsat,0.0496585420332849,29,2,42,0.8839524130453356,False,5,True,True
+six-hole-course,seed0,H4_SR3,117,M3,blocked_statically,mower 'M3' already serving 'H1_FW' at that hour,28,False,0,,,,,0,0.0,False,0,,False
+six-hole-course,seed0,H5_FW,106,M4,blocked_statically,mower 'M4' already serving 'H5_SR1' at that hour,28,False,0,,,,,0,0.0,False,0,,False
+six-hole-course,seed0,H5_FW,153,M4,blocked_statically,mower 'M4' already serving 'H5_SR1' at that hour,28,False,0,,,,,0,0.0,False,0,,False
+six-hole-course,seed0,H5_FW,35,M4,blocked_statically,mower 'M4' already serving 'H6_SR1' at that hour,28,False,0,,,,,0,0.0,False,0,,False
+six-hole-course,seed0,H5_SR1,147,M2,blocked_statically,overlaps this area's own kept task at hour 154,28,False,0,,,,,0,0.0,False,0,,False
+six-hole-course,seed0,H5_SR3,165,M2,conflicts_with,conflicts with 2 kept task(s),28,False,8,unsat,0.01929958298569545,9,2,14,0.39990070794010535,False,5,True,False
+six-hole-course,seed0,H6_FW,111,M2,blocked_statically,mower 'M2' already serving 'H5_SR2' at that hour,28,False,0,,,,,0,0.0,False,0,,False
+six-hole-course,seed0,H6_FW,119,M4,conflicts_with,conflicts with 2 kept task(s),28,False,11,unsat,0.17564954108092934,29,2,42,0.9116741262259893,False,5,True,True
+six-hole-course,seed0,H6_FW,117,M2,conflicts_with,conflicts with 2 kept task(s),28,False,6,unsat,0.01977633300703019,7,2,9,0.3045317920623347,False,5,True,False
+six-hole-course,seed1,H2_FW,96,M3,conflicts_with,conflicts with 2 kept task(s),41,False,12,unsat,0.09538133401656523,13,2,16,0.4500350001035258,False,5,True,False
+six-hole-course,seed1,H2_FW,162,M3,blocked_statically,mower 'M3' already serving 'H3_FW' at that hour,41,False,0,,,,,0,0.0,False,0,,False
+six-hole-course,seed1,H2_FW,5,M3,blocked_statically,mower 'M3' already serving 'H3_FW' at that hour,41,False,0,,,,,0,0.0,False,0,,False
+six-hole-course,seed1,H2_FW,147,M3,blocked_statically,mower 'M3' already serving 'H3_FW' at that hour,41,False,0,,,,,0,0.0,False,0,,False
+six-hole-course,seed1,H2_FW,28,M3,conflicts_with,conflicts with 2 kept task(s),41,False,12,unsat,0.01709004200529307,13,2,16,0.34165654197568074,False,5,True,False
+six-hole-course,seed1,H3_SR1,144,M1,conflicts_with,conflicts with 2 kept task(s),41,False,4,unsat,0.027910832955967635,5,2,8,0.41998970811255276,False,5,True,False
+six-hole-course,seed1,H4_FW,163,M5,blocked_statically,mower 'M5' already serving 'H2_SR1' at that hour,41,False,0,,,,,0,0.0,False,0,,False
+six-hole-course,seed1,H4_FW,158,M5,blocked_statically,mower 'M5' already serving 'H1_FW' at that hour,41,False,0,,,,,0,0.0,False,0,,False
+six-hole-course,seed1,H4_FW,110,M5,blocked_statically,mower 'M5' already serving 'H3_SR3' at that hour,41,False,0,,,,,0,0.0,False,0,,False
+six-hole-course,seed1,H4_FW,160,M3,blocked_statically,mower 'M3' already serving 'H3_FW' at that hour,41,False,0,,,,,0,0.0,False,0,,False
+six-hole-course,seed1,H4_SR3,93,M3,conflicts_with,conflicts with 2 kept task(s),41,False,12,unsat,0.009902582969516516,13,2,16,0.514926916861441,False,5,True,False
+six-hole-course,seed1,H5_FW,152,M4,conflicts_with,conflicts with 2 kept task(s),41,False,11,unsat,0.03863508300855756,12,2,17,0.4899530000402592,False,5,True,False
+six-hole-course,seed1,H5_SR2,35,M2,blocked_statically,mower 'M2' already serving 'H5_SR1' at that hour,41,False,0,,,,,0,0.0,False,0,,False
+six-hole-course,seed1,H5_SR2,82,M2,conflicts_with,conflicts with 2 kept task(s),41,False,3,unsat,0.05750183400232345,42,2,51,0.864564333925955,False,5,True,True
+six-hole-course,seed1,H5_SR2,133,M2,conflicts_with,conflicts with 2 kept task(s),41,False,3,unsat,0.05155199998989701,42,2,51,0.8397632465930656,False,5,True,True
+six-hole-course,seed1,H5_SR3,120,M2,blocked_statically,overlaps this area's own kept task at hour 125,41,False,0,,,,,0,0.0,False,0,,False
+six-hole-course,seed1,H6_FW,47,M2,blocked_statically,mower 'M2' already serving 'H5_SR1' at that hour,41,False,0,,,,,0,0.0,False,0,,False
+six-hole-course,seed1,H6_FW,59,M4,conflicts_with,conflicts with 2 kept task(s),41,False,11,unsat,0.009873750037513673,12,2,17,0.3968199170194566,False,5,True,False
+six-hole-course,seed1,H6_FW,104,M4,conflicts_with,conflicts with 2 kept task(s),41,False,11,unsat,0.009615458024200052,12,2,17,0.40634062519529834,False,5,True,False
+six-hole-course,seed1,H6_FW,67,M2,conflicts_with,conflicts with 2 kept task(s),41,False,3,unsat,0.04954837600234896,42,2,51,0.830574998864904,False,5,True,True
+six-hole-course,seed2,H1_FW,138,M3,conflicts_with,conflicts with 2 kept task(s),30,False,6,unsat,0.21619845897657797,31,2,71,2.334142457868438,False,5,True,True
+six-hole-course,seed2,H1_FW,62,M3,blocked_statically,mower 'M3' already serving 'H1_FW' at that hour,30,False,0,,,,,0,0.0,False,0,,False
+six-hole-course,seed2,H1_FW,15,M3,conflicts_with,conflicts with 2 kept task(s),30,False,6,unsat,0.17591633304255083,31,2,71,2.2927432478172705,False,5,True,True
+six-hole-course,seed2,H2_FW,26,M3,conflicts_with,conflicts with 2 kept task(s),30,False,6,unsat,0.25817749998532236,31,2,71,2.758665045024827,False,5,True,True
+six-hole-course,seed2,H2_FW,7,M3,blocked_statically,mower 'M3' already serving 'H3_SR2' at that hour,30,False,0,,,,,0,0.0,False,0,,False
+six-hole-course,seed2,H3_FW,134,M3,conflicts_with,conflicts with 2 kept task(s),30,False,6,unsat,0.15306333301123232,31,2,71,2.583980334806256,False,5,True,True
+six-hole-course,seed2,H3_FW,117,M3,conflicts_with,conflicts with 2 kept task(s),30,False,6,unsat,0.10718229203484952,31,2,71,2.3300308744073845,False,5,True,True
+six-hole-course,seed2,H3_SR1,16,M3,conflicts_with,conflicts with 2 kept task(s),30,False,6,unsat,0.3416516659781337,31,2,71,2.2633200410054997,False,5,True,True
+six-hole-course,seed2,H3_SR1,20,M5,conflicts_with,conflicts with 2 kept task(s),30,False,6,unsat,0.010203084035310894,7,2,12,0.38196045701624826,False,5,True,False
+six-hole-course,seed2,H4_FW,1,M5,conflicts_with,conflicts with 2 kept task(s),30,False,6,unsat,0.010310415993444622,7,2,12,0.4026956248562783,False,5,True,False
+six-hole-course,seed2,H4_FW,97,M3,blocked_statically,mower 'M3' already serving 'H2_FW' at that hour,30,False,0,,,,,0,0.0,False,0,,False
+six-hole-course,seed2,H4_FW,44,M3,blocked_statically,mower 'M3' already serving 'H2_FW' at that hour,30,False,0,,,,,0,0.0,False,0,,False
+six-hole-course,seed2,H4_SR2,65,M5,conflicts_with,conflicts with 2 kept task(s),30,False,7,unsat,0.010469417029526085,8,2,15,0.4893017080030404,False,5,True,False
+six-hole-course,seed2,H4_SR3,64,M3,blocked_statically,mower 'M3' already serving 'H1_FW' at that hour,30,False,0,,,,,0,0.0,False,0,,False
+six-hole-course,seed2,H5_SR1,31,M4,conflicts_with,conflicts with 2 kept task(s),30,False,12,unsat,0.052673792000859976,31,2,71,2.1504753337358125,False,5,True,True
+six-hole-course,seed2,H5_SR2,36,M2,blocked_statically,mower 'M2' already serving 'H5_SR3' at that hour,30,False,0,,,,,0,0.0,False,0,,False
+six-hole-course,seed2,H6_FW,127,M4,blocked_statically,mower 'M4' already serving 'H5_SR3' at that hour,30,False,0,,,,,0,0.0,False,0,,False
+six-hole-course,seed2,H6_FW,36,M4,conflicts_with,conflicts with 2 kept task(s),30,False,13,unsat,0.10268424998503178,31,2,71,2.149324250931386,False,5,True,True
+six-hole-course,seed2,H6_SR1,33,M2,blocked_statically,mower 'M2' already serving 'H5_SR3' at that hour,30,False,0,,,,,0,0.0,False,0,,False
+six-hole-course,seed2,H6_SR1,146,M2,conflicts_with,conflicts with 2 kept task(s),30,False,3,unsat,0.05335674999514595,31,2,71,2.1199025809182785,False,5,True,True
+six-hole-course,seed2,H6_SR1,127,M4,blocked_statically,mower 'M4' already serving 'H5_SR3' at that hour,30,False,0,,,,,0,0.0,False,0,,False
+six-hole-course,seed2,H6_SR1,50,M2,conflicts_with,conflicts with 2 kept task(s),30,False,3,unsat,0.05915370798902586,31,2,71,2.1199997481890023,False,5,True,True

@@ -1,0 +1,343 @@
+{
+  "cost": [
+    1,
+    0,
+    0,
+    7,
+    2
+  ],
+  "tasks": [
+    {
+      "area": "Hole1_Fairway",
+      "end": 9,
+      "mower": "Mower A",
+      "start": 3,
+      "task": 1
+    },
+    {
+      "area": "Hole1_Fairway",
+      "end": 31,
+      "mower": "Mower A",
+      "start": 25,
+      "task": 2
+    },
+    {
+      "area": "Hole1_Fairway",
+      "end": 55,
+      "mower": "Mower A",
+      "start": 49,
+      "task": 3
+    },
+    {
+      "area": "Hole1_Fairway",
+      "end": 79,
+      "mower": "Mower A",
+      "start": 73,
+      "task": 4
+    },
+    {
+      "area": "Hole1_Fairway",
+      "end": 102,
+      "mower": "Mower A",
+      "start": 96,
+      "task": 5
+    },
+    {
+      "area": "Hole1_Fairway",
+      "end": 126,
+      "mower": "Mower A",
+      "start": 120,
+      "task": 6
+    },
+    {
+      "area": "Hole1_Fairway",
+      "end": 149,
+      "mower": "Mower A",
+      "start": 143,
+      "task": 7
+    },
+    {
+      "area": "Hole1_SemiroughA",
+      "end": 19,
+      "mower": "Mower A",
+      "start": 16,
+      "task": 1
+    },
+    {
+      "area": "Hole1_SemiroughA",
+      "end": 67,
+      "mower": "Mower A",
+      "start": 64,
+      "task": 2
+    },
+    {
+      "area": "Hole1_SemiroughA",
+      "end": 106,
+      "mower": "Mower A",
+      "start": 103,
+      "task": 3
+    },
+    {
+      "area": "Hole1_SemiroughA",
+      "end": 152,
+      "mower": "Mower A",
+      "start": 149,
+      "task": 4
+    },
+    {
+      "area": "Hole1_SemiroughB",
+      "end": 29,
+      "mower": "Mower B",
+      "start": 24,
+      "task": 1
+    },
+    {
+      "area": "Hole1_SemiroughB",
+      "end": 77,
+      "mower": "Mower B",
+      "start": 72,
+      "task": 2
+    },
+    {
+      "area": "Hole1_SemiroughB",
+      "end": 125,
+      "mower": "Mower B",
+      "start": 120,
+      "task": 3
+    },
+    {
+      "area": "Hole2_Fairway",
+      "end": 24,
+      "mower": "Mower A",
+      "start": 19,
+      "task": 1
+    },
+    {
+      "area": "Hole2_Fairway",
+      "end": 48,
+      "mower": "Mower A",
+      "start": 43,
+      "task": 2
+    },
+    {
+      "area": "Hole2_Fairway",
+      "end": 72,
+      "mower": "Mower A",
+      "start": 67,
+      "task": 3
+    },
+    {
+      "area": "Hole2_Fairway",
+      "end": 96,
+      "mower": "Mower A",
+      "start": 91,
+      "task": 4
+    },
+    {
+      "area": "Hole2_Fairway",
+      "end": 120,
+      "mower": "Mower A",
+      "start": 115,
+      "task": 5
+    },
+    {
+      "area": "Hole2_Fairway",
+      "end": 143,
+      "mower": "Mower A",
+      "start": 138,
+      "task": 6
+    },
+    {
+      "area": "Hole2_Fairway",
+      "end": 166,
+      "mower": "Mower A",
+      "start": 161,
+      "task": 7
+    },
+    {
+      "area": "Hole2_SemiroughA",
+      "end": 43,
+      "mower": "Mower A",
+      "start": 31,
+      "task": 1
+    },
+    {
+      "area": "Hole2_SemiroughA",
+      "end": 91,
+      "mower": "Mower A",
+      "start": 79,
+      "task": 2
+    },
+    {
+      "area": "Hole2_SemiroughA",
+      "end": 138,
+      "mower": "Mower A",
+      "start": 126,
+      "task": 3
+    },
+    {
+      "area": "Hole2_SemiroughC",
+      "end": 55,
+      "mower": "Mower C",
+      "start": 49,
+      "task": 1
+    },
+    {
+      "area": "Hole2_SemiroughC",
+      "end": 126,
+      "mower": "Mower C",
+      "start": 120,
+      "task": 2
+    },
+    {
+      "area": "Hole2_SemiroughC",
+      "end": 173,
+      "mower": "Mower C",
+      "start": 167,
+      "task": 3
+    },
+    {
+      "area": "Hole3_Fairway",
+      "end": 24,
+      "mower": "Mower C",
+      "start": 8,
+      "task": 1
+    },
+    {
+      "area": "Hole3_Fairway",
+      "end": 48,
+      "mower": "Mower C",
+      "start": 32,
+      "task": 2
+    },
+    {
+      "area": "Hole3_Fairway",
+      "end": 72,
+      "mower": "Mower C",
+      "start": 56,
+      "task": 3
+    },
+    {
+      "area": "Hole3_Fairway",
+      "end": 96,
+      "mower": "Mower C",
+      "start": 80,
+      "task": 4
+    },
+    {
+      "area": "Hole3_Fairway",
+      "end": 120,
+      "mower": "Mower C",
+      "start": 104,
+      "task": 5
+    },
+    {
+      "area": "Hole3_Fairway",
+      "end": 144,
+      "mower": "Mower C",
+      "start": 128,
+      "task": 6
+    },
+    {
+      "area": "Hole3_Fairway",
+      "end": 167,
+      "mower": "Mower C",
+      "start": 151,
+      "task": 7
+    },
+    {
+      "area": "Hole3_SemiroughB",
+      "end": 41,
+      "mower": "Mower D",
+      "start": 31,
+      "task": 1
+    },
+    {
+      "area": "Hole3_SemiroughB",
+      "end": 75,
+      "mower": "Mower D",
+      "start": 71,
+      "task": 2
+    },
+    {
+      "area": "Hole3_SemiroughB",
+      "end": 123,
+      "mower": "Mower D",
+      "start": 119,
+      "task": 3
+    },
+    {
+      "area": "Hole3_SemiroughC",
+      "end": 28,
+      "mower": "Mower C",
+      "start": 25,
+      "task": 1
+    },
+    {
+      "area": "Hole3_SemiroughC",
+      "end": 77,
+      "mower": "Mower C",
+      "start": 74,
+      "task": 2
+    },
+    {
+      "area": "Hole3_SemiroughC",
+      "end": 147,
+      "mower": "Mower C",
+      "start": 144,
+      "task": 3
+    }
+  ],
+  "violations": [
+    {
+      "area": "Hole1_Fairway",
+      "kind": "avoid_zone",
+      "task": 1
+    },
+    {
+      "area": "Hole1_Fairway",
+      "kind": "avoid_zone",
+      "task": 2
+    },
+    {
+      "area": "Hole1_Fairway",
+      "kind": "avoid_zone",
+      "task": 3
+    },
+    {
+      "area": "Hole1_Fairway",
+      "kind": "avoid_zone",
+      "task": 4
+    },
+    {
+      "area": "Hole1_Fairway",
+      "kind": "avoid_zone",
+      "task": 5
+    },
+    {
+      "area": "Hole1_Fairway",
+      "kind": "avoid_zone",
+      "task": 6
+    },
+    {
+      "area": "Hole1_Fairway",
+      "kind": "avoid_zone",
+      "task": 7
+    },
+    {
+      "area": "Hole2_Fairway",
+      "kind": "max_interval",
+      "task": 1
+    },
+    {
+      "area": "Hole1_Fairway",
+      "kind": "min_interval",
+      "task": 1
+    },
+    {
+      "area": "Hole1_SemiroughA",
+      "kind": "min_interval",
+      "task": 1
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+/* Anchored to the clicked bar in *page* coordinates, so it scrolls with the chart. */
+.task-popover {
+  position: absolute;
+  z-index: 20;
+  min-width: 190px;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+  box-shadow: 0 6px 20px rgb(0 0 0 / 18%);
+  font-size: 13px;
+}
+
+.task-popover-head {
+  margin: 0 0 8px;
+}
+
+.task-popover-field {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+
+.task-popover-field > span {
+  color: var(--text-secondary);
+  font-size: 12px;
+}

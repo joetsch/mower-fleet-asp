@@ -1,0 +1,58 @@
+[project]
+name = "fleetplanning"
+version = "0.1.0"
+description = "Interactive demonstrator for ASP-based (clingcon) weekly scheduling of a robotic mower fleet on a golf course."
+readme = "README.md"
+authors = [
+    { name = "Johannes Oetsch", email = "johannes.oetsch@ju.se" },
+]
+# clingcon ships wheels only up to CPython 3.11, so we cap the upper bound here.
+requires-python = ">=3.11,<3.12"
+dependencies = [
+    "clingo==5.8.2",
+    "clingcon==5.2.1.post2",
+    "fastapi>=0.115",
+    "uvicorn[standard]>=0.34",
+    "pydantic>=2.9",
+]
+
+
+[project.scripts]
+fleetplanning-api = "fleetplanning.api.app:run"
+
+[dependency-groups]
+dev = [
+    "pytest>=8.3",
+    "pytest-cov>=6.0",       # `uv run pytest --cov=fleetplanning` — measure the corpus
+    "pytest-timeout>=2.3",   # global per-test timeout — a hung solve fails, never hangs the run
+    "httpx2>=2.12.0",  # required by fastapi.testclient (starlette 1.x)
+    "ruff>=0.8",
+
+]
+
+[build-system]
+requires = ["uv_build>=0.12.3,<0.13.0"]
+build-backend = "uv_build"
+
+[tool.ruff]
+line-length = 100
+src = ["src", "tests"]
+# experiments/replan-pilot/analyse.py is the analysis script exactly as run: not linted.
+extend-exclude = ["experiments/replan-pilot"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+# Two tests need the generator provenance files (`<slug>.source.json`), which this
+# snapshot does not ship.
+addopts = "-ra --strict-markers --deselect tests/test_scenario_write.py::test_delete_removes_the_scenario_and_its_source --deselect tests/test_derived.py::test_load_factor_matches_the_generator_source"
+# Safety net: no single test should run this long. A bad solver build or an accidental
+# infinite loop (see docs/known-hazards.md) fails the run instead of hanging it. The
+# slowest legit test is the threads=1 solve at ~20 s.
+timeout = 180
+markers = [
+    "slow: exercises the real clingcon solver (seconds); skip with -m 'not slow'",
+    "contract: pins an assumption about the clingo/clingcon API or the encoding output (also slow)",
+]

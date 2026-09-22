@@ -1,0 +1,33 @@
+{
+  "scenarios": [
+    "balanced-four-hole",
+    "six-hole-course"
+  ],
+  "cells": "replayed from cells.json",
+  "base_seed": 1,
+  "fraction": 0.4,
+  "n_seeds": 3,
+  "time_limit_s": 20.0,
+  "refute_time_limit_s": 10.0,
+  "step_budget_s": 5.0,
+  "max_minimise_total_s": 15.0,
+  "stability_repeats": 5,
+  "opt_mode": "opt",
+  "skipped": [
+    "balanced-four-hole/seed1: no re-plan within 20 s"
+  ],
+  "explain_s_by_scenario": {
+    "balanced-four-hole": 412.5,
+    "six-hole-course": 373.2
+  },
+  "n_records": 118,
+  "generated_at": "2026-09-16T16:46:53.957813+00:00",
+  "host": "macOS-26.6.2-arm64-arm-64bit",
+  "tool_versions": {
+    "python": "3.11.15",
+    "clingo": "5.8.2",
+    "clingcon": "5.2.1.post2",
+    "numpy": "2.4.6",
+    "typer": "0.27.2"
+  }
+}

@@ -1,0 +1,995 @@
+{
+  "name": "scenario_0001",
+  "areas": [
+    {
+      "name": "H1_FW",
+      "type": "FAIRWAY",
+      "hole": 1,
+      "priority": 1,
+      "min_interval": 18,
+      "max_interval": 24,
+      "schedule": {
+        "Monday": {
+          "no_go": [
+            [
+              0,
+              2
+            ],
+            [
+              22,
+              0
+            ]
+          ],
+          "avoid": [
+            [
+              8,
+              20
+            ]
+          ]
+        },
+        "Tuesday": {
+          "no_go": [
+            [
+              0,
+              2
+            ],
+            [
+              22,
+              0
+            ]
+          ],
+          "avoid": [
+            [
+              8,
+              20
+            ]
+          ]
+        },
+        "Wednesday": {
+          "no_go": [
+            [
+              0,
+              2
+            ],
+            [
+              22,
+              0
+            ]
+          ],
+          "avoid": [
+            [
+              8,
+              20
+            ]
+          ]
+        },
+        "Thursday": {
+          "no_go": [
+            [
+              0,
+              2
+            ],
+            [
+              22,
+              0
+            ]
+          ],
+          "avoid": [
+            [
+              8,
+              20
+            ]
+          ]
+        },
+        "Friday": {
+          "no_go": [
+            [
+              0,
+              2
+            ],
+            [
+              22,
+              0
+            ]
+          ],
+          "avoid": [
+            [
+              8,
+              20
+            ]
+          ]
+        },
+        "Saturday": {
+          "no_go": [
+            [
+              0,
+              2
+            ],
+            [
+              22,
+              0
+            ]
+          ],
+          "avoid": [
+            [
+              8,
+              20
+            ]
+          ]
+        },
+        "Sunday": {
+          "no_go": [
+            [
+              0,
+              2
+            ],
+            [
+              22,
+              0
+            ]
+          ],
+          "avoid": [
+            [
+              8,
+              20
+            ]
+          ]
+        }
+      },
+      "size_m2": null,
+      "min_services": null,
+      "max_services": null
+    },
+    {
+      "name": "H1_SR1",
+      "type": "SEMIROUGH_B",
+      "hole": 1,
+      "priority": 3,
+      "min_interval": 39,
+      "max_interval": 48,
+      "schedule": {
+        "Monday": {
+          "no_go": [
+            [
+              1,
+              5
+            ]
+          ],
+          "avoid": []
+        },
+        "Tuesday": {
+          "no_go": [
+            [
+              1,
+              5
+            ]
+          ],
+          "avoid": []
+        },
+        "Wednesday": {
+          "no_go": [
+            [
+              1,
+              5
+            ]
+          ],
+          "avoid": []
+        },
+        "Thursday": {
+          "no_go": [
+            [
+              1,
+              5
+            ]
+          ],
+          "avoid": []
+        },
+        "Friday": {
+          "no_go": [
+            [
+              1,
+              5
+            ]
+          ],
+          "avoid": []
+        },
+        "Saturday": {
+          "no_go": [
+            [
+              1,
+              5
+            ]
+          ],
+          "avoid": []
+        },
+        "Sunday": {
+          "no_go": [
+            [
+              1,
+              5
+            ]
+          ],
+          "avoid": []
+        }
+      },
+      "size_m2": null,
+      "min_services": null,
+      "max_services": null
+    },
+    {
+      "name": "H2_FW",
+      "type": "FAIRWAY",
+      "hole": 2,
+      "priority": 1,
+      "min_interval": 18,
+      "max_interval": 24,
+      "schedule": {
+        "Monday": {
+          "no_go": [
+            [
+              0,
+              2
+            ],
+            [
+              22,
+              0
+            ]
+          ],
+          "avoid": [
+            [
+              8,
+              20
+            ]
+          ]
+        },
+        "Tuesday": {
+          "no_go": [
+            [
+              0,
+              2
+            ],
+            [
+              22,
+              0
+            ]
+          ],
+          "avoid": [
+            [
+              8,
+              20
+            ]
+          ]
+        },
+        "Wednesday": {
+          "no_go": [
+            [
+              0,
+              2
+            ],
+            [
+              22,
+              0
+            ]
+          ],
+          "avoid": [
+            [
+              8,
+              20
+            ]
+          ]
+        },
+        "Thursday": {
+          "no_go": [
+            [
+              0,
+              2
+            ],
+            [
+              22,
+              0
+            ]
+          ],
+          "avoid": [
+            [
+              8,
+              20
+            ]
+          ]
+        },
+        "Friday": {
+          "no_go": [
+            [
+              0,
+              2
+            ],
+            [
+              22,
+              0
+            ]
+          ],
+          "avoid": [
+            [
+              8,
+              20
+            ]
+          ]
+        },
+        "Saturday": {
+          "no_go": [
+            [
+              0,
+              2
+            ],
+            [
+              22,
+              0
+            ]
+          ],
+          "avoid": [
+            [
+              8,
+              20
+            ]
+          ]
+        },
+        "Sunday": {
+          "no_go": [
+            [
+              0,
+              2
+            ],
+            [
+              22,
+              0
+            ]
+          ],
+          "avoid": [
+            [
+              8,
+              20
+            ]
+          ]
+        }
+      },
+      "size_m2": null,
+      "min_services": null,
+      "max_services": null
+    },
+    {
+      "name": "H2_SR1",
+      "type": "SEMIROUGH_B",
+      "hole": 2,
+      "priority": 3,
+      "min_interval": 39,
+      "max_interval": 48,
+      "schedule": {
+        "Monday": {
+          "no_go": [
+            [
+              1,
+              5
+            ]
+          ],
+          "avoid": []
+        },
+        "Tuesday": {
+          "no_go": [
+            [
+              1,
+              5
+            ]
+          ],
+          "avoid": []
+        },
+        "Wednesday": {
+          "no_go": [
+            [
+              1,
+              5
+            ]
+          ],
+          "avoid": []
+        },
+        "Thursday": {
+          "no_go": [
+            [
+              1,
+              5
+            ]
+          ],
+          "avoid": []
+        },
+        "Friday": {
+          "no_go": [
+            [
+              1,
+              5
+            ]
+          ],
+          "avoid": []
+        },
+        "Saturday": {
+          "no_go": [
+            [
+              1,
+              5
+            ]
+          ],
+          "avoid": []
+        },
+        "Sunday": {
+          "no_go": [
+            [
+              1,
+              5
+            ]
+          ],
+          "avoid": []
+        }
+      },
+      "size_m2": null,
+      "min_services": null,
+      "max_services": null
+    },
+    {
+      "name": "H2_SR2",
+      "type": "SEMIROUGH_B",
+      "hole": 2,
+      "priority": 3,
+      "min_interval": 39,
+      "max_interval": 48,
+      "schedule": {
+        "Monday": {
+          "no_go": [
+            [
+              1,
+              5
+            ]
+          ],
+          "avoid": []
+        },
+        "Tuesday": {
+          "no_go": [
+            [
+              1,
+              5
+            ]
+          ],
+          "avoid": []
+        },
+        "Wednesday": {
+          "no_go": [
+            [
+              1,
+              5
+            ]
+          ],
+          "avoid": []
+        },
+        "Thursday": {
+          "no_go": [
+            [
+              1,
+              5
+            ]
+          ],
+          "avoid": []
+        },
+        "Friday": {
+          "no_go": [
+            [
+              1,
+              5
+            ]
+          ],
+          "avoid": []
+        },
+        "Saturday": {
+          "no_go": [
+            [
+              1,
+              5
+            ]
+          ],
+          "avoid": []
+        },
+        "Sunday": {
+          "no_go": [
+            [
+              1,
+              5
+            ]
+          ],
+          "avoid": []
+        }
+      },
+      "size_m2": null,
+      "min_services": null,
+      "max_services": null
+    },
+    {
+      "name": "H2_SR3",
+      "type": "SEMIROUGH_C",
+      "hole": 2,
+      "priority": 3,
+      "min_interval": 39,
+      "max_interval": 72,
+      "schedule": {
+        "Monday": {
+          "no_go": [
+            [
+              1,
+              5
+            ]
+          ],
+          "avoid": []
+        },
+        "Tuesday": {
+          "no_go": [
+            [
+              1,
+              5
+            ]
+          ],
+          "avoid": []
+        },
+        "Wednesday": {
+          "no_go": [
+            [
+              1,
+              5
+            ]
+          ],
+          "avoid": []
+        },
+        "Thursday": {
+          "no_go": [
+            [
+              1,
+              5
+            ]
+          ],
+          "avoid": []
+        },
+        "Friday": {
+          "no_go": [
+            [
+              1,
+              5
+            ]
+          ],
+          "avoid": []
+        },
+        "Saturday": {
+          "no_go": [
+            [
+              1,
+              5
+            ]
+          ],
+          "avoid": []
+        },
+        "Sunday": {
+          "no_go": [
+            [
+              1,
+              5
+            ]
+          ],
+          "avoid": []
+        }
+      },
+      "size_m2": null,
+      "min_services": null,
+      "max_services": null
+    },
+    {
+      "name": "H3_FW",
+      "type": "FAIRWAY",
+      "hole": 3,
+      "priority": 1,
+      "min_interval": 18,
+      "max_interval": 24,
+      "schedule": {
+        "Monday": {
+          "no_go": [
+            [
+              0,
+              2
+            ],
+            [
+              22,
+              0
+            ]
+          ],
+          "avoid": [
+            [
+              8,
+              20
+            ]
+          ]
+        },
+        "Tuesday": {
+          "no_go": [
+            [
+              0,
+              2
+            ],
+            [
+              22,
+              0
+            ]
+          ],
+          "avoid": [
+            [
+              8,
+              20
+            ]
+          ]
+        },
+        "Wednesday": {
+          "no_go": [
+            [
+              0,
+              2
+            ],
+            [
+              22,
+              0
+            ]
+          ],
+          "avoid": [
+            [
+              8,
+              20
+            ]
+          ]
+        },
+        "Thursday": {
+          "no_go": [
+            [
+              0,
+              2
+            ],
+            [
+              22,
+              0
+            ]
+          ],
+          "avoid": [
+            [
+              8,
+              20
+            ]
+          ]
+        },
+        "Friday": {
+          "no_go": [
+            [
+              0,
+              2
+            ],
+            [
+              22,
+              0
+            ]
+          ],
+          "avoid": [
+            [
+              8,
+              20
+            ]
+          ]
+        },
+        "Saturday": {
+          "no_go": [
+            [
+              0,
+              2
+            ],
+            [
+              22,
+              0
+            ]
+          ],
+          "avoid": [
+            [
+              8,
+              20
+            ]
+          ]
+        },
+        "Sunday": {
+          "no_go": [
+            [
+              0,
+              2
+            ],
+            [
+              22,
+              0
+            ]
+          ],
+          "avoid": [
+            [
+              8,
+              20
+            ]
+          ]
+        }
+      },
+      "size_m2": null,
+      "min_services": null,
+      "max_services": null
+    },
+    {
+      "name": "H3_SR1",
+      "type": "SEMIROUGH_A",
+      "hole": 3,
+      "priority": 2,
+      "min_interval": 39,
+      "max_interval": 48,
+      "schedule": {
+        "Monday": {
+          "no_go": [
+            [
+              1,
+              5
+            ]
+          ],
+          "avoid": []
+        },
+        "Tuesday": {
+          "no_go": [
+            [
+              1,
+              5
+            ]
+          ],
+          "avoid": []
+        },
+        "Wednesday": {
+          "no_go": [
+            [
+              1,
+              5
+            ]
+          ],
+          "avoid": []
+        },
+        "Thursday": {
+          "no_go": [
+            [
+              1,
+              5
+            ]
+          ],
+          "avoid": []
+        },
+        "Friday": {
+          "no_go": [
+            [
+              1,
+              5
+            ]
+          ],
+          "avoid": []
+        },
+        "Saturday": {
+          "no_go": [
+            [
+              1,
+              5
+            ]
+          ],
+          "avoid": []
+        },
+        "Sunday": {
+          "no_go": [
+            [
+              1,
+              5
+            ]
+          ],
+          "avoid": []
+        }
+      },
+      "size_m2": null,
+      "min_services": null,
+      "max_services": null
+    }
+  ],
+  "mowers": [
+    {
+      "name": "M1",
+      "can_mow": [
+        "H1_FW",
+        "H1_SR1",
+        "H2_FW",
+        "H2_SR1",
+        "H2_SR2",
+        "H2_SR3"
+      ],
+      "model": null,
+      "area_capacity_m2_per_day": null
+    },
+    {
+      "name": "M2",
+      "can_mow": [
+        "H1_SR1",
+        "H2_SR2",
+        "H2_SR3",
+        "H3_SR1"
+      ],
+      "model": null,
+      "area_capacity_m2_per_day": null
+    },
+    {
+      "name": "M3",
+      "can_mow": [
+        "H1_SR1",
+        "H2_FW",
+        "H2_SR2",
+        "H2_SR3",
+        "H3_SR1"
+      ],
+      "model": null,
+      "area_capacity_m2_per_day": null
+    },
+    {
+      "name": "M4",
+      "can_mow": [
+        "H2_SR3",
+        "H3_FW",
+        "H3_SR1"
+      ],
+      "model": null,
+      "area_capacity_m2_per_day": null
+    }
+  ],
+  "history": [
+    {
+      "area": "H1_FW",
+      "mower": "M1",
+      "start": -55,
+      "completion": -20
+    },
+    {
+      "area": "H1_SR1",
+      "mower": "M2",
+      "start": -9,
+      "completion": 5
+    },
+    {
+      "area": "H2_FW",
+      "mower": "M1",
+      "start": -18,
+      "completion": -2
+    },
+    {
+      "area": "H2_SR1",
+      "mower": "M1",
+      "start": -20,
+      "completion": -13
+    },
+    {
+      "area": "H2_SR2",
+      "mower": "M1",
+      "start": -19,
+      "completion": -13
+    },
+    {
+      "area": "H2_SR3",
+      "mower": "M3",
+      "start": -64,
+      "completion": -55
+    },
+    {
+      "area": "H3_FW",
+      "mower": "M4",
+      "start": -27,
+      "completion": -19
+    },
+    {
+      "area": "H3_SR1",
+      "mower": "M3",
+      "start": -24,
+      "completion": -11
+    }
+  ],
+  "horizon_hours": 168,
+  "horizon_start_hour": 13,
+  "duration_seed": 0,
+  "base_durations": [
+    {
+      "area": "H1_FW",
+      "mower": "M1",
+      "hours": 35
+    },
+    {
+      "area": "H1_SR1",
+      "mower": "M1",
+      "hours": 14
+    },
+    {
+      "area": "H2_FW",
+      "mower": "M1",
+      "hours": 16
+    },
+    {
+      "area": "H2_SR1",
+      "mower": "M1",
+      "hours": 7
+    },
+    {
+      "area": "H2_SR2",
+      "mower": "M1",
+      "hours": 6
+    },
+    {
+      "area": "H2_SR3",
+      "mower": "M1",
+      "hours": 9
+    },
+    {
+      "area": "H1_SR1",
+      "mower": "M2",
+      "hours": 14
+    },
+    {
+      "area": "H2_SR2",
+      "mower": "M2",
+      "hours": 6
+    },
+    {
+      "area": "H2_SR3",
+      "mower": "M2",
+      "hours": 9
+    },
+    {
+      "area": "H3_SR1",
+      "mower": "M2",
+      "hours": 13
+    },
+    {
+      "area": "H1_SR1",
+      "mower": "M3",
+      "hours": 14
+    },
+    {
+      "area": "H2_FW",
+      "mower": "M3",
+      "hours": 16
+    },
+    {
+      "area": "H2_SR2",
+      "mower": "M3",
+      "hours": 6
+    },
+    {
+      "area": "H2_SR3",
+      "mower": "M3",
+      "hours": 9
+    },
+    {
+      "area": "H3_SR1",
+      "mower": "M3",
+      "hours": 13
+    },
+    {
+      "area": "H2_SR3",
+      "mower": "M4",
+      "hours": 4
+    },
+    {
+      "area": "H3_FW",
+      "mower": "M4",
+      "hours": 8
+    },
+    {
+      "area": "H3_SR1",
+      "mower": "M4",
+      "hours": 5
+    }
+  ]
+}

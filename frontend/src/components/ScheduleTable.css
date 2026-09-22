@@ -1,0 +1,39 @@
+.schedule-table {
+  border-collapse: collapse;
+  font-size: 13px;
+  width: 100%;
+}
+
+.schedule-table th,
+.schedule-table td {
+  text-align: left;
+  padding: 5px 14px 5px 0;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+
+.schedule-table th {
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+.schedule-table td {
+  font-variant-numeric: tabular-nums;
+}
+
+.schedule-table .muted {
+  color: var(--text-muted);
+}
+
+/* A released task is still shown — it is part of the plan until the next solve says
+   otherwise — but reads as out of the payload. Neutral, not a status colour: releasing is
+   a choice, not a problem. */
+.schedule-table tr.task-released td {
+  opacity: 0.55;
+}
+
+.schedule-table td.col-actions,
+.schedule-table th.col-actions {
+  text-align: right;
+  white-space: nowrap;
+}

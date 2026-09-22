@@ -1,0 +1,119 @@
+scenario,seed_tag,area,requested_start,requested_mower,outcome,detail,n_kept_total,parent_optimal,n_kept_relevant,refute_status,refute_time_s,raw_core_size,min_core_size,min_steps,min_time_s,min_hit_budget,stability_repeats,stable,pruning_missed
+balanced-four-hole,seed0,H1_FW,159,M4,blocked_statically,overlaps this area's own kept task at hour 142,6,False,0,,,,,0,0.0,False,0,,False
+balanced-four-hole,seed0,H1_SR1,23,M1,not_determined,budget exhausted on the individual check,6,False,2,unknown,10.242550958006177,,,0,0.0,False,0,,False
+balanced-four-hole,seed0,H1_SR1,54,M1,blocked_statically,mower 'M1' already serving 'H2_FW' at that hour,6,False,0,,,,,0,0.0,False,0,,False
+balanced-four-hole,seed0,H1_SR2,149,M5,blocked_statically,mower 'M5' already serving 'H1_SR2' at that hour,6,False,0,,,,,0,0.0,False,0,,False
+balanced-four-hole,seed0,H2_FW,54,M1,not_determined,budget exhausted on the individual check,6,False,3,unknown,10.18875475000823,,,0,0.0,False,0,,False
+balanced-four-hole,seed0,H2_FW,32,M3,not_determined,budget exhausted on the individual check,6,False,2,unknown,10.062386291043367,,,0,0.0,False,0,,False
+balanced-four-hole,seed0,H2_SR2,89,M1,not_determined,budget exhausted on the individual check,6,False,2,unknown,10.028660957992543,,,0,0.0,False,0,,False
+balanced-four-hole,seed0,H2_SR2,68,M3,not_determined,budget exhausted on the individual check,6,False,0,unknown,10.020067125034984,,,0,0.0,False,0,,False
+balanced-four-hole,seed0,H3_FW,7,M4,not_determined,budget exhausted on the individual check,6,False,1,unknown,10.02128895802889,,,0,0.0,False,0,,False
+balanced-four-hole,seed0,H3_FW,51,M2,not_determined,budget exhausted on the individual check,6,False,3,unknown,10.03605112497462,,,0,0.0,False,0,,False
+balanced-four-hole,seed0,H3_FW,134,M4,not_determined,budget exhausted on the individual check,6,False,1,unknown,10.031793500005733,,,0,0.0,False,0,,False
+balanced-four-hole,seed0,H3_FW,152,M2,blocked_statically,mower 'M2' already serving 'H1_FW' at that hour,6,False,0,,,,,0,0.0,False,0,,False
+balanced-four-hole,seed0,H3_SR1,130,M5,not_determined,budget exhausted on the individual check,6,False,1,unknown,10.024701332964469,,,0,0.0,False,0,,False
+balanced-four-hole,seed0,H3_SR1,114,M1,blocked_statically,mower 'M1' already serving 'H2_FW' at that hour,6,False,0,,,,,0,0.0,False,0,,False
+balanced-four-hole,seed0,H3_SR2,153,M4,not_determined,budget exhausted on the individual check,6,False,0,unknown,10.02621054102201,,,0,0.0,False,0,,False
+balanced-four-hole,seed0,H3_SR3,167,M3,not_determined,budget exhausted on the individual check,6,False,0,unknown,10.022468459035736,,,0,0.0,False,0,,False
+balanced-four-hole,seed0,H3_SR3,97,M3,not_determined,budget exhausted on the individual check,6,False,0,unknown,10.026379459013697,,,0,0.0,False,0,,False
+balanced-four-hole,seed0,H3_SR3,1,M3,not_determined,budget exhausted on the individual check,6,False,0,unknown,10.023043207998853,,,0,0.0,False,0,,False
+balanced-four-hole,seed0,H4_FW,1,M1,not_determined,budget exhausted on the individual check,6,False,2,unknown,10.022827208042145,,,0,0.0,False,0,,False
+balanced-four-hole,seed0,H4_SR1,7,M2,not_determined,budget exhausted on the individual check,6,False,3,unknown,10.035292125015985,,,0,0.0,False,0,,False
+balanced-four-hole,seed0,H4_SR1,94,M2,blocked_statically,mower 'M2' already serving 'H3_FW' at that hour,6,False,0,,,,,0,0.0,False,0,,False
+balanced-four-hole,seed0,H4_SR1,161,M4,not_determined,budget exhausted on the individual check,6,False,0,unknown,10.023116750002373,,,0,0.0,False,0,,False
+balanced-four-hole,seed0,H4_SR2,155,M3,not_determined,budget exhausted on the individual check,6,False,0,unknown,10.016242957965005,,,0,0.0,False,0,,False
+balanced-four-hole,seed0,H4_SR3,57,M4,not_determined,budget exhausted on the individual check,6,False,1,unknown,10.022993959020823,,,0,0.0,False,0,,False
+balanced-four-hole,seed0,H4_SR3,32,M4,not_determined,budget exhausted on the individual check,6,False,1,unknown,10.030878916964866,,,0,0.0,False,0,,False
+balanced-four-hole,seed2,H1_FW,71,M3,not_determined,budget exhausted on the individual check,4,False,3,unknown,10.246639500022866,,,0,0.0,False,0,,False
+balanced-four-hole,seed2,H1_FW,165,M2,not_determined,budget exhausted on the individual check,4,False,2,unknown,10.182751416985411,,,0,0.0,False,0,,False
+balanced-four-hole,seed2,H1_FW,112,M4,not_determined,budget exhausted on the individual check,4,False,1,unknown,10.028688708960544,,,0,0.0,False,0,,False
+balanced-four-hole,seed2,H1_SR1,22,M1,not_determined,budget exhausted on the individual check,4,False,0,unknown,10.048686374968383,,,0,0.0,False,0,,False
+balanced-four-hole,seed2,H1_SR1,3,M1,not_determined,budget exhausted on the individual check,4,False,0,unknown,10.031638624961488,,,0,0.0,False,0,,False
+balanced-four-hole,seed2,H1_SR2,118,M5,not_determined,budget exhausted on the individual check,4,False,0,unknown,10.020979708002415,,,0,0.0,False,0,,False
+balanced-four-hole,seed2,H2_FW,50,M2,not_determined,budget exhausted on the individual check,4,False,3,unknown,10.031835915986449,,,0,0.0,False,0,,False
+balanced-four-hole,seed2,H2_FW,47,M3,blocked_statically,mower 'M3' already serving 'H1_FW' at that hour,4,False,0,,,,,0,0.0,False,0,,False
+balanced-four-hole,seed2,H2_FW,150,M1,blocked_statically,overlaps this area's own kept task at hour 148,4,False,0,,,,,0,0.0,False,0,,False
+balanced-four-hole,seed2,H2_FW,53,M1,not_determined,budget exhausted on the individual check,4,False,2,unknown,10.037937041954137,,,0,0.0,False,0,,False
+balanced-four-hole,seed2,H2_SR1,124,M3,not_determined,budget exhausted on the individual check,4,False,3,unknown,10.022973082959652,,,0,0.0,False,0,,False
+balanced-four-hole,seed2,H2_SR1,100,M1,not_determined,budget exhausted on the individual check,4,False,0,unknown,10.040747207996901,,,0,0.0,False,0,,False
+balanced-four-hole,seed2,H2_SR1,129,M3,not_determined,budget exhausted on the individual check,4,False,3,unknown,10.022185834008269,,,0,0.0,False,0,,False
+balanced-four-hole,seed2,H3_FW,79,M5,not_determined,budget exhausted on the individual check,4,False,0,unknown,10.022957540990319,,,0,0.0,False,0,,False
+balanced-four-hole,seed2,H3_SR1,124,M1,not_determined,budget exhausted on the individual check,4,False,0,unknown,10.024751542019658,,,0,0.0,False,0,,False
+balanced-four-hole,seed2,H3_SR2,93,M2,not_determined,budget exhausted on the individual check,4,False,1,unknown,10.02213458402548,,,0,0.0,False,0,,False
+balanced-four-hole,seed2,H3_SR2,103,M3,not_determined,budget exhausted on the individual check,4,False,3,unknown,10.016899249982089,,,0,0.0,False,0,,False
+balanced-four-hole,seed2,H3_SR3,144,M3,blocked_statically,mower 'M3' already serving 'H2_FW' at that hour,4,False,0,,,,,0,0.0,False,0,,False
+balanced-four-hole,seed2,H4_FW,140,M3,not_determined,budget exhausted on the individual check,4,False,4,unknown,10.02423004101729,,,0,0.0,False,0,,False
+balanced-four-hole,seed2,H4_FW,75,M1,not_determined,budget exhausted on the individual check,4,False,1,unknown,10.022540459001902,,,0,0.0,False,0,,False
+balanced-four-hole,seed2,H4_SR1,93,M4,not_determined,budget exhausted on the individual check,4,False,0,unknown,10.022137957974337,,,0,0.0,False,0,,False
+balanced-four-hole,seed2,H4_SR2,167,M3,not_determined,budget exhausted on the individual check,4,False,3,unknown,10.022032333014067,,,0,0.0,False,0,,False
+balanced-four-hole,seed2,H4_SR2,164,M2,not_determined,budget exhausted on the individual check,4,False,1,unknown,10.027651374984998,,,0,0.0,False,0,,False
+balanced-four-hole,seed2,H4_SR3,147,M5,not_determined,budget exhausted on the individual check,4,False,0,unknown,10.02225645899307,,,0,0.0,False,0,,False
+balanced-four-hole,seed2,H4_SR3,82,M3,not_determined,budget exhausted on the individual check,4,False,3,unknown,10.017858374980278,,,0,0.0,False,0,,False
+six-hole-course,seed0,H2_FW,73,M3,not_determined,budget exhausted on the individual check,28,False,5,unknown,10.250093333015684,,,0,0.0,False,0,,False
+six-hole-course,seed0,H2_FW,26,M3,not_determined,budget exhausted on the individual check,28,False,5,unknown,10.16787204198772,,,0,0.0,False,0,,False
+six-hole-course,seed0,H2_FW,150,M3,blocked_statically,mower 'M3' already serving 'H3_SR2' at that hour,28,False,0,,,,,0,0.0,False,0,,False
+six-hole-course,seed0,H2_FW,150,M3,blocked_statically,mower 'M3' already serving 'H3_SR2' at that hour,28,False,0,,,,,0,0.0,False,0,,False
+six-hole-course,seed0,H2_SR1,130,M5,not_determined,budget exhausted on the individual check,28,False,6,unknown,10.036727375001647,,,0,0.0,False,0,,False
+six-hole-course,seed0,H3_SR1,96,M3,not_determined,budget exhausted on the individual check,28,False,5,unknown,10.032636791991536,,,0,0.0,False,0,,False
+six-hole-course,seed0,H3_SR1,130,M1,blocked_statically,mower 'M1' already serving 'H1_SR1' at that hour,28,False,0,,,,,0,0.0,False,0,,False
+six-hole-course,seed0,H3_SR1,36,M5,blocked_statically,mower 'M5' already serving 'H1_FW' at that hour,28,False,0,,,,,0,0.0,False,0,,False
+six-hole-course,seed0,H3_SR2,11,M5,not_determined,budget exhausted on the individual check,28,False,7,unknown,10.033467625034973,,,0,0.0,False,0,,False
+six-hole-course,seed0,H3_SR2,90,M5,blocked_statically,mower 'M5' already serving 'H1_SR1' at that hour,28,False,0,,,,,0,0.0,False,0,,False
+six-hole-course,seed0,H4_FW,155,M3,blocked_statically,mower 'M3' already serving 'H3_SR2' at that hour,28,False,0,,,,,0,0.0,False,0,,False
+six-hole-course,seed0,H4_FW,159,M3,not_determined,budget exhausted on the individual check,28,False,5,unknown,10.014938583015464,,,0,0.0,False,0,,False
+six-hole-course,seed0,H4_FW,84,M3,not_determined,budget exhausted on the individual check,28,False,5,unknown,10.0235075840028,,,0,0.0,False,0,,False
+six-hole-course,seed0,H4_FW,0,M5,not_determined,budget exhausted on the individual check,28,False,6,unknown,10.029470540990587,,,0,0.0,False,0,,False
+six-hole-course,seed0,H4_SR1,80,M5,not_determined,budget exhausted on the individual check,28,False,6,unknown,10.024748541007284,,,0,0.0,False,0,,False
+six-hole-course,seed0,H4_SR2,69,M1,not_determined,budget exhausted on the individual check,28,False,1,unknown,10.0226464169682,,,0,0.0,False,0,,False
+six-hole-course,seed0,H4_SR2,28,M1,not_determined,budget exhausted on the individual check,28,False,1,unknown,10.022657666006126,,,0,0.0,False,0,,False
+six-hole-course,seed0,H4_SR3,117,M3,blocked_statically,mower 'M3' already serving 'H1_FW' at that hour,28,False,0,,,,,0,0.0,False,0,,False
+six-hole-course,seed0,H5_FW,106,M4,blocked_statically,mower 'M4' already serving 'H5_SR1' at that hour,28,False,0,,,,,0,0.0,False,0,,False
+six-hole-course,seed0,H5_FW,153,M4,blocked_statically,mower 'M4' already serving 'H5_SR1' at that hour,28,False,0,,,,,0,0.0,False,0,,False
+six-hole-course,seed0,H5_FW,35,M4,blocked_statically,mower 'M4' already serving 'H6_SR1' at that hour,28,False,0,,,,,0,0.0,False,0,,False
+six-hole-course,seed0,H5_SR1,147,M2,blocked_statically,overlaps this area's own kept task at hour 154,28,False,0,,,,,0,0.0,False,0,,False
+six-hole-course,seed0,H5_SR3,165,M2,not_determined,budget exhausted on the individual check,28,False,8,unknown,10.025013999955263,,,0,0.0,False,0,,False
+six-hole-course,seed0,H6_FW,111,M2,blocked_statically,mower 'M2' already serving 'H5_SR2' at that hour,28,False,0,,,,,0,0.0,False,0,,False
+six-hole-course,seed0,H6_FW,119,M4,not_determined,budget exhausted on the individual check,28,False,11,unknown,10.027403291023802,,,0,0.0,False,0,,False
+six-hole-course,seed0,H6_FW,117,M2,not_determined,budget exhausted on the individual check,28,False,6,unknown,10.032128916995134,,,0,0.0,False,0,,False
+six-hole-course,seed1,H2_FW,96,M3,not_determined,budget exhausted on the individual check,41,False,12,unknown,10.261550959025044,,,0,0.0,False,0,,False
+six-hole-course,seed1,H2_FW,162,M3,blocked_statically,mower 'M3' already serving 'H3_FW' at that hour,41,False,0,,,,,0,0.0,False,0,,False
+six-hole-course,seed1,H2_FW,5,M3,blocked_statically,mower 'M3' already serving 'H3_FW' at that hour,41,False,0,,,,,0,0.0,False,0,,False
+six-hole-course,seed1,H2_FW,147,M3,blocked_statically,mower 'M3' already serving 'H3_FW' at that hour,41,False,0,,,,,0,0.0,False,0,,False
+six-hole-course,seed1,H2_FW,28,M3,not_determined,budget exhausted on the individual check,41,False,12,unknown,10.156733583949972,,,0,0.0,False,0,,False
+six-hole-course,seed1,H3_SR1,144,M1,not_determined,budget exhausted on the individual check,41,False,4,unknown,10.036901458981447,,,0,0.0,False,0,,False
+six-hole-course,seed1,H4_FW,163,M5,blocked_statically,mower 'M5' already serving 'H2_SR1' at that hour,41,False,0,,,,,0,0.0,False,0,,False
+six-hole-course,seed1,H4_FW,158,M5,blocked_statically,mower 'M5' already serving 'H1_FW' at that hour,41,False,0,,,,,0,0.0,False,0,,False
+six-hole-course,seed1,H4_FW,110,M5,blocked_statically,mower 'M5' already serving 'H3_SR3' at that hour,41,False,0,,,,,0,0.0,False,0,,False
+six-hole-course,seed1,H4_FW,160,M3,blocked_statically,mower 'M3' already serving 'H3_FW' at that hour,41,False,0,,,,,0,0.0,False,0,,False
+six-hole-course,seed1,H4_SR3,93,M3,not_determined,budget exhausted on the individual check,41,False,12,unknown,10.036015833029523,,,0,0.0,False,0,,False
+six-hole-course,seed1,H5_FW,152,M4,not_determined,budget exhausted on the individual check,41,False,11,unknown,10.034699750016443,,,0,0.0,False,0,,False
+six-hole-course,seed1,H5_SR2,35,M2,blocked_statically,mower 'M2' already serving 'H5_SR1' at that hour,41,False,0,,,,,0,0.0,False,0,,False
+six-hole-course,seed1,H5_SR2,82,M2,not_determined,budget exhausted on the individual check,41,False,3,unknown,10.024214625009336,,,0,0.0,False,0,,False
+six-hole-course,seed1,H5_SR2,133,M2,not_determined,budget exhausted on the individual check,41,False,3,unknown,10.027309124998283,,,0,0.0,False,0,,False
+six-hole-course,seed1,H5_SR3,120,M2,blocked_statically,overlaps this area's own kept task at hour 125,41,False,0,,,,,0,0.0,False,0,,False
+six-hole-course,seed1,H6_FW,47,M2,blocked_statically,mower 'M2' already serving 'H5_SR1' at that hour,41,False,0,,,,,0,0.0,False,0,,False
+six-hole-course,seed1,H6_FW,59,M4,not_determined,budget exhausted on the individual check,41,False,11,unknown,10.02429520804435,,,0,0.0,False,0,,False
+six-hole-course,seed1,H6_FW,104,M4,not_determined,budget exhausted on the individual check,41,False,11,unknown,10.036007124988828,,,0,0.0,False,0,,False
+six-hole-course,seed1,H6_FW,67,M2,not_determined,budget exhausted on the individual check,41,False,3,unknown,10.022265292005613,,,0,0.0,False,0,,False
+six-hole-course,seed2,H1_FW,138,M3,not_determined,budget exhausted on the individual check,30,False,6,unknown,10.268920333008282,,,0,0.0,False,0,,False
+six-hole-course,seed2,H1_FW,62,M3,blocked_statically,mower 'M3' already serving 'H1_FW' at that hour,30,False,0,,,,,0,0.0,False,0,,False
+six-hole-course,seed2,H1_FW,15,M3,not_determined,budget exhausted on the individual check,30,False,6,unknown,10.147053167049307,,,0,0.0,False,0,,False
+six-hole-course,seed2,H2_FW,26,M3,not_determined,budget exhausted on the individual check,30,False,6,unknown,10.052089459029958,,,0,0.0,False,0,,False
+six-hole-course,seed2,H2_FW,7,M3,blocked_statically,mower 'M3' already serving 'H3_SR2' at that hour,30,False,0,,,,,0,0.0,False,0,,False
+six-hole-course,seed2,H3_FW,134,M3,not_determined,budget exhausted on the individual check,30,False,6,unknown,10.031361792003736,,,0,0.0,False,0,,False
+six-hole-course,seed2,H3_FW,117,M3,not_determined,budget exhausted on the individual check,30,False,6,unknown,10.027966791996732,,,0,0.0,False,0,,False
+six-hole-course,seed2,H3_SR1,16,M3,not_determined,budget exhausted on the individual check,30,False,6,unknown,10.023837000015192,,,0,0.0,False,0,,False
+six-hole-course,seed2,H3_SR1,20,M5,not_determined,budget exhausted on the individual check,30,False,6,unknown,10.023542375012767,,,0,0.0,False,0,,False
+six-hole-course,seed2,H4_FW,1,M5,not_determined,budget exhausted on the individual check,30,False,6,unknown,10.040498541027773,,,0,0.0,False,0,,False
+six-hole-course,seed2,H4_FW,97,M3,blocked_statically,mower 'M3' already serving 'H2_FW' at that hour,30,False,0,,,,,0,0.0,False,0,,False
+six-hole-course,seed2,H4_FW,44,M3,blocked_statically,mower 'M3' already serving 'H2_FW' at that hour,30,False,0,,,,,0,0.0,False,0,,False
+six-hole-course,seed2,H4_SR2,65,M5,not_determined,budget exhausted on the individual check,30,False,7,unknown,10.036040458013304,,,0,0.0,False,0,,False
+six-hole-course,seed2,H4_SR3,64,M3,blocked_statically,mower 'M3' already serving 'H1_FW' at that hour,30,False,0,,,,,0,0.0,False,0,,False
+six-hole-course,seed2,H5_SR1,31,M4,not_determined,budget exhausted on the individual check,30,False,12,unknown,10.037891041953117,,,0,0.0,False,0,,False
+six-hole-course,seed2,H5_SR2,36,M2,blocked_statically,mower 'M2' already serving 'H5_SR3' at that hour,30,False,0,,,,,0,0.0,False,0,,False
+six-hole-course,seed2,H6_FW,127,M4,blocked_statically,mower 'M4' already serving 'H5_SR3' at that hour,30,False,0,,,,,0,0.0,False,0,,False
+six-hole-course,seed2,H6_FW,36,M4,not_determined,budget exhausted on the individual check,30,False,13,unknown,10.01418450003257,,,0,0.0,False,0,,False
+six-hole-course,seed2,H6_SR1,33,M2,blocked_statically,mower 'M2' already serving 'H5_SR3' at that hour,30,False,0,,,,,0,0.0,False,0,,False
+six-hole-course,seed2,H6_SR1,146,M2,not_determined,budget exhausted on the individual check,30,False,3,unknown,10.023573917045724,,,0,0.0,False,0,,False
+six-hole-course,seed2,H6_SR1,127,M4,blocked_statically,mower 'M4' already serving 'H5_SR3' at that hour,30,False,0,,,,,0,0.0,False,0,,False
+six-hole-course,seed2,H6_SR1,50,M2,not_determined,budget exhausted on the individual check,30,False,3,unknown,10.021761292009614,,,0,0.0,False,0,,False

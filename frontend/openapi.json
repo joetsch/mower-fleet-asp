@@ -1,0 +1,2052 @@
+{
+  "components": {
+    "schemas": {
+      "AgreementCounts": {
+        "description": "How much of what was asked for survived.\n\n``mower_total`` counts only preferences that named a mower, so ``mower_kept /\nmower_total`` is not diluted by time-only preferences that never asked for one.",
+        "properties": {
+          "mower_kept": {
+            "default": 0,
+            "title": "Mower Kept",
+            "type": "integer"
+          },
+          "mower_total": {
+            "default": 0,
+            "title": "Mower Total",
+            "type": "integer"
+          },
+          "time_kept": {
+            "default": 0,
+            "title": "Time Kept",
+            "type": "integer"
+          },
+          "total": {
+            "default": 0,
+            "title": "Total",
+            "type": "integer"
+          }
+        },
+        "title": "AgreementCounts",
+        "type": "object"
+      },
+      "Area": {
+        "description": "A part of the course that must be serviced regularly.",
+        "properties": {
+          "hole": {
+            "minimum": 1.0,
+            "title": "Hole",
+            "type": "integer"
+          },
+          "max_interval": {
+            "description": "Maximum hours between two service starts.",
+            "exclusiveMinimum": 0.0,
+            "title": "Max Interval",
+            "type": "integer"
+          },
+          "max_services": {
+            "anyOf": [
+              {
+                "minimum": 1.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Cap on service starts this week \u2014 a user-owned requirement (ADR-0024). None means derive it (ADR-0017). Also caps the ground-program size.",
+            "title": "Max Services"
+          },
+          "min_interval": {
+            "description": "Minimum hours between two service starts.",
+            "exclusiveMinimum": 0.0,
+            "title": "Min Interval",
+            "type": "integer"
+          },
+          "min_services": {
+            "anyOf": [
+              {
+                "minimum": 1.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Required minimum service starts this week \u2014 a user-owned requirement (ADR-0024). None means derive it (ADR-0017). See docs/known-hazards.md: a hand-set value can make the scenario genuinely UNSAT.",
+            "title": "Min Services"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "priority": {
+            "description": "1 = highest priority. The encoding maps priority P to weak-constraint level 5-P (see docs/design-choices.md B4 and ADR-0012). The range is capped at 3 so that level 5-P stays in {4, 3, 2}, strictly above the avoid-zone level (1) and the min-interval level (0); P >= 4 would put a max-interval violation on the same level as an avoid violation. Relax this bound only together with an encoding change.",
+            "maximum": 3.0,
+            "minimum": 1.0,
+            "title": "Priority",
+            "type": "integer"
+          },
+          "schedule": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/DaySchedule"
+            },
+            "description": "Weekly availability, keyed by weekday name (see DAYS).",
+            "title": "Schedule",
+            "type": "object"
+          },
+          "size_m2": {
+            "anyOf": [
+              {
+                "exclusiveMinimum": 0.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Area size. Promoted from the generator source (ADR-0024) so the scenario is self-describing; None for scenarios authored before that. Feeds the default per-(area, mower) duration and the recomputed load factor.",
+            "title": "Size M2"
+          },
+          "type": {
+            "title": "Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "type",
+          "hole",
+          "priority",
+          "min_interval",
+          "max_interval",
+          "schedule"
+        ],
+        "title": "Area",
+        "type": "object"
+      },
+      "BaseDuration": {
+        "description": "The productive mowing time (whole hours) for one ``(area, mower)`` pair.\n\nSet by the scenario generator (ADR-0013): it derives this from area size and mower\narea-capacity instead of the notebook's seeded sampling. When\n:attr:`Scenario.base_durations` is populated the completion table uses these numbers\nas the base for its no-go/avoid walk; when it is ``None`` the sampling path\n(``duration_seed``) still applies, so ``toy_course`` and the notebook are unchanged.",
+        "properties": {
+          "area": {
+            "title": "Area",
+            "type": "string"
+          },
+          "hours": {
+            "exclusiveMinimum": 0.0,
+            "title": "Hours",
+            "type": "integer"
+          },
+          "mower": {
+            "title": "Mower",
+            "type": "string"
+          }
+        },
+        "required": [
+          "area",
+          "mower",
+          "hours"
+        ],
+        "title": "BaseDuration",
+        "type": "object"
+      },
+      "Catalog": {
+        "properties": {
+          "area_types": {
+            "items": {
+              "$ref": "#/components/schemas/CatalogAreaType"
+            },
+            "title": "Area Types",
+            "type": "array"
+          },
+          "mower_models": {
+            "items": {
+              "$ref": "#/components/schemas/CatalogMower"
+            },
+            "title": "Mower Models",
+            "type": "array"
+          }
+        },
+        "required": [
+          "mower_models",
+          "area_types"
+        ],
+        "title": "Catalog",
+        "type": "object"
+      },
+      "CatalogAreaType": {
+        "properties": {
+          "cut_height_mm": {
+            "title": "Cut Height Mm",
+            "type": "integer"
+          },
+          "default_size_m2": {
+            "description": "Typical size for this type (generator's Distributions.area_geo_mean_m2) \u2014 the editor's default when adding an area (ADR-0027). A suggestion, never a constraint.",
+            "exclusiveMinimum": 0.0,
+            "title": "Default Size M2",
+            "type": "integer"
+          },
+          "max_interval_h": {
+            "title": "Max Interval H",
+            "type": "integer"
+          },
+          "min_interval_h": {
+            "title": "Min Interval H",
+            "type": "integer"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "priority": {
+            "title": "Priority",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "name",
+          "cut_height_mm",
+          "priority",
+          "min_interval_h",
+          "max_interval_h",
+          "default_size_m2"
+        ],
+        "title": "CatalogAreaType",
+        "type": "object"
+      },
+      "CatalogMower": {
+        "description": "One mower model from ``reference.py`` \u2014 the editor's defaults source\n(ADR-0024). ``capable_area_types`` applies the cut-height rule so the frontend never\nre-implements it. Suggestions only \u2014 the stored scenario value is always the truth.",
+        "properties": {
+          "area_capacity_m2_per_day": {
+            "title": "Area Capacity M2 Per Day",
+            "type": "integer"
+          },
+          "capable_area_types": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Capable Area Types",
+            "type": "array"
+          },
+          "max_cut_height_mm": {
+            "title": "Max Cut Height Mm",
+            "type": "integer"
+          },
+          "min_cut_height_mm": {
+            "title": "Min Cut Height Mm",
+            "type": "integer"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "area_capacity_m2_per_day",
+          "min_cut_height_mm",
+          "max_cut_height_mm",
+          "capable_area_types"
+        ],
+        "title": "CatalogMower",
+        "type": "object"
+      },
+      "ConflictingTask": {
+        "description": "One task from the plan on screen that a dropped edit conflicts with \u2014 a member of\nthe conflict named in :attr:`EditExplanation.conflicts`.",
+        "properties": {
+          "area": {
+            "title": "Area",
+            "type": "string"
+          },
+          "mower": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Mower"
+          },
+          "start": {
+            "title": "Start",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "area",
+          "start"
+        ],
+        "title": "ConflictingTask",
+        "type": "object"
+      },
+      "DaySchedule": {
+        "description": "Availability for one weekday.",
+        "properties": {
+          "avoid": {
+            "description": "Hours a mower should avoid but may use if necessary (daytime play).",
+            "items": {
+              "maxItems": 2,
+              "minItems": 2,
+              "prefixItems": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "integer"
+                }
+              ],
+              "type": "array"
+            },
+            "title": "Avoid",
+            "type": "array"
+          },
+          "no_go": {
+            "description": "Hours a mower may not operate at all (irrigation, night rules, ...).",
+            "items": {
+              "maxItems": 2,
+              "minItems": 2,
+              "prefixItems": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "integer"
+                }
+              ],
+              "type": "array"
+            },
+            "title": "No Go",
+            "type": "array"
+          }
+        },
+        "title": "DaySchedule",
+        "type": "object"
+      },
+      "DroppedPreference": {
+        "description": "One half of one preference that could not be expressed, and why.\n\n``half`` is ``\"time\"`` or ``\"mower\"``. Dropping the mower half leaves the time half\nstanding \u2014 the right degradation for \"that machine cannot mow this area\".",
+        "properties": {
+          "area": {
+            "title": "Area",
+            "type": "string"
+          },
+          "half": {
+            "enum": [
+              "time",
+              "mower"
+            ],
+            "title": "Half",
+            "type": "string"
+          },
+          "mower": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Mower"
+          },
+          "reason": {
+            "title": "Reason",
+            "type": "string"
+          },
+          "start": {
+            "title": "Start",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "area",
+          "start",
+          "half",
+          "reason"
+        ],
+        "title": "DroppedPreference",
+        "type": "object"
+      },
+      "EditExplanation": {
+        "description": "Why one dropped edit \u2014 a submitted preference with ``origin`` ``\"edited\"`` or\n``\"added\"`` that does not appear in the resulting schedule \u2014 was not kept.\n\n**What each outcome means:**\n\n- ``blocked_statically`` \u2014 conflicts with a *kept* task's mower or area interval;\n  found by a plain overlap check, no solver call.\n- ``individually_impossible`` \u2014 no schedule could ever place this edit, even alone\n  (a structural conflict the encoding's own hard constraints rule out regardless of\n  anything else).\n- ``conflicts_with`` \u2014 conflicts specifically with the kept tasks named in\n  ``conflicts``, proven by assumption-based refutation over the real forward model.\n- ``not_yet_found`` \u2014 a schedule keeping this edit alongside every currently-kept task\n  does exist (checked directly) \u2014 but the solve that produced the plan on screen had\n  not proven optimality. This is the *only* way a \"could have been kept\" answer can\n  arise: if the parent solve **had** been proven optimal, a model satisfying this edit\n  plus everything already kept would mean strictly fewer unmet preferences than the\n  claimed optimum \u2014 a contradiction. So this outcome is a solid signal that searching\n  longer (or re-solving with this edit pinned) may do better, never an arbitrary tie.\n- ``not_determined`` \u2014 the explain budget ran out before an answer was reached. Never\n  a claim that the edit is impossible.",
+        "properties": {
+          "area": {
+            "title": "Area",
+            "type": "string"
+          },
+          "conflicts": {
+            "items": {
+              "$ref": "#/components/schemas/ConflictingTask"
+            },
+            "title": "Conflicts",
+            "type": "array"
+          },
+          "detail": {
+            "description": "A short, composable reason \u2014 the specific static overlap found, or a plain count for a conflict.",
+            "title": "Detail",
+            "type": "string"
+          },
+          "minimal": {
+            "default": true,
+            "description": "False if the explain budget ran out before every candidate in `conflicts` could be checked for redundancy \u2014 the conflict is still valid, just not proven smallest (the keep-on-timeout degradation rule: an assumption is only ever removed once proven unnecessary, so a timeout can only leave this larger, never wrong).",
+            "title": "Minimal",
+            "type": "boolean"
+          },
+          "mower": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Mower"
+          },
+          "outcome": {
+            "enum": [
+              "blocked_statically",
+              "individually_impossible",
+              "conflicts_with",
+              "not_yet_found",
+              "not_determined"
+            ],
+            "title": "Outcome",
+            "type": "string"
+          },
+          "solve_time_s": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Wall time this edit's counterfactual check(s) took. None for blocked_statically, which makes no solver call.",
+            "title": "Solve Time S"
+          },
+          "start": {
+            "title": "Start",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "area",
+          "start",
+          "outcome",
+          "detail"
+        ],
+        "title": "EditExplanation",
+        "type": "object"
+      },
+      "ExplainRequest": {
+        "description": "Body for ``POST /api/explain`` (Iteration 6). ``preferences`` and ``schedule`` are\nthe payload and the result of the solve being explained \u2014 the same\n``SolvePreferences`` sent to ``POST /api/solve`` and the ``SolveResult.schedule`` it\nreturned. Never re-solved: a second solve under the ``-t4`` portfolio could return a\ndifferent equally-optimal plan (ADR-0007), which would explain a schedule the user is\nnot looking at.",
+        "properties": {
+          "budget_s": {
+            "anyOf": [
+              {
+                "exclusiveMinimum": 0.0,
+                "maximum": 60.0,
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Overall wall-clock deadline for this explanation (expert-mode setting, mirroring `SolveRequest.time_limit_s`). Omit for the default (`explain.DEFAULT_EXPLAIN_BUDGET_S`). Capped at 60s \u2014 this is a feasibility check, not a search, and the Stage 1 pilot's worst observed batch was 7.6s.",
+            "title": "Budget S"
+          },
+          "preferences": {
+            "$ref": "#/components/schemas/SolvePreferences",
+            "description": "The edits submitted to the solve being explained."
+          },
+          "scenario": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Scenario"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "A full problem instance."
+          },
+          "scenario_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Slug of a curated scenario. Provide this or `scenario`; `scenario` wins when both are set.",
+            "title": "Scenario Id"
+          },
+          "schedule": {
+            "$ref": "#/components/schemas/Schedule",
+            "description": "The schedule that solve returned."
+          }
+        },
+        "required": [
+          "preferences",
+          "schedule"
+        ],
+        "title": "ExplainRequest",
+        "type": "object"
+      },
+      "ExplainResponse": {
+        "properties": {
+          "report": {
+            "$ref": "#/components/schemas/ExplanationReport"
+          }
+        },
+        "required": [
+          "report"
+        ],
+        "title": "ExplainResponse",
+        "type": "object"
+      },
+      "ExplanationReport": {
+        "description": "Everything explainable about one solve result relative to what the user asked for.\nComputed from the submitted :class:`SolvePreferences` and the resulting\n:class:`Schedule` \u2014 no re-solve, so nothing here can disagree with the plan already on\nscreen.",
+        "properties": {
+          "budget_exhausted": {
+            "default": false,
+            "description": "True if the budget ran out before every dropped edit could be explained \u2014 the remainder are reported `not_determined`, never silently omitted.",
+            "title": "Budget Exhausted",
+            "type": "boolean"
+          },
+          "budget_s": {
+            "description": "The overall wall-clock budget this report ran under.",
+            "title": "Budget S",
+            "type": "number"
+          },
+          "edits": {
+            "items": {
+              "$ref": "#/components/schemas/EditExplanation"
+            },
+            "title": "Edits",
+            "type": "array"
+          },
+          "reinstated": {
+            "items": {
+              "$ref": "#/components/schemas/ReinstatedService"
+            },
+            "title": "Reinstated",
+            "type": "array"
+          },
+          "ripple": {
+            "items": {
+              "$ref": "#/components/schemas/RippleMove"
+            },
+            "title": "Ripple",
+            "type": "array"
+          }
+        },
+        "required": [
+          "budget_s"
+        ],
+        "title": "ExplanationReport",
+        "type": "object"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "title": "Detail",
+            "type": "array"
+          }
+        },
+        "title": "HTTPValidationError",
+        "type": "object"
+      },
+      "Mower": {
+        "properties": {
+          "area_capacity_m2_per_day": {
+            "anyOf": [
+              {
+                "exclusiveMinimum": 0.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Mowing rate. Promoted from the generator source (ADR-0024); None for scenarios authored before that. Feeds the default per-(area, mower) duration and the recomputed load factor.",
+            "title": "Area Capacity M2 Per Day"
+          },
+          "can_mow": {
+            "description": "Names of areas this mower is able to service.",
+            "items": {
+              "type": "string"
+            },
+            "title": "Can Mow",
+            "type": "array"
+          },
+          "model": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Mower model label. Promoted from the generator source (ADR-0024); None for scenarios authored before that. Display + catalogue lookup only.",
+            "title": "Model"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "can_mow"
+        ],
+        "title": "Mower",
+        "type": "object"
+      },
+      "PreferenceAgreement": {
+        "description": "Overall agreement plus the same counts split by :attr:`PreferredTask.origin` \u2014\n\"7 of 9 frozen tasks untouched\" is the sentence the UI wants to write.",
+        "properties": {
+          "by_origin": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/AgreementCounts"
+            },
+            "title": "By Origin",
+            "type": "object"
+          },
+          "mower_kept": {
+            "default": 0,
+            "title": "Mower Kept",
+            "type": "integer"
+          },
+          "mower_total": {
+            "default": 0,
+            "title": "Mower Total",
+            "type": "integer"
+          },
+          "time_kept": {
+            "default": 0,
+            "title": "Time Kept",
+            "type": "integer"
+          },
+          "total": {
+            "default": 0,
+            "title": "Total",
+            "type": "integer"
+          }
+        },
+        "title": "PreferenceAgreement",
+        "type": "object"
+      },
+      "PreferenceReport": {
+        "description": "What the re-solve did with the user's edits. Attached to :class:`SolveResult`.",
+        "properties": {
+          "agreement": {
+            "$ref": "#/components/schemas/PreferenceAgreement"
+          },
+          "dropped": {
+            "items": {
+              "$ref": "#/components/schemas/DroppedPreference"
+            },
+            "title": "Dropped",
+            "type": "array"
+          },
+          "level": {
+            "anyOf": [
+              {
+                "enum": [
+                  "top",
+                  "high",
+                  "low",
+                  "avoid",
+                  "tiebreak"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The stability setting this solve actually ran at; None in heuristic mode, which biases the search and leaves the objective alone. Echoed because `Schedule.cost`'s shape depends on it \u2014 at 'top' the unmet-preference count is a separate leading slot, at the others it is summed into an existing service-quality slot and cannot be split back out.",
+            "title": "Level"
+          },
+          "pref_level": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The `-c pref_level=N` constant `level` maps to, for the expert readout. None whenever `level` is.",
+            "title": "Pref Level"
+          }
+        },
+        "required": [
+          "agreement"
+        ],
+        "title": "PreferenceReport",
+        "type": "object"
+      },
+      "PreferredTask": {
+        "description": "One task the user edited or froze; a re-solve should try to preserve it (ADR-0031).\n\nDeliberately **index-free**. The encoding numbers an area's tasks 1..N in time order\n(``task(A,1..M)``, ordered by ``start(A,N+1) >= completion(A,N)``), so a preference\nphrased as \"task 3 of this area\" silently re-targets the moment the solver picks a\ndifferent ``num_starts``. \"This area has a task starting at hour S, on mower M\"\nsurvives that, and is what the user actually meant by dragging a bar.\n\nThe two halves are scored independently, so ``mower=None`` is meaningful on its own:\na **time-only** preference \u2014 keep the hour, let the solver choose the mower. The\nIteration 5 schedule editor always names a mower; the field is optional because that\nis the shape a later mower-breakdown control needs, and it costs nothing to allow.",
+        "properties": {
+          "area": {
+            "minLength": 1,
+            "title": "Area",
+            "type": "string"
+          },
+          "mower": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Preferred mower; None means 'keep the time, any mower'.",
+            "title": "Mower"
+          },
+          "origin": {
+            "default": "edited",
+            "description": "Where the preference came from. Read by the UI and the mechanism study only \u2014 it is never emitted as a solver fact.",
+            "enum": [
+              "frozen",
+              "edited",
+              "added"
+            ],
+            "title": "Origin",
+            "type": "string"
+          },
+          "start": {
+            "description": "Start hour offset from t = 0, as in ScheduledTask.",
+            "minimum": 0.0,
+            "title": "Start",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "area",
+          "start"
+        ],
+        "title": "PreferredTask",
+        "type": "object"
+      },
+      "ReinstatedService": {
+        "description": "An area whose schedule carries more tasks than the user's submitted plan named for\nit \u2014 almost always a released task the area's own service-count minimum brought back.\nInvisible to the kept/dropped count (there is no negative preference, ADR-0035\ndecision 3: release means \"out of the payload\", not \"never do this\"), so this is the\none explanation class that needs no dropped edit to trigger.",
+        "properties": {
+          "actual_count": {
+            "title": "Actual Count",
+            "type": "integer"
+          },
+          "area": {
+            "title": "Area",
+            "type": "string"
+          },
+          "min_services": {
+            "title": "Min Services",
+            "type": "integer"
+          },
+          "submitted_count": {
+            "title": "Submitted Count",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "area",
+          "min_services",
+          "submitted_count",
+          "actual_count"
+        ],
+        "title": "ReinstatedService",
+        "type": "object"
+      },
+      "RippleMove": {
+        "description": "A *frozen* task \u2014 one the user did not touch \u2014 that still moved, attributed when\npossible to sharing a mower or area with one of the user's edits.",
+        "properties": {
+          "area": {
+            "title": "Area",
+            "type": "string"
+          },
+          "mower": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Mower"
+          },
+          "shares_area_with": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Set when this task's own area was edited elsewhere.",
+            "title": "Shares Area With"
+          },
+          "shares_mower_with": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Area name of an edited task using the same mower.",
+            "title": "Shares Mower With"
+          },
+          "start": {
+            "title": "Start",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "area",
+          "start"
+        ],
+        "title": "RippleMove",
+        "type": "object"
+      },
+      "RollRequest": {
+        "description": "Body for ``POST /api/scenario/advance`` \u2014 the moving-horizon step (ADR-0042).\n\nAdvance \"now\" by ``hours``, given the plan ``tasks`` that were executed. There is no\nexecution simulation: ``tasks`` is just the current plan. ``hours`` out of the\n``1..horizon_hours`` range is a 400.",
+        "properties": {
+          "hours": {
+            "default": 24,
+            "description": "How far to advance now, in whole hours.",
+            "minimum": 1.0,
+            "title": "Hours",
+            "type": "integer"
+          },
+          "scenario": {
+            "$ref": "#/components/schemas/Scenario"
+          },
+          "tasks": {
+            "description": "The plan being executed over the elapsed window.",
+            "items": {
+              "$ref": "#/components/schemas/ScheduledTask"
+            },
+            "title": "Tasks",
+            "type": "array"
+          }
+        },
+        "required": [
+          "scenario"
+        ],
+        "title": "RollRequest",
+        "type": "object"
+      },
+      "RollResponse": {
+        "description": "What ``POST /api/scenario/advance`` returns: the rolled scenario (with its derived\nfigures recomputed, like every other scenario response) plus what the roll did.",
+        "properties": {
+          "carried": {
+            "description": "Still-future tasks rebased to the new now, as frozen re-solve preferences.",
+            "items": {
+              "$ref": "#/components/schemas/PreferredTask"
+            },
+            "title": "Carried",
+            "type": "array"
+          },
+          "consumed": {
+            "description": "New history events from now-past tasks \u2014 one per area serviced in the window.",
+            "items": {
+              "$ref": "#/components/schemas/ServiceEvent"
+            },
+            "title": "Consumed",
+            "type": "array"
+          },
+          "derived": {
+            "$ref": "#/components/schemas/ScenarioDerived"
+          },
+          "notes": {
+            "description": "Remarks about this roll (areas idle, services straddling now).",
+            "items": {
+              "type": "string"
+            },
+            "title": "Notes",
+            "type": "array"
+          },
+          "scenario": {
+            "$ref": "#/components/schemas/Scenario"
+          }
+        },
+        "required": [
+          "scenario",
+          "derived",
+          "consumed",
+          "carried",
+          "notes"
+        ],
+        "title": "RollResponse",
+        "type": "object"
+      },
+      "Scenario": {
+        "description": "A complete planning problem instance.",
+        "properties": {
+          "areas": {
+            "items": {
+              "$ref": "#/components/schemas/Area"
+            },
+            "title": "Areas",
+            "type": "array"
+          },
+          "base_durations": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/BaseDuration"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Data-driven per-(area, mower) base mowing hours (ADR-0013). When set, the completion table uses these instead of sampling.",
+            "title": "Base Durations"
+          },
+          "duration_seed": {
+            "default": 0,
+            "description": "Seed for the (otherwise deterministic) mowing-duration sampling. Ignored when base_durations is set.",
+            "title": "Duration Seed",
+            "type": "integer"
+          },
+          "history": {
+            "items": {
+              "$ref": "#/components/schemas/ServiceEvent"
+            },
+            "title": "History",
+            "type": "array"
+          },
+          "horizon_hours": {
+            "default": 168,
+            "exclusiveMinimum": 0.0,
+            "title": "Horizon Hours",
+            "type": "integer"
+          },
+          "horizon_start_hour": {
+            "default": 13,
+            "description": "Hour of the week (0 = Mon 00:00) that t = 0 corresponds to.",
+            "maximum": 167.0,
+            "minimum": 0.0,
+            "title": "Horizon Start Hour",
+            "type": "integer"
+          },
+          "mowers": {
+            "items": {
+              "$ref": "#/components/schemas/Mower"
+            },
+            "title": "Mowers",
+            "type": "array"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "areas",
+          "mowers",
+          "history"
+        ],
+        "title": "Scenario",
+        "type": "object"
+      },
+      "ScenarioBundle": {
+        "properties": {
+          "derived": {
+            "$ref": "#/components/schemas/ScenarioDerived"
+          },
+          "scenario": {
+            "$ref": "#/components/schemas/Scenario"
+          }
+        },
+        "required": [
+          "scenario",
+          "derived"
+        ],
+        "title": "ScenarioBundle",
+        "type": "object"
+      },
+      "ScenarioCreateRequest": {
+        "description": "Body for ``POST /api/scenarios`` \u2014 save the edited scenario under a *new* slug\n(ADR-0026). ``id`` is the target slug; a clash is a 409. ``PUT /api/scenario/{id}``\nis the overwrite path and takes the bare ``Scenario`` instead.",
+        "properties": {
+          "id": {
+            "description": "Target slug (lowercase, digits, internal hyphens).",
+            "title": "Id",
+            "type": "string"
+          },
+          "scenario": {
+            "$ref": "#/components/schemas/Scenario"
+          }
+        },
+        "required": [
+          "id",
+          "scenario"
+        ],
+        "title": "ScenarioCreateRequest",
+        "type": "object"
+      },
+      "ScenarioDerived": {
+        "description": "Figures computed from the ``Scenario`` \u2014 never stored, recomputed on every edit\n(ADR-0024, ``fleetplanning.derived``). Replaces the old source-derived ``detail``.",
+        "properties": {
+          "bounds": {
+            "additionalProperties": {
+              "maxItems": 2,
+              "minItems": 2,
+              "prefixItems": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "integer"
+                }
+              ],
+              "type": "array"
+            },
+            "description": "Per-area (min, max) service starts for the week \u2014 the user-owned requirement when set, else the ADR-0017 derivation.",
+            "title": "Bounds",
+            "type": "object"
+          },
+          "load_factor": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Demand/capacity proxy; None without size/rate data.",
+            "title": "Load Factor"
+          }
+        },
+        "required": [
+          "bounds"
+        ],
+        "title": "ScenarioDerived",
+        "type": "object"
+      },
+      "ScenarioListEntry": {
+        "properties": {
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "summary": {
+            "$ref": "#/components/schemas/ScenarioSummary"
+          }
+        },
+        "required": [
+          "id",
+          "summary"
+        ],
+        "title": "ScenarioListEntry",
+        "type": "object"
+      },
+      "ScenarioSummary": {
+        "description": "The facts the picker shows next to a scenario name \u2014 all computed, never stored.",
+        "properties": {
+          "areas": {
+            "title": "Areas",
+            "type": "integer"
+          },
+          "holes": {
+            "title": "Holes",
+            "type": "integer"
+          },
+          "load_factor": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Demand/capacity proxy, recomputed from the scenario (ADR-0024); None when size or mower-rate data is missing.",
+            "title": "Load Factor"
+          },
+          "mowers": {
+            "title": "Mowers",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "holes",
+          "areas",
+          "mowers"
+        ],
+        "title": "ScenarioSummary",
+        "type": "object"
+      },
+      "ScenarioTemplateRequest": {
+        "description": "Body for ``POST /api/scenario/template`` (ADR-0027). ``name`` seeds the editable\nscenario-name field only \u2014 it is not a slug and nothing is written; Save derives the\nslug from it later.",
+        "properties": {
+          "name": {
+            "default": "new-scenario",
+            "maxLength": 100,
+            "minLength": 1,
+            "title": "Name",
+            "type": "string"
+          }
+        },
+        "title": "ScenarioTemplateRequest",
+        "type": "object"
+      },
+      "Schedule": {
+        "properties": {
+          "cost": {
+            "description": "clingcon optimisation cost vector (lexicographic).",
+            "items": {
+              "type": "integer"
+            },
+            "title": "Cost",
+            "type": "array"
+          },
+          "tasks": {
+            "items": {
+              "$ref": "#/components/schemas/ScheduledTask"
+            },
+            "title": "Tasks",
+            "type": "array"
+          },
+          "violations": {
+            "items": {
+              "$ref": "#/components/schemas/Violation"
+            },
+            "title": "Violations",
+            "type": "array"
+          }
+        },
+        "required": [
+          "tasks",
+          "violations",
+          "cost"
+        ],
+        "title": "Schedule",
+        "type": "object"
+      },
+      "ScheduledTask": {
+        "properties": {
+          "area": {
+            "title": "Area",
+            "type": "string"
+          },
+          "end": {
+            "title": "End",
+            "type": "integer"
+          },
+          "mower": {
+            "title": "Mower",
+            "type": "string"
+          },
+          "start": {
+            "title": "Start",
+            "type": "integer"
+          },
+          "task": {
+            "title": "Task",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "area",
+          "task",
+          "mower",
+          "start",
+          "end"
+        ],
+        "title": "ScheduledTask",
+        "type": "object"
+      },
+      "ServiceEvent": {
+        "description": "One past (or in-progress) service, relative to t = 0.",
+        "properties": {
+          "area": {
+            "title": "Area",
+            "type": "string"
+          },
+          "completion": {
+            "title": "Completion",
+            "type": "integer"
+          },
+          "mower": {
+            "title": "Mower",
+            "type": "string"
+          },
+          "start": {
+            "title": "Start",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "area",
+          "mower",
+          "start",
+          "completion"
+        ],
+        "title": "ServiceEvent",
+        "type": "object"
+      },
+      "SolveJobStarted": {
+        "description": "``POST /api/solve`` returns this immediately \u2014 the solve keeps running in the\nbackground (ADR-0022, anytime solving). Poll ``GET /api/solve/{job_id}`` for progress.",
+        "properties": {
+          "job_id": {
+            "title": "Job Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "job_id"
+        ],
+        "title": "SolveJobStarted",
+        "type": "object"
+      },
+      "SolveJobStatus": {
+        "description": "Response for both the poll and cancel endpoints.\n\n``result`` is ``None`` only while running with no model found yet; while running with\na model it is the best-so-far (``solved=True, optimal=False``); once ``done`` it is\nthe final result (possibly still ``solved=False`` \u2014 no feasible schedule was found).",
+        "properties": {
+          "done": {
+            "title": "Done",
+            "type": "boolean"
+          },
+          "job_id": {
+            "title": "Job Id",
+            "type": "string"
+          },
+          "result": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SolveResult"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "job_id",
+          "done"
+        ],
+        "title": "SolveJobStatus",
+        "type": "object"
+      },
+      "SolvePreferences": {
+        "description": "The edited/frozen tasks a re-solve should try to preserve, and how (ADR-0031).\n\n``mode=\"off\"`` (the default) means the solve is byte-identical to one with no\npreferences at all: no extra program, no extra flag. That invariant is what keeps\nevery existing golden and contract test meaningful.",
+        "properties": {
+          "level": {
+            "default": "top",
+            "description": "Weak mode only: where the preference weak constraints sit relative to the forward model's own service-quality levels, i.e. what one churned task is worth. 'top' outranks every service violation (the default); 'high' ties it with one missed High-priority service, 'low' with a Low-priority one, 'avoid' with an hour worked in an avoid window; 'tiebreak' puts it below all of them. Prefer 'top' \u2014 ADR-0034 found 'tiebreak' indistinguishable from ignoring the edits (0.131 vs 0.134 agreement) on any instance the solver cannot prove within budget, which is most of them. It is kept for the study, not as a product option.",
+            "enum": [
+              "top",
+              "high",
+              "low",
+              "avoid",
+              "tiebreak"
+            ],
+            "title": "Level",
+            "type": "string"
+          },
+          "mode": {
+            "default": "off",
+            "description": "How preferences reach the solver: 'weak' adds weak constraints at their own priority level, 'heuristic' adds #heuristic directives (ADR-0032). 'off' ignores `tasks` entirely.",
+            "enum": [
+              "off",
+              "weak",
+              "heuristic"
+            ],
+            "title": "Mode",
+            "type": "string"
+          },
+          "tasks": {
+            "items": {
+              "$ref": "#/components/schemas/PreferredTask"
+            },
+            "title": "Tasks",
+            "type": "array"
+          }
+        },
+        "title": "SolvePreferences",
+        "type": "object"
+      },
+      "SolveRequest": {
+        "properties": {
+          "clingo_args": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Expert-mode override for the clingo command line, replacing the default -t4 --configuration=many portfolio (ADR-0007, ADR-0023). Omit for the default. Must not set constants (-c/--const) \u2014 the horizon constant is appended automatically; clingo itself rejects most other invalid flags/values, surfaced as a 400.",
+            "title": "Clingo Args"
+          },
+          "preferences": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SolvePreferences"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "User edits to preserve on a re-solve (ADR-0031). Omit for a cold solve; omitting it and sending `mode: off` are equivalent, and both leave the solver program exactly as it would be without this feature."
+          },
+          "scenario": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Scenario"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "A full (edited) problem instance, solved directly (ADR-0024). Every `model.py` rule runs during request parsing, so a malformed body is a 422 with a field path. Takes precedence over `scenario_id`."
+          },
+          "scenario_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Slug of a curated scenario (see GET /api/scenarios). Provide this or `scenario`; `scenario` wins when both are set.",
+            "title": "Scenario Id"
+          },
+          "time_limit_s": {
+            "default": 20.0,
+            "description": "Solver wall-clock budget in seconds; on timeout the best schedule so far is returned. Capped at 4 hours purely as a sanity limit against runaway jobs.",
+            "exclusiveMinimum": 0.0,
+            "maximum": 14400.0,
+            "title": "Time Limit S",
+            "type": "number"
+          }
+        },
+        "title": "SolveRequest",
+        "type": "object"
+      },
+      "SolveResult": {
+        "properties": {
+          "horizon_hours": {
+            "title": "Horizon Hours",
+            "type": "integer"
+          },
+          "optimal": {
+            "default": false,
+            "description": "True if the solver proved optimality; False if it returned a best-so-far.",
+            "title": "Optimal",
+            "type": "boolean"
+          },
+          "preferences": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PreferenceReport"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "What became of the user's schedule edits (ADR-0031). None when the solve carried no preferences."
+          },
+          "quality": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "integer"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The fixed 5-slot service-quality vector [max@P1, max@P2, max@P3, avoid, min] recomputed by solver/score.py (ADR-0016). Unlike the raw clingcon `schedule.cost`, its length and meaning do not change with the instance or the preference level, so it is the axis to compare across solves \u2014 a rolling horizon compares it across rolls (ADR-0042). None when there is no schedule.",
+            "title": "Quality"
+          },
+          "scenario_name": {
+            "title": "Scenario Name",
+            "type": "string"
+          },
+          "schedule": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Schedule"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "solve_time_s": {
+            "title": "Solve Time S",
+            "type": "number"
+          },
+          "solved": {
+            "title": "Solved",
+            "type": "boolean"
+          },
+          "solver": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SolverInfo"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Solver configuration for this solve \u2014 expert-mode diagnostics. None only for results not produced by a real solve (e.g. stubbed in tests)."
+          },
+          "status": {
+            "default": "unknown",
+            "description": "optimal | satisfiable | unsatisfiable | unknown (see ADR-0010).",
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "scenario_name",
+          "horizon_hours",
+          "solved",
+          "solve_time_s"
+        ],
+        "title": "SolveResult",
+        "type": "object"
+      },
+      "SolverInfo": {
+        "description": "How the solver was configured for one solve \u2014 expert-mode diagnostics, not\nend-user data.\n\nEchoed to the client so the UI reports the real configuration instead of a hardcoded\nguess (an earlier frontend string claimed \"single-threaded\"; the default portfolio\nis 4-thread \u2014 see ADR-0007, ADR-0009).",
+        "properties": {
+          "args": {
+            "description": "Thread/portfolio flags passed to clingo (ADR-0007). Excludes the -c horizon=N instance constant.",
+            "items": {
+              "type": "string"
+            },
+            "title": "Args",
+            "type": "array"
+          },
+          "config": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "clingo --configuration, present only when threads > 1.",
+            "title": "Config"
+          },
+          "name": {
+            "default": "clingcon",
+            "title": "Name",
+            "type": "string"
+          },
+          "threads": {
+            "title": "Threads",
+            "type": "integer"
+          },
+          "time_limit_s": {
+            "title": "Time Limit S",
+            "type": "number"
+          }
+        },
+        "required": [
+          "threads",
+          "args",
+          "time_limit_s"
+        ],
+        "title": "SolverInfo",
+        "type": "object"
+      },
+      "ValidationError": {
+        "properties": {
+          "ctx": {
+            "title": "Context",
+            "type": "object"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "title": "Location",
+            "type": "array"
+          },
+          "msg": {
+            "title": "Message",
+            "type": "string"
+          },
+          "type": {
+            "title": "Error Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError",
+        "type": "object"
+      },
+      "Violation": {
+        "properties": {
+          "area": {
+            "title": "Area",
+            "type": "string"
+          },
+          "kind": {
+            "description": "max_interval | min_interval | avoid_zone",
+            "title": "Kind",
+            "type": "string"
+          },
+          "task": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Task"
+          }
+        },
+        "required": [
+          "kind",
+          "area"
+        ],
+        "title": "Violation",
+        "type": "object"
+      }
+    }
+  },
+  "info": {
+    "title": "Fleet-Planning Demonstrator API",
+    "version": "0.1.0"
+  },
+  "openapi": "3.1.0",
+  "paths": {
+    "/api/catalog": {
+      "get": {
+        "description": "The mower model + area-type catalogue (``reference.py``), read-only,\nthe editor's defaults source (ADR-0024).",
+        "operationId": "get_catalog_api_catalog_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Catalog"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Get Catalog"
+      }
+    },
+    "/api/explain": {
+      "post": {
+        "description": "Explain why the edits in `request.preferences` that are missing from\n`request.schedule` were not kept (Iteration 6).\n\nA plain synchronous call, not a job like `/api/solve`: the explain budget (a few\nseconds, capped at 60s by `schemas.ExplainRequest`) bounds it directly, so there is\nnothing to poll or cancel. FastAPI runs this `def` handler in a worker thread, the\nsame as every other handler here \u2014 it does not block the server's event loop, only\nthis one request.",
+        "operationId": "post_explain_api_explain_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ExplainRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExplainResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Post Explain"
+      }
+    },
+    "/api/health": {
+      "get": {
+        "operationId": "health_api_health_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": {
+                    "type": "string"
+                  },
+                  "title": "Response Health Api Health Get",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Health"
+      }
+    },
+    "/api/scenario/advance": {
+      "post": {
+        "description": "Advance \"now\" for the moving horizon (ADR-0042): slide the window forward, fold the\nnow-past plan into history, hand back the still-future plan as frozen preferences. The\ncaller then re-solves the returned scenario carrying ``carried``. ``hours`` outside\n``1..horizon_hours`` is a 400.",
+        "operationId": "post_scenario_advance_api_scenario_advance_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RollRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RollResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Post Scenario Advance"
+      }
+    },
+    "/api/scenario/derived": {
+      "post": {
+        "description": "Recompute the derived figures for an edited scenario (ADR-0024). The editor calls\nthis as the user types; a malformed body is a 422 from request parsing.",
+        "operationId": "post_scenario_derived_api_scenario_derived_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Scenario"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ScenarioDerived"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Post Scenario Derived"
+      }
+    },
+    "/api/scenario/template": {
+      "post": {
+        "description": "A minimal, immediately-solvable scenario for \"New scenario\u2026\" (ADR-0027).\n\nNothing is written: this is a *draft* the editor opens. It reaches disk only via\n``PUT /api/scenario/{id}`` or ``POST /api/scenarios``. 200, not 201 \u2014 no resource\nis created here.",
+        "operationId": "post_scenario_template_api_scenario_template_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ScenarioTemplateRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ScenarioBundle"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Post Scenario Template"
+      }
+    },
+    "/api/scenario/{scenario_id}": {
+      "delete": {
+        "description": "Remove a scenario from the library (ADR-0026). 404 if the slug is unknown.",
+        "operationId": "delete_scenario_api_scenario__scenario_id__delete",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "scenario_id",
+            "required": true,
+            "schema": {
+              "title": "Scenario Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Delete Scenario"
+      },
+      "get": {
+        "operationId": "get_scenario_api_scenario__scenario_id__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "scenario_id",
+            "required": true,
+            "schema": {
+              "title": "Scenario Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ScenarioBundle"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Get Scenario"
+      },
+      "put": {
+        "description": "Save the edited scenario over the slug ``scenario_id`` \u2014 create or overwrite\n(ADR-0026). ``scenario.name`` is forced to the slug. A malformed slug is a 400; a\nmalformed scenario is a 422 from request parsing.",
+        "operationId": "put_scenario_api_scenario__scenario_id__put",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "scenario_id",
+            "required": true,
+            "schema": {
+              "title": "Scenario Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Scenario"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ScenarioBundle"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Put Scenario"
+      }
+    },
+    "/api/scenarios": {
+      "get": {
+        "operationId": "list_scenarios_api_scenarios_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/ScenarioListEntry"
+                  },
+                  "title": "Response List Scenarios Api Scenarios Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "List Scenarios"
+      },
+      "post": {
+        "description": "Save the edited scenario under a *new* slug (the \"Save as\u2026\" path, ADR-0026). A\nslug that is already taken is a 409 \u2014 use ``PUT`` to overwrite.",
+        "operationId": "create_scenario_api_scenarios_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ScenarioCreateRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ScenarioBundle"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Create Scenario"
+      }
+    },
+    "/api/solve": {
+      "post": {
+        "operationId": "post_solve_api_solve_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SolveRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SolveJobStarted"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Post Solve"
+      }
+    },
+    "/api/solve/{job_id}": {
+      "get": {
+        "operationId": "get_solve_api_solve__job_id__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "job_id",
+            "required": true,
+            "schema": {
+              "title": "Job Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SolveJobStatus"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Get Solve"
+      }
+    },
+    "/api/solve/{job_id}/cancel": {
+      "post": {
+        "operationId": "post_cancel_solve_api_solve__job_id__cancel_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "job_id",
+            "required": true,
+            "schema": {
+              "title": "Job Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SolveJobStatus"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Post Cancel Solve"
+      }
+    }
+  }
+}

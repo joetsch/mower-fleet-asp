@@ -1,0 +1,514 @@
+.summary {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.summary h3 {
+  margin: 0 0 10px;
+  font-size: 15px;
+}
+
+.summary code {
+  background: var(--gridline);
+  border-radius: 4px;
+  padding: 1px 5px;
+  font-size: 12px;
+}
+
+/* --- overview panel --- */
+.summary-overview {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.summary-facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 28px;
+}
+
+.summary-fact-value {
+  font-size: 20px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.summary-fact-label {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.summary-priority,
+.summary-now {
+  margin: 0;
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.summary-priority strong,
+.summary-now strong {
+  color: var(--text-primary);
+}
+
+.summary-load {
+  max-width: 420px;
+}
+
+.summary-load-head {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-bottom: 4px;
+}
+
+.summary-load-word {
+  color: var(--text-primary);
+}
+
+.summary-load-track {
+  height: 8px;
+  border-radius: 999px;
+  background: var(--gridline);
+  overflow: hidden;
+}
+
+.summary-load-fill {
+  height: 100%;
+  border-radius: 999px;
+}
+
+/* --- tabs --- */
+.tab-bar {
+  display: inline-flex;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.tab-bar button {
+  font: inherit;
+  font-size: 12px;
+  background: var(--surface);
+  color: var(--text-secondary);
+  border: none;
+  padding: 6px 16px;
+  cursor: pointer;
+}
+
+.tab-bar button.active {
+  background: var(--series-1);
+  color: #fff;
+}
+
+.summary-table-scroll {
+  overflow-x: auto;
+}
+
+.summary-table {
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.summary-table th,
+.summary-table td {
+  text-align: left;
+  padding: 6px 16px 6px 0;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+
+.summary-table th {
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+.summary-table td {
+  font-variant-numeric: tabular-nums;
+}
+
+/* --- edit mode (ADR-0024) --- */
+.cell-input {
+  font: inherit;
+  font-size: 13px;
+  padding: 2px 4px;
+  background: var(--surface);
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+}
+.cell-input-narrow {
+  width: 3em;
+}
+.cell-input-normal {
+  width: 4.5em;
+}
+.cell-input-wide {
+  width: 6.5em;
+}
+.cell-input-name {
+  width: 16em;
+}
+.cell-input-name-cell {
+  width: 9em;
+}
+select.cell-input {
+  width: auto;
+}
+
+/* --- structural editing (ADR-0027) --- */
+.summary-table .col-actions {
+  text-align: right;
+  padding-right: 0;
+}
+.summary-table .table-add-row td,
+.summary-table .table-note-row td {
+  border-bottom: none;
+}
+.summary-table .table-add-row td {
+  padding-top: 10px;
+}
+.fleet-edit-remove {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 10px;
+}
+.fleet-edit-add,
+.avail-edit-add {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-top: 2px;
+}
+
+.summary-name-edit {
+  display: block;
+  margin-bottom: 12px;
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+/* --- Fleet tab edit mode --- */
+.fleet-edit {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  font-size: 13px;
+}
+.fleet-edit-mower {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px 14px;
+}
+.fleet-edit-head {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 8px;
+}
+.fleet-edit-head label {
+  color: var(--text-secondary);
+  display: inline-flex;
+  align-items: baseline;
+  gap: 4px;
+}
+.cap-grid th,
+.cap-grid td {
+  text-align: center;
+  padding: 4px 10px;
+}
+.cap-grid td:first-child,
+.cap-grid th:first-child {
+  text-align: left;
+  position: relative;
+}
+.cap-cell input {
+  cursor: pointer;
+}
+.cap-orphan {
+  color: var(--status-critical);
+}
+.cap-orphan-msg {
+  position: static;
+  display: block;
+}
+
+.fleet-dur {
+  margin-left: 4px;
+}
+.fleet-dur td {
+  border-bottom: none;
+  padding: 3px 16px 3px 0;
+}
+
+/* --- Availability tab edit mode --- */
+.avail-edit {
+  margin-top: 16px;
+  font-size: 13px;
+}
+.avail-edit-area {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 6px 0;
+  border-top: 1px solid var(--border);
+}
+.avail-edit-area .summary-strip-label {
+  width: 120px;
+  flex: none;
+  padding-top: 3px;
+}
+.avail-edit-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.avail-edit-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.avail-edit-kind {
+  width: 48px;
+  color: var(--text-secondary);
+}
+
+/* The weekday picker on a window row (ADR-0029). Seven single-letter toggles, sized to
+   read as one control rather than seven buttons. While every row on the area covers all
+   seven days there is no per-weekday structure to show, so the whole group is muted —
+   it comes forward the moment a day is unticked. */
+.day-chips {
+  display: inline-flex;
+  gap: 2px;
+  margin-left: 4px;
+}
+.day-chips-uniform {
+  opacity: 0.45;
+}
+.day-chips-uniform:hover,
+.day-chips-uniform:focus-within {
+  opacity: 1;
+}
+.day-chip {
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  font: inherit;
+  font-size: 11px;
+  line-height: 1;
+  color: var(--text-secondary);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  cursor: pointer;
+}
+.day-chip-on {
+  color: var(--surface);
+  background: var(--series-1);
+  border-color: var(--series-1);
+}
+.day-chip:disabled {
+  cursor: default;
+}
+/* The last remaining day: still filled (it IS on), just not clickable. */
+.day-chip-on:disabled {
+  opacity: 0.7;
+}
+
+/* What the row actually blocks, spelled out — the wrap is same-weekday (ADR-0014). */
+.avail-edit-effect {
+  font-size: 12px;
+  white-space: nowrap;
+}
+.cell-input-invalid {
+  border-color: var(--status-critical);
+}
+.cell-input:disabled {
+  opacity: 0.5;
+}
+.cell-num {
+  position: relative;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 3px;
+}
+.cell-suffix {
+  color: var(--text-muted);
+  font-size: 11px;
+}
+.cell-pair {
+  white-space: nowrap;
+}
+.cell-pair .cell-num .cell-input {
+  width: 3.4em;
+}
+.field-error {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  margin-top: 2px;
+  color: var(--status-critical);
+  font-size: 11px;
+  font-weight: 500;
+  white-space: nowrap;
+  z-index: 1;
+}
+
+.summary-fleet {
+  margin: 0;
+  padding-left: 18px;
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.summary-fleet li {
+  margin-bottom: 4px;
+}
+
+.summary-fleet strong {
+  color: var(--text-primary);
+}
+
+.summary-fleet-model {
+  color: var(--text-muted);
+}
+
+.summary-legend {
+  display: flex;
+  gap: 16px;
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+}
+
+.summary-legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.av-key {
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+  display: inline-block;
+  border: 1px solid var(--border);
+}
+
+.summary-strip-scroll {
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+  padding: 10px 12px;
+}
+
+.summary-strip-daylabels {
+  display: flex;
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+}
+
+.summary-strip-daylabels span {
+  display: inline-block;
+  text-align: center;
+}
+
+.summary-strip-row {
+  display: flex;
+  align-items: center;
+  height: 18px;
+}
+
+.summary-strip-label {
+  width: 132px;
+  flex-shrink: 0;
+  font-size: 11px;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding-right: 8px;
+}
+
+.summary-strip {
+  display: block;
+}
+
+.summary-note {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin: 0 0 8px;
+}
+
+.summary-tip {
+  position: fixed;
+  z-index: 30;
+  pointer-events: none;
+  background: var(--text-primary);
+  color: var(--page);
+  border-radius: 6px;
+  padding: 4px 8px;
+  font-size: 11px;
+  white-space: nowrap;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+}
+
+/* availability states */
+.av-free {
+  fill: transparent;
+}
+.av-avoid {
+  fill: var(--status-serious);
+  opacity: 0.4;
+}
+.av-no_go {
+  fill: var(--text-primary);
+  opacity: 0.22;
+}
+.av-grid {
+  stroke: var(--gridline);
+  stroke-width: 1;
+}
+
+/* legend keys reuse the same look */
+.summary-legend .av-free {
+  background: var(--surface);
+}
+.summary-legend .av-avoid {
+  background: var(--status-serious);
+  opacity: 0.5;
+}
+.summary-legend .av-no_go {
+  background: var(--text-primary);
+  opacity: 0.28;
+}
+
+/* --- History tab --- */
+.hist-bar {
+  fill: var(--history-fill);
+  cursor: default;
+}
+.hist-now {
+  stroke: var(--text-secondary);
+  stroke-width: 1.5;
+  stroke-dasharray: 3 3;
+}
+.summary-legend .hist-key {
+  background: var(--history-fill);
+}
+.summary-legend .hist-now-key {
+  background: none;
+  border: none;
+  border-radius: 0;
+  border-top: 2px dashed var(--text-secondary);
+  width: 12px;
+  height: 0;
+  align-self: center;
+}

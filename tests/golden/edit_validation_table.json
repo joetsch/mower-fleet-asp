@@ -1,0 +1,2355 @@
+{
+  "$comment": "Cross-boundary mirror guard — docs/known-hazards.md 'Refactor before Iteration 5' item 4. Regenerate: cd frontend && UPDATE_GOLDEN=1 npm run test. Consumed by tests/test_model.py (validates each entry through pydantic).",
+  "cases": [
+    {
+      "note": "well-formed baseline",
+      "verdict": "accept",
+      "clientErrorPaths": [],
+      "scenario": {
+        "name": "test",
+        "areas": [
+          {
+            "name": "A1",
+            "type": "FAIRWAY",
+            "hole": 1,
+            "priority": 1,
+            "min_interval": 18,
+            "max_interval": 24,
+            "schedule": {
+              "Monday": {
+                "no_go": [],
+                "avoid": [
+                  [
+                    8,
+                    20
+                  ]
+                ]
+              },
+              "Tuesday": {
+                "no_go": [],
+                "avoid": [
+                  [
+                    8,
+                    20
+                  ]
+                ]
+              },
+              "Wednesday": {
+                "no_go": [],
+                "avoid": [
+                  [
+                    8,
+                    20
+                  ]
+                ]
+              },
+              "Thursday": {
+                "no_go": [],
+                "avoid": [
+                  [
+                    8,
+                    20
+                  ]
+                ]
+              },
+              "Friday": {
+                "no_go": [],
+                "avoid": [
+                  [
+                    8,
+                    20
+                  ]
+                ]
+              },
+              "Saturday": {
+                "no_go": [],
+                "avoid": [
+                  [
+                    8,
+                    20
+                  ]
+                ]
+              },
+              "Sunday": {
+                "no_go": [],
+                "avoid": [
+                  [
+                    8,
+                    20
+                  ]
+                ]
+              }
+            },
+            "size_m2": 5000,
+            "min_services": null,
+            "max_services": null
+          },
+          {
+            "name": "A2",
+            "type": "SEMIROUGH_A",
+            "hole": 1,
+            "priority": 2,
+            "min_interval": 39,
+            "max_interval": 48,
+            "schedule": {
+              "Monday": {
+                "no_go": [],
+                "avoid": []
+              },
+              "Tuesday": {
+                "no_go": [],
+                "avoid": []
+              },
+              "Wednesday": {
+                "no_go": [],
+                "avoid": []
+              },
+              "Thursday": {
+                "no_go": [],
+                "avoid": []
+              },
+              "Friday": {
+                "no_go": [],
+                "avoid": []
+              },
+              "Saturday": {
+                "no_go": [],
+                "avoid": []
+              },
+              "Sunday": {
+                "no_go": [],
+                "avoid": []
+              }
+            },
+            "size_m2": 3000,
+            "min_services": null,
+            "max_services": null
+          }
+        ],
+        "mowers": [
+          {
+            "name": "M1",
+            "can_mow": [
+              "A1",
+              "A2"
+            ],
+            "model": "AM_580L EPOS",
+            "area_capacity_m2_per_day": 8000
+          }
+        ],
+        "history": [
+          {
+            "area": "A1",
+            "mower": "M1",
+            "start": -20,
+            "completion": -14
+          },
+          {
+            "area": "A2",
+            "mower": "M1",
+            "start": -40,
+            "completion": -33
+          }
+        ],
+        "horizon_hours": 168,
+        "horizon_start_hour": 13,
+        "duration_seed": 0,
+        "base_durations": [
+          {
+            "area": "A1",
+            "mower": "M1",
+            "hours": 15
+          },
+          {
+            "area": "A2",
+            "mower": "M1",
+            "hours": 9
+          }
+        ]
+      }
+    },
+    {
+      "note": "priority above 3",
+      "verdict": "reject",
+      "clientErrorPaths": [
+        "areas.A1.priority"
+      ],
+      "scenario": {
+        "name": "test",
+        "areas": [
+          {
+            "name": "A1",
+            "type": "FAIRWAY",
+            "hole": 1,
+            "priority": 9,
+            "min_interval": 18,
+            "max_interval": 24,
+            "schedule": {
+              "Monday": {
+                "no_go": [],
+                "avoid": [
+                  [
+                    8,
+                    20
+                  ]
+                ]
+              },
+              "Tuesday": {
+                "no_go": [],
+                "avoid": [
+                  [
+                    8,
+                    20
+                  ]
+                ]
+              },
+              "Wednesday": {
+                "no_go": [],
+                "avoid": [
+                  [
+                    8,
+                    20
+                  ]
+                ]
+              },
+              "Thursday": {
+                "no_go": [],
+                "avoid": [
+                  [
+                    8,
+                    20
+                  ]
+                ]
+              },
+              "Friday": {
+                "no_go": [],
+                "avoid": [
+                  [
+                    8,
+                    20
+                  ]
+                ]
+              },
+              "Saturday": {
+                "no_go": [],
+                "avoid": [
+                  [
+                    8,
+                    20
+                  ]
+                ]
+              },
+              "Sunday": {
+                "no_go": [],
+                "avoid": [
+                  [
+                    8,
+                    20
+                  ]
+                ]
+              }
+            },
+            "size_m2": 5000,
+            "min_services": null,
+            "max_services": null
+          },
+          {
+            "name": "A2",
+            "type": "SEMIROUGH_A",
+            "hole": 1,
+            "priority": 2,
+            "min_interval": 39,
+            "max_interval": 48,
+            "schedule": {
+              "Monday": {
+                "no_go": [],
+                "avoid": []
+              },
+              "Tuesday": {
+                "no_go": [],
+                "avoid": []
+              },
+              "Wednesday": {
+                "no_go": [],
+                "avoid": []
+              },
+              "Thursday": {
+                "no_go": [],
+                "avoid": []
+              },
+              "Friday": {
+                "no_go": [],
+                "avoid": []
+              },
+              "Saturday": {
+                "no_go": [],
+                "avoid": []
+              },
+              "Sunday": {
+                "no_go": [],
+                "avoid": []
+              }
+            },
+            "size_m2": 3000,
+            "min_services": null,
+            "max_services": null
+          }
+        ],
+        "mowers": [
+          {
+            "name": "M1",
+            "can_mow": [
+              "A1",
+              "A2"
+            ],
+            "model": "AM_580L EPOS",
+            "area_capacity_m2_per_day": 8000
+          }
+        ],
+        "history": [
+          {
+            "area": "A1",
+            "mower": "M1",
+            "start": -20,
+            "completion": -14
+          },
+          {
+            "area": "A2",
+            "mower": "M1",
+            "start": -40,
+            "completion": -33
+          }
+        ],
+        "horizon_hours": 168,
+        "horizon_start_hour": 13,
+        "duration_seed": 0,
+        "base_durations": [
+          {
+            "area": "A1",
+            "mower": "M1",
+            "hours": 15
+          },
+          {
+            "area": "A2",
+            "mower": "M1",
+            "hours": 9
+          }
+        ]
+      }
+    },
+    {
+      "note": "priority below 1",
+      "verdict": "reject",
+      "clientErrorPaths": [
+        "areas.A1.priority"
+      ],
+      "scenario": {
+        "name": "test",
+        "areas": [
+          {
+            "name": "A1",
+            "type": "FAIRWAY",
+            "hole": 1,
+            "priority": 0,
+            "min_interval": 18,
+            "max_interval": 24,
+            "schedule": {
+              "Monday": {
+                "no_go": [],
+                "avoid": [
+                  [
+                    8,
+                    20
+                  ]
+                ]
+              },
+              "Tuesday": {
+                "no_go": [],
+                "avoid": [
+                  [
+                    8,
+                    20
+                  ]
+                ]
+              },
+              "Wednesday": {
+                "no_go": [],
+                "avoid": [
+                  [
+                    8,
+                    20
+                  ]
+                ]
+              },
+              "Thursday": {
+                "no_go": [],
+                "avoid": [
+                  [
+                    8,
+                    20
+                  ]
+                ]
+              },
+              "Friday": {
+                "no_go": [],
+                "avoid": [
+                  [
+                    8,
+                    20
+                  ]
+                ]
+              },
+              "Saturday": {
+                "no_go": [],
+                "avoid": [
+                  [
+                    8,
+                    20
+                  ]
+                ]
+              },
+              "Sunday": {
+                "no_go": [],
+                "avoid": [
+                  [
+                    8,
+                    20
+                  ]
+                ]
+              }
+            },
+            "size_m2": 5000,
+            "min_services": null,
+            "max_services": null
+          },
+          {
+            "name": "A2",
+            "type": "SEMIROUGH_A",
+            "hole": 1,
+            "priority": 2,
+            "min_interval": 39,
+            "max_interval": 48,
+            "schedule": {
+              "Monday": {
+                "no_go": [],
+                "avoid": []
+              },
+              "Tuesday": {
+                "no_go": [],
+                "avoid": []
+              },
+              "Wednesday": {
+                "no_go": [],
+                "avoid": []
+              },
+              "Thursday": {
+                "no_go": [],
+                "avoid": []
+              },
+              "Friday": {
+                "no_go": [],
+                "avoid": []
+              },
+              "Saturday": {
+                "no_go": [],
+                "avoid": []
+              },
+              "Sunday": {
+                "no_go": [],
+                "avoid": []
+              }
+            },
+            "size_m2": 3000,
+            "min_services": null,
+            "max_services": null
+          }
+        ],
+        "mowers": [
+          {
+            "name": "M1",
+            "can_mow": [
+              "A1",
+              "A2"
+            ],
+            "model": "AM_580L EPOS",
+            "area_capacity_m2_per_day": 8000
+          }
+        ],
+        "history": [
+          {
+            "area": "A1",
+            "mower": "M1",
+            "start": -20,
+            "completion": -14
+          },
+          {
+            "area": "A2",
+            "mower": "M1",
+            "start": -40,
+            "completion": -33
+          }
+        ],
+        "horizon_hours": 168,
+        "horizon_start_hour": 13,
+        "duration_seed": 0,
+        "base_durations": [
+          {
+            "area": "A1",
+            "mower": "M1",
+            "hours": 15
+          },
+          {
+            "area": "A2",
+            "mower": "M1",
+            "hours": 9
+          }
+        ]
+      }
+    },
+    {
+      "note": "min_interval > max_interval",
+      "verdict": "reject",
+      "clientErrorPaths": [
+        "areas.A1.min_interval"
+      ],
+      "scenario": {
+        "name": "test",
+        "areas": [
+          {
+            "name": "A1",
+            "type": "FAIRWAY",
+            "hole": 1,
+            "priority": 1,
+            "min_interval": 99,
+            "max_interval": 24,
+            "schedule": {
+              "Monday": {
+                "no_go": [],
+                "avoid": [
+                  [
+                    8,
+                    20
+                  ]
+                ]
+              },
+              "Tuesday": {
+                "no_go": [],
+                "avoid": [
+                  [
+                    8,
+                    20
+                  ]
+                ]
+              },
+              "Wednesday": {
+                "no_go": [],
+                "avoid": [
+                  [
+                    8,
+                    20
+                  ]
+                ]
+              },
+              "Thursday": {
+                "no_go": [],
+                "avoid": [
+                  [
+                    8,
+                    20
+                  ]
+                ]
+              },
+              "Friday": {
+                "no_go": [],
+                "avoid": [
+                  [
+                    8,
+                    20
+                  ]
+                ]
+              },
+              "Saturday": {
+                "no_go": [],
+                "avoid": [
+                  [
+                    8,
+                    20
+                  ]
+                ]
+              },
+              "Sunday": {
+                "no_go": [],
+                "avoid": [
+                  [
+                    8,
+                    20
+                  ]
+                ]
+              }
+            },
+            "size_m2": 5000,
+            "min_services": null,
+            "max_services": null
+          },
+          {
+            "name": "A2",
+            "type": "SEMIROUGH_A",
+            "hole": 1,
+            "priority": 2,
+            "min_interval": 39,
+            "max_interval": 48,
+            "schedule": {
+              "Monday": {
+                "no_go": [],
+                "avoid": []
+              },
+              "Tuesday": {
+                "no_go": [],
+                "avoid": []
+              },
+              "Wednesday": {
+                "no_go": [],
+                "avoid": []
+              },
+              "Thursday": {
+                "no_go": [],
+                "avoid": []
+              },
+              "Friday": {
+                "no_go": [],
+                "avoid": []
+              },
+              "Saturday": {
+                "no_go": [],
+                "avoid": []
+              },
+              "Sunday": {
+                "no_go": [],
+                "avoid": []
+              }
+            },
+            "size_m2": 3000,
+            "min_services": null,
+            "max_services": null
+          }
+        ],
+        "mowers": [
+          {
+            "name": "M1",
+            "can_mow": [
+              "A1",
+              "A2"
+            ],
+            "model": "AM_580L EPOS",
+            "area_capacity_m2_per_day": 8000
+          }
+        ],
+        "history": [
+          {
+            "area": "A1",
+            "mower": "M1",
+            "start": -20,
+            "completion": -14
+          },
+          {
+            "area": "A2",
+            "mower": "M1",
+            "start": -40,
+            "completion": -33
+          }
+        ],
+        "horizon_hours": 168,
+        "horizon_start_hour": 13,
+        "duration_seed": 0,
+        "base_durations": [
+          {
+            "area": "A1",
+            "mower": "M1",
+            "hours": 15
+          },
+          {
+            "area": "A2",
+            "mower": "M1",
+            "hours": 9
+          }
+        ]
+      }
+    },
+    {
+      "note": "min_services > max_services",
+      "verdict": "reject",
+      "clientErrorPaths": [
+        "areas.A1.min_services"
+      ],
+      "scenario": {
+        "name": "test",
+        "areas": [
+          {
+            "name": "A1",
+            "type": "FAIRWAY",
+            "hole": 1,
+            "priority": 1,
+            "min_interval": 18,
+            "max_interval": 24,
+            "schedule": {
+              "Monday": {
+                "no_go": [],
+                "avoid": [
+                  [
+                    8,
+                    20
+                  ]
+                ]
+              },
+              "Tuesday": {
+                "no_go": [],
+                "avoid": [
+                  [
+                    8,
+                    20
+                  ]
+                ]
+              },
+              "Wednesday": {
+                "no_go": [],
+                "avoid": [
+                  [
+                    8,
+                    20
+                  ]
+                ]
+              },
+              "Thursday": {
+                "no_go": [],
+                "avoid": [
+                  [
+                    8,
+                    20
+                  ]
+                ]
+              },
+              "Friday": {
+                "no_go": [],
+                "avoid": [
+                  [
+                    8,
+                    20
+                  ]
+                ]
+              },
+              "Saturday": {
+                "no_go": [],
+                "avoid": [
+                  [
+                    8,
+                    20
+                  ]
+                ]
+              },
+              "Sunday": {
+                "no_go": [],
+                "avoid": [
+                  [
+                    8,
+                    20
+                  ]
+                ]
+              }
+            },
+            "size_m2": 5000,
+            "min_services": 5,
+            "max_services": 2
+          },
+          {
+            "name": "A2",
+            "type": "SEMIROUGH_A",
+            "hole": 1,
+            "priority": 2,
+            "min_interval": 39,
+            "max_interval": 48,
+            "schedule": {
+              "Monday": {
+                "no_go": [],
+                "avoid": []
+              },
+              "Tuesday": {
+                "no_go": [],
+                "avoid": []
+              },
+              "Wednesday": {
+                "no_go": [],
+                "avoid": []
+              },
+              "Thursday": {
+                "no_go": [],
+                "avoid": []
+              },
+              "Friday": {
+                "no_go": [],
+                "avoid": []
+              },
+              "Saturday": {
+                "no_go": [],
+                "avoid": []
+              },
+              "Sunday": {
+                "no_go": [],
+                "avoid": []
+              }
+            },
+            "size_m2": 3000,
+            "min_services": null,
+            "max_services": null
+          }
+        ],
+        "mowers": [
+          {
+            "name": "M1",
+            "can_mow": [
+              "A1",
+              "A2"
+            ],
+            "model": "AM_580L EPOS",
+            "area_capacity_m2_per_day": 8000
+          }
+        ],
+        "history": [
+          {
+            "area": "A1",
+            "mower": "M1",
+            "start": -20,
+            "completion": -14
+          },
+          {
+            "area": "A2",
+            "mower": "M1",
+            "start": -40,
+            "completion": -33
+          }
+        ],
+        "horizon_hours": 168,
+        "horizon_start_hour": 13,
+        "duration_seed": 0,
+        "base_durations": [
+          {
+            "area": "A1",
+            "mower": "M1",
+            "hours": 15
+          },
+          {
+            "area": "A2",
+            "mower": "M1",
+            "hours": 9
+          }
+        ]
+      }
+    },
+    {
+      "note": "history completion before start",
+      "verdict": "reject",
+      "clientErrorPaths": [
+        "history.A1.completion"
+      ],
+      "scenario": {
+        "name": "test",
+        "areas": [
+          {
+            "name": "A1",
+            "type": "FAIRWAY",
+            "hole": 1,
+            "priority": 1,
+            "min_interval": 18,
+            "max_interval": 24,
+            "schedule": {
+              "Monday": {
+                "no_go": [],
+                "avoid": [
+                  [
+                    8,
+                    20
+                  ]
+                ]
+              },
+              "Tuesday": {
+                "no_go": [],
+                "avoid": [
+                  [
+                    8,
+                    20
+                  ]
+                ]
+              },
+              "Wednesday": {
+                "no_go": [],
+                "avoid": [
+                  [
+                    8,
+                    20
+                  ]
+                ]
+              },
+              "Thursday": {
+                "no_go": [],
+                "avoid": [
+                  [
+                    8,
+                    20
+                  ]
+                ]
+              },
+              "Friday": {
+                "no_go": [],
+                "avoid": [
+                  [
+                    8,
+                    20
+                  ]
+                ]
+              },
+              "Saturday": {
+                "no_go": [],
+                "avoid": [
+                  [
+                    8,
+                    20
+                  ]
+                ]
+              },
+              "Sunday": {
+                "no_go": [],
+                "avoid": [
+                  [
+                    8,
+                    20
+                  ]
+                ]
+              }
+            },
+            "size_m2": 5000,
+            "min_services": null,
+            "max_services": null
+          },
+          {
+            "name": "A2",
+            "type": "SEMIROUGH_A",
+            "hole": 1,
+            "priority": 2,
+            "min_interval": 39,
+            "max_interval": 48,
+            "schedule": {
+              "Monday": {
+                "no_go": [],
+                "avoid": []
+              },
+              "Tuesday": {
+                "no_go": [],
+                "avoid": []
+              },
+              "Wednesday": {
+                "no_go": [],
+                "avoid": []
+              },
+              "Thursday": {
+                "no_go": [],
+                "avoid": []
+              },
+              "Friday": {
+                "no_go": [],
+                "avoid": []
+              },
+              "Saturday": {
+                "no_go": [],
+                "avoid": []
+              },
+              "Sunday": {
+                "no_go": [],
+                "avoid": []
+              }
+            },
+            "size_m2": 3000,
+            "min_services": null,
+            "max_services": null
+          }
+        ],
+        "mowers": [
+          {
+            "name": "M1",
+            "can_mow": [
+              "A1",
+              "A2"
+            ],
+            "model": "AM_580L EPOS",
+            "area_capacity_m2_per_day": 8000
+          }
+        ],
+        "history": [
+          {
+            "area": "A1",
+            "mower": "M1",
+            "start": -20,
+            "completion": -25
+          },
+          {
+            "area": "A2",
+            "mower": "M1",
+            "start": -40,
+            "completion": -33
+          }
+        ],
+        "horizon_hours": 168,
+        "horizon_start_hour": 13,
+        "duration_seed": 0,
+        "base_durations": [
+          {
+            "area": "A1",
+            "mower": "M1",
+            "hours": 15
+          },
+          {
+            "area": "A2",
+            "mower": "M1",
+            "hours": 9
+          }
+        ]
+      }
+    },
+    {
+      "note": "duplicate area names",
+      "verdict": "reject",
+      "clientErrorPaths": [
+        "areas.A1.name"
+      ],
+      "scenario": {
+        "name": "test",
+        "areas": [
+          {
+            "name": "A1",
+            "type": "FAIRWAY",
+            "hole": 1,
+            "priority": 1,
+            "min_interval": 18,
+            "max_interval": 24,
+            "schedule": {
+              "Monday": {
+                "no_go": [],
+                "avoid": [
+                  [
+                    8,
+                    20
+                  ]
+                ]
+              },
+              "Tuesday": {
+                "no_go": [],
+                "avoid": [
+                  [
+                    8,
+                    20
+                  ]
+                ]
+              },
+              "Wednesday": {
+                "no_go": [],
+                "avoid": [
+                  [
+                    8,
+                    20
+                  ]
+                ]
+              },
+              "Thursday": {
+                "no_go": [],
+                "avoid": [
+                  [
+                    8,
+                    20
+                  ]
+                ]
+              },
+              "Friday": {
+                "no_go": [],
+                "avoid": [
+                  [
+                    8,
+                    20
+                  ]
+                ]
+              },
+              "Saturday": {
+                "no_go": [],
+                "avoid": [
+                  [
+                    8,
+                    20
+                  ]
+                ]
+              },
+              "Sunday": {
+                "no_go": [],
+                "avoid": [
+                  [
+                    8,
+                    20
+                  ]
+                ]
+              }
+            },
+            "size_m2": 5000,
+            "min_services": null,
+            "max_services": null
+          },
+          {
+            "name": "A2",
+            "type": "SEMIROUGH_A",
+            "hole": 1,
+            "priority": 2,
+            "min_interval": 39,
+            "max_interval": 48,
+            "schedule": {
+              "Monday": {
+                "no_go": [],
+                "avoid": []
+              },
+              "Tuesday": {
+                "no_go": [],
+                "avoid": []
+              },
+              "Wednesday": {
+                "no_go": [],
+                "avoid": []
+              },
+              "Thursday": {
+                "no_go": [],
+                "avoid": []
+              },
+              "Friday": {
+                "no_go": [],
+                "avoid": []
+              },
+              "Saturday": {
+                "no_go": [],
+                "avoid": []
+              },
+              "Sunday": {
+                "no_go": [],
+                "avoid": []
+              }
+            },
+            "size_m2": 3000,
+            "min_services": null,
+            "max_services": null
+          },
+          {
+            "name": "A1",
+            "type": "FAIRWAY",
+            "hole": 1,
+            "priority": 1,
+            "min_interval": 18,
+            "max_interval": 24,
+            "schedule": {
+              "Monday": {
+                "no_go": [],
+                "avoid": [
+                  [
+                    8,
+                    20
+                  ]
+                ]
+              },
+              "Tuesday": {
+                "no_go": [],
+                "avoid": [
+                  [
+                    8,
+                    20
+                  ]
+                ]
+              },
+              "Wednesday": {
+                "no_go": [],
+                "avoid": [
+                  [
+                    8,
+                    20
+                  ]
+                ]
+              },
+              "Thursday": {
+                "no_go": [],
+                "avoid": [
+                  [
+                    8,
+                    20
+                  ]
+                ]
+              },
+              "Friday": {
+                "no_go": [],
+                "avoid": [
+                  [
+                    8,
+                    20
+                  ]
+                ]
+              },
+              "Saturday": {
+                "no_go": [],
+                "avoid": [
+                  [
+                    8,
+                    20
+                  ]
+                ]
+              },
+              "Sunday": {
+                "no_go": [],
+                "avoid": [
+                  [
+                    8,
+                    20
+                  ]
+                ]
+              }
+            },
+            "size_m2": 5000,
+            "min_services": null,
+            "max_services": null
+          }
+        ],
+        "mowers": [
+          {
+            "name": "M1",
+            "can_mow": [
+              "A1",
+              "A2"
+            ],
+            "model": "AM_580L EPOS",
+            "area_capacity_m2_per_day": 8000
+          }
+        ],
+        "history": [
+          {
+            "area": "A1",
+            "mower": "M1",
+            "start": -20,
+            "completion": -14
+          },
+          {
+            "area": "A2",
+            "mower": "M1",
+            "start": -40,
+            "completion": -33
+          }
+        ],
+        "horizon_hours": 168,
+        "horizon_start_hour": 13,
+        "duration_seed": 0,
+        "base_durations": [
+          {
+            "area": "A1",
+            "mower": "M1",
+            "hours": 15
+          },
+          {
+            "area": "A2",
+            "mower": "M1",
+            "hours": 9
+          }
+        ]
+      }
+    },
+    {
+      "note": "duplicate mower names",
+      "verdict": "reject",
+      "clientErrorPaths": [
+        "mowers.M1.name"
+      ],
+      "scenario": {
+        "name": "test",
+        "areas": [
+          {
+            "name": "A1",
+            "type": "FAIRWAY",
+            "hole": 1,
+            "priority": 1,
+            "min_interval": 18,
+            "max_interval": 24,
+            "schedule": {
+              "Monday": {
+                "no_go": [],
+                "avoid": [
+                  [
+                    8,
+                    20
+                  ]
+                ]
+              },
+              "Tuesday": {
+                "no_go": [],
+                "avoid": [
+                  [
+                    8,
+                    20
+                  ]
+                ]
+              },
+              "Wednesday": {
+                "no_go": [],
+                "avoid": [
+                  [
+                    8,
+                    20
+                  ]
+                ]
+              },
+              "Thursday": {
+                "no_go": [],
+                "avoid": [
+                  [
+                    8,
+                    20
+                  ]
+                ]
+              },
+              "Friday": {
+                "no_go": [],
+                "avoid": [
+                  [
+                    8,
+                    20
+                  ]
+                ]
+              },
+              "Saturday": {
+                "no_go": [],
+                "avoid": [
+                  [
+                    8,
+                    20
+                  ]
+                ]
+              },
+              "Sunday": {
+                "no_go": [],
+                "avoid": [
+                  [
+                    8,
+                    20
+                  ]
+                ]
+              }
+            },
+            "size_m2": 5000,
+            "min_services": null,
+            "max_services": null
+          },
+          {
+            "name": "A2",
+            "type": "SEMIROUGH_A",
+            "hole": 1,
+            "priority": 2,
+            "min_interval": 39,
+            "max_interval": 48,
+            "schedule": {
+              "Monday": {
+                "no_go": [],
+                "avoid": []
+              },
+              "Tuesday": {
+                "no_go": [],
+                "avoid": []
+              },
+              "Wednesday": {
+                "no_go": [],
+                "avoid": []
+              },
+              "Thursday": {
+                "no_go": [],
+                "avoid": []
+              },
+              "Friday": {
+                "no_go": [],
+                "avoid": []
+              },
+              "Saturday": {
+                "no_go": [],
+                "avoid": []
+              },
+              "Sunday": {
+                "no_go": [],
+                "avoid": []
+              }
+            },
+            "size_m2": 3000,
+            "min_services": null,
+            "max_services": null
+          }
+        ],
+        "mowers": [
+          {
+            "name": "M1",
+            "can_mow": [
+              "A1",
+              "A2"
+            ],
+            "model": "AM_580L EPOS",
+            "area_capacity_m2_per_day": 8000
+          },
+          {
+            "name": "M1",
+            "can_mow": [
+              "A1",
+              "A2"
+            ],
+            "model": "AM_580L EPOS",
+            "area_capacity_m2_per_day": 8000
+          }
+        ],
+        "history": [
+          {
+            "area": "A1",
+            "mower": "M1",
+            "start": -20,
+            "completion": -14
+          },
+          {
+            "area": "A2",
+            "mower": "M1",
+            "start": -40,
+            "completion": -33
+          }
+        ],
+        "horizon_hours": 168,
+        "horizon_start_hour": 13,
+        "duration_seed": 0,
+        "base_durations": [
+          {
+            "area": "A1",
+            "mower": "M1",
+            "hours": 15
+          },
+          {
+            "area": "A2",
+            "mower": "M1",
+            "hours": 9
+          }
+        ]
+      }
+    },
+    {
+      "note": "no_go covers the whole day (wrap-aware)",
+      "verdict": "reject",
+      "clientErrorPaths": [
+        "areas.A1.schedule.Friday.no_go",
+        "areas.A1.schedule.Monday.no_go",
+        "areas.A1.schedule.Saturday.no_go",
+        "areas.A1.schedule.Sunday.no_go",
+        "areas.A1.schedule.Thursday.no_go",
+        "areas.A1.schedule.Tuesday.no_go",
+        "areas.A1.schedule.Wednesday.no_go"
+      ],
+      "scenario": {
+        "name": "test",
+        "areas": [
+          {
+            "name": "A1",
+            "type": "FAIRWAY",
+            "hole": 1,
+            "priority": 1,
+            "min_interval": 18,
+            "max_interval": 24,
+            "schedule": {
+              "Monday": {
+                "no_go": [
+                  [
+                    1,
+                    0
+                  ],
+                  [
+                    0,
+                    1
+                  ]
+                ],
+                "avoid": [
+                  [
+                    8,
+                    20
+                  ]
+                ]
+              },
+              "Tuesday": {
+                "no_go": [
+                  [
+                    1,
+                    0
+                  ],
+                  [
+                    0,
+                    1
+                  ]
+                ],
+                "avoid": [
+                  [
+                    8,
+                    20
+                  ]
+                ]
+              },
+              "Wednesday": {
+                "no_go": [
+                  [
+                    1,
+                    0
+                  ],
+                  [
+                    0,
+                    1
+                  ]
+                ],
+                "avoid": [
+                  [
+                    8,
+                    20
+                  ]
+                ]
+              },
+              "Thursday": {
+                "no_go": [
+                  [
+                    1,
+                    0
+                  ],
+                  [
+                    0,
+                    1
+                  ]
+                ],
+                "avoid": [
+                  [
+                    8,
+                    20
+                  ]
+                ]
+              },
+              "Friday": {
+                "no_go": [
+                  [
+                    1,
+                    0
+                  ],
+                  [
+                    0,
+                    1
+                  ]
+                ],
+                "avoid": [
+                  [
+                    8,
+                    20
+                  ]
+                ]
+              },
+              "Saturday": {
+                "no_go": [
+                  [
+                    1,
+                    0
+                  ],
+                  [
+                    0,
+                    1
+                  ]
+                ],
+                "avoid": [
+                  [
+                    8,
+                    20
+                  ]
+                ]
+              },
+              "Sunday": {
+                "no_go": [
+                  [
+                    1,
+                    0
+                  ],
+                  [
+                    0,
+                    1
+                  ]
+                ],
+                "avoid": [
+                  [
+                    8,
+                    20
+                  ]
+                ]
+              }
+            },
+            "size_m2": 5000,
+            "min_services": null,
+            "max_services": null
+          },
+          {
+            "name": "A2",
+            "type": "SEMIROUGH_A",
+            "hole": 1,
+            "priority": 2,
+            "min_interval": 39,
+            "max_interval": 48,
+            "schedule": {
+              "Monday": {
+                "no_go": [],
+                "avoid": []
+              },
+              "Tuesday": {
+                "no_go": [],
+                "avoid": []
+              },
+              "Wednesday": {
+                "no_go": [],
+                "avoid": []
+              },
+              "Thursday": {
+                "no_go": [],
+                "avoid": []
+              },
+              "Friday": {
+                "no_go": [],
+                "avoid": []
+              },
+              "Saturday": {
+                "no_go": [],
+                "avoid": []
+              },
+              "Sunday": {
+                "no_go": [],
+                "avoid": []
+              }
+            },
+            "size_m2": 3000,
+            "min_services": null,
+            "max_services": null
+          }
+        ],
+        "mowers": [
+          {
+            "name": "M1",
+            "can_mow": [
+              "A1",
+              "A2"
+            ],
+            "model": "AM_580L EPOS",
+            "area_capacity_m2_per_day": 8000
+          }
+        ],
+        "history": [
+          {
+            "area": "A1",
+            "mower": "M1",
+            "start": -20,
+            "completion": -14
+          },
+          {
+            "area": "A2",
+            "mower": "M1",
+            "start": -40,
+            "completion": -33
+          }
+        ],
+        "horizon_hours": 168,
+        "horizon_start_hour": 13,
+        "duration_seed": 0,
+        "base_durations": [
+          {
+            "area": "A1",
+            "mower": "M1",
+            "hours": 15
+          },
+          {
+            "area": "A2",
+            "mower": "M1",
+            "hours": 9
+          }
+        ]
+      }
+    },
+    {
+      "note": "zero-width availability interval",
+      "verdict": "reject",
+      "clientErrorPaths": [
+        "areas.A1.schedule.Friday.avoid.0",
+        "areas.A1.schedule.Monday.avoid.0",
+        "areas.A1.schedule.Saturday.avoid.0",
+        "areas.A1.schedule.Sunday.avoid.0",
+        "areas.A1.schedule.Thursday.avoid.0",
+        "areas.A1.schedule.Tuesday.avoid.0",
+        "areas.A1.schedule.Wednesday.avoid.0"
+      ],
+      "scenario": {
+        "name": "test",
+        "areas": [
+          {
+            "name": "A1",
+            "type": "FAIRWAY",
+            "hole": 1,
+            "priority": 1,
+            "min_interval": 18,
+            "max_interval": 24,
+            "schedule": {
+              "Monday": {
+                "no_go": [],
+                "avoid": [
+                  [
+                    8,
+                    8
+                  ]
+                ]
+              },
+              "Tuesday": {
+                "no_go": [],
+                "avoid": [
+                  [
+                    8,
+                    8
+                  ]
+                ]
+              },
+              "Wednesday": {
+                "no_go": [],
+                "avoid": [
+                  [
+                    8,
+                    8
+                  ]
+                ]
+              },
+              "Thursday": {
+                "no_go": [],
+                "avoid": [
+                  [
+                    8,
+                    8
+                  ]
+                ]
+              },
+              "Friday": {
+                "no_go": [],
+                "avoid": [
+                  [
+                    8,
+                    8
+                  ]
+                ]
+              },
+              "Saturday": {
+                "no_go": [],
+                "avoid": [
+                  [
+                    8,
+                    8
+                  ]
+                ]
+              },
+              "Sunday": {
+                "no_go": [],
+                "avoid": [
+                  [
+                    8,
+                    8
+                  ]
+                ]
+              }
+            },
+            "size_m2": 5000,
+            "min_services": null,
+            "max_services": null
+          },
+          {
+            "name": "A2",
+            "type": "SEMIROUGH_A",
+            "hole": 1,
+            "priority": 2,
+            "min_interval": 39,
+            "max_interval": 48,
+            "schedule": {
+              "Monday": {
+                "no_go": [],
+                "avoid": []
+              },
+              "Tuesday": {
+                "no_go": [],
+                "avoid": []
+              },
+              "Wednesday": {
+                "no_go": [],
+                "avoid": []
+              },
+              "Thursday": {
+                "no_go": [],
+                "avoid": []
+              },
+              "Friday": {
+                "no_go": [],
+                "avoid": []
+              },
+              "Saturday": {
+                "no_go": [],
+                "avoid": []
+              },
+              "Sunday": {
+                "no_go": [],
+                "avoid": []
+              }
+            },
+            "size_m2": 3000,
+            "min_services": null,
+            "max_services": null
+          }
+        ],
+        "mowers": [
+          {
+            "name": "M1",
+            "can_mow": [
+              "A1",
+              "A2"
+            ],
+            "model": "AM_580L EPOS",
+            "area_capacity_m2_per_day": 8000
+          }
+        ],
+        "history": [
+          {
+            "area": "A1",
+            "mower": "M1",
+            "start": -20,
+            "completion": -14
+          },
+          {
+            "area": "A2",
+            "mower": "M1",
+            "start": -40,
+            "completion": -33
+          }
+        ],
+        "horizon_hours": 168,
+        "horizon_start_hour": 13,
+        "duration_seed": 0,
+        "base_durations": [
+          {
+            "area": "A1",
+            "mower": "M1",
+            "hours": 15
+          },
+          {
+            "area": "A2",
+            "mower": "M1",
+            "hours": 9
+          }
+        ]
+      }
+    },
+    {
+      "note": "availability hour outside 0..23",
+      "verdict": "reject",
+      "clientErrorPaths": [
+        "areas.A1.schedule.Friday.avoid.0",
+        "areas.A1.schedule.Monday.avoid.0",
+        "areas.A1.schedule.Saturday.avoid.0",
+        "areas.A1.schedule.Sunday.avoid.0",
+        "areas.A1.schedule.Thursday.avoid.0",
+        "areas.A1.schedule.Tuesday.avoid.0",
+        "areas.A1.schedule.Wednesday.avoid.0"
+      ],
+      "scenario": {
+        "name": "test",
+        "areas": [
+          {
+            "name": "A1",
+            "type": "FAIRWAY",
+            "hole": 1,
+            "priority": 1,
+            "min_interval": 18,
+            "max_interval": 24,
+            "schedule": {
+              "Monday": {
+                "no_go": [],
+                "avoid": [
+                  [
+                    8,
+                    24
+                  ]
+                ]
+              },
+              "Tuesday": {
+                "no_go": [],
+                "avoid": [
+                  [
+                    8,
+                    24
+                  ]
+                ]
+              },
+              "Wednesday": {
+                "no_go": [],
+                "avoid": [
+                  [
+                    8,
+                    24
+                  ]
+                ]
+              },
+              "Thursday": {
+                "no_go": [],
+                "avoid": [
+                  [
+                    8,
+                    24
+                  ]
+                ]
+              },
+              "Friday": {
+                "no_go": [],
+                "avoid": [
+                  [
+                    8,
+                    24
+                  ]
+                ]
+              },
+              "Saturday": {
+                "no_go": [],
+                "avoid": [
+                  [
+                    8,
+                    24
+                  ]
+                ]
+              },
+              "Sunday": {
+                "no_go": [],
+                "avoid": [
+                  [
+                    8,
+                    24
+                  ]
+                ]
+              }
+            },
+            "size_m2": 5000,
+            "min_services": null,
+            "max_services": null
+          },
+          {
+            "name": "A2",
+            "type": "SEMIROUGH_A",
+            "hole": 1,
+            "priority": 2,
+            "min_interval": 39,
+            "max_interval": 48,
+            "schedule": {
+              "Monday": {
+                "no_go": [],
+                "avoid": []
+              },
+              "Tuesday": {
+                "no_go": [],
+                "avoid": []
+              },
+              "Wednesday": {
+                "no_go": [],
+                "avoid": []
+              },
+              "Thursday": {
+                "no_go": [],
+                "avoid": []
+              },
+              "Friday": {
+                "no_go": [],
+                "avoid": []
+              },
+              "Saturday": {
+                "no_go": [],
+                "avoid": []
+              },
+              "Sunday": {
+                "no_go": [],
+                "avoid": []
+              }
+            },
+            "size_m2": 3000,
+            "min_services": null,
+            "max_services": null
+          }
+        ],
+        "mowers": [
+          {
+            "name": "M1",
+            "can_mow": [
+              "A1",
+              "A2"
+            ],
+            "model": "AM_580L EPOS",
+            "area_capacity_m2_per_day": 8000
+          }
+        ],
+        "history": [
+          {
+            "area": "A1",
+            "mower": "M1",
+            "start": -20,
+            "completion": -14
+          },
+          {
+            "area": "A2",
+            "mower": "M1",
+            "start": -40,
+            "completion": -33
+          }
+        ],
+        "horizon_hours": 168,
+        "horizon_start_hour": 13,
+        "duration_seed": 0,
+        "base_durations": [
+          {
+            "area": "A1",
+            "mower": "M1",
+            "hours": 15
+          },
+          {
+            "area": "A2",
+            "mower": "M1",
+            "hours": 9
+          }
+        ]
+      }
+    },
+    {
+      "note": "base_durations misses a capable (area, mower) pair",
+      "verdict": "reject",
+      "clientErrorPaths": [
+        "base_durations"
+      ],
+      "scenario": {
+        "name": "test",
+        "areas": [
+          {
+            "name": "A1",
+            "type": "FAIRWAY",
+            "hole": 1,
+            "priority": 1,
+            "min_interval": 18,
+            "max_interval": 24,
+            "schedule": {
+              "Monday": {
+                "no_go": [],
+                "avoid": [
+                  [
+                    8,
+                    20
+                  ]
+                ]
+              },
+              "Tuesday": {
+                "no_go": [],
+                "avoid": [
+                  [
+                    8,
+                    20
+                  ]
+                ]
+              },
+              "Wednesday": {
+                "no_go": [],
+                "avoid": [
+                  [
+                    8,
+                    20
+                  ]
+                ]
+              },
+              "Thursday": {
+                "no_go": [],
+                "avoid": [
+                  [
+                    8,
+                    20
+                  ]
+                ]
+              },
+              "Friday": {
+                "no_go": [],
+                "avoid": [
+                  [
+                    8,
+                    20
+                  ]
+                ]
+              },
+              "Saturday": {
+                "no_go": [],
+                "avoid": [
+                  [
+                    8,
+                    20
+                  ]
+                ]
+              },
+              "Sunday": {
+                "no_go": [],
+                "avoid": [
+                  [
+                    8,
+                    20
+                  ]
+                ]
+              }
+            },
+            "size_m2": 5000,
+            "min_services": null,
+            "max_services": null
+          },
+          {
+            "name": "A2",
+            "type": "SEMIROUGH_A",
+            "hole": 1,
+            "priority": 2,
+            "min_interval": 39,
+            "max_interval": 48,
+            "schedule": {
+              "Monday": {
+                "no_go": [],
+                "avoid": []
+              },
+              "Tuesday": {
+                "no_go": [],
+                "avoid": []
+              },
+              "Wednesday": {
+                "no_go": [],
+                "avoid": []
+              },
+              "Thursday": {
+                "no_go": [],
+                "avoid": []
+              },
+              "Friday": {
+                "no_go": [],
+                "avoid": []
+              },
+              "Saturday": {
+                "no_go": [],
+                "avoid": []
+              },
+              "Sunday": {
+                "no_go": [],
+                "avoid": []
+              }
+            },
+            "size_m2": 3000,
+            "min_services": null,
+            "max_services": null
+          }
+        ],
+        "mowers": [
+          {
+            "name": "M1",
+            "can_mow": [
+              "A1",
+              "A2"
+            ],
+            "model": "AM_580L EPOS",
+            "area_capacity_m2_per_day": 8000
+          }
+        ],
+        "history": [
+          {
+            "area": "A1",
+            "mower": "M1",
+            "start": -20,
+            "completion": -14
+          },
+          {
+            "area": "A2",
+            "mower": "M1",
+            "start": -40,
+            "completion": -33
+          }
+        ],
+        "horizon_hours": 168,
+        "horizon_start_hour": 13,
+        "duration_seed": 0,
+        "base_durations": [
+          {
+            "area": "A1",
+            "mower": "M1",
+            "hours": 15
+          }
+        ]
+      }
+    },
+    {
+      "note": "an area has no service history event",
+      "verdict": "reject",
+      "clientErrorPaths": [
+        "history.A2"
+      ],
+      "scenario": {
+        "name": "test",
+        "areas": [
+          {
+            "name": "A1",
+            "type": "FAIRWAY",
+            "hole": 1,
+            "priority": 1,
+            "min_interval": 18,
+            "max_interval": 24,
+            "schedule": {
+              "Monday": {
+                "no_go": [],
+                "avoid": [
+                  [
+                    8,
+                    20
+                  ]
+                ]
+              },
+              "Tuesday": {
+                "no_go": [],
+                "avoid": [
+                  [
+                    8,
+                    20
+                  ]
+                ]
+              },
+              "Wednesday": {
+                "no_go": [],
+                "avoid": [
+                  [
+                    8,
+                    20
+                  ]
+                ]
+              },
+              "Thursday": {
+                "no_go": [],
+                "avoid": [
+                  [
+                    8,
+                    20
+                  ]
+                ]
+              },
+              "Friday": {
+                "no_go": [],
+                "avoid": [
+                  [
+                    8,
+                    20
+                  ]
+                ]
+              },
+              "Saturday": {
+                "no_go": [],
+                "avoid": [
+                  [
+                    8,
+                    20
+                  ]
+                ]
+              },
+              "Sunday": {
+                "no_go": [],
+                "avoid": [
+                  [
+                    8,
+                    20
+                  ]
+                ]
+              }
+            },
+            "size_m2": 5000,
+            "min_services": null,
+            "max_services": null
+          },
+          {
+            "name": "A2",
+            "type": "SEMIROUGH_A",
+            "hole": 1,
+            "priority": 2,
+            "min_interval": 39,
+            "max_interval": 48,
+            "schedule": {
+              "Monday": {
+                "no_go": [],
+                "avoid": []
+              },
+              "Tuesday": {
+                "no_go": [],
+                "avoid": []
+              },
+              "Wednesday": {
+                "no_go": [],
+                "avoid": []
+              },
+              "Thursday": {
+                "no_go": [],
+                "avoid": []
+              },
+              "Friday": {
+                "no_go": [],
+                "avoid": []
+              },
+              "Saturday": {
+                "no_go": [],
+                "avoid": []
+              },
+              "Sunday": {
+                "no_go": [],
+                "avoid": []
+              }
+            },
+            "size_m2": 3000,
+            "min_services": null,
+            "max_services": null
+          }
+        ],
+        "mowers": [
+          {
+            "name": "M1",
+            "can_mow": [
+              "A1",
+              "A2"
+            ],
+            "model": "AM_580L EPOS",
+            "area_capacity_m2_per_day": 8000
+          }
+        ],
+        "history": [
+          {
+            "area": "A1",
+            "mower": "M1",
+            "start": -20,
+            "completion": -14
+          }
+        ],
+        "horizon_hours": 168,
+        "horizon_start_hour": 13,
+        "duration_seed": 0,
+        "base_durations": [
+          {
+            "area": "A1",
+            "mower": "M1",
+            "hours": 15
+          },
+          {
+            "area": "A2",
+            "mower": "M1",
+            "hours": 9
+          }
+        ]
+      }
+    }
+  ]
+}

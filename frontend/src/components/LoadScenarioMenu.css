@@ -1,0 +1,83 @@
+.load-menu {
+  position: relative;
+  display: inline-block;
+}
+
+.load-menu-button {
+  font: inherit;
+  font-size: 12px;
+  color: var(--text-secondary);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 4px 10px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.load-menu-button strong {
+  color: var(--text-primary);
+}
+
+.load-menu-list {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 4px);
+  z-index: 20;
+  margin: 0;
+  padding: 4px;
+  list-style: none;
+  min-width: 280px;
+  max-height: 60vh;
+  overflow-y: auto;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+}
+
+.load-menu-list button {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  width: 100%;
+  text-align: left;
+  font: inherit;
+  background: none;
+  border: none;
+  border-radius: 6px;
+  padding: 7px 10px;
+  cursor: pointer;
+  color: var(--text-primary);
+}
+
+.load-menu-list button:hover,
+.load-menu-list button:focus-visible {
+  background: var(--gridline);
+  outline: none;
+}
+
+.load-menu-list button.active {
+  background: color-mix(in srgb, var(--series-1) 12%, var(--surface));
+}
+
+.load-menu-name {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.load-menu-sub {
+  font-size: 11px;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+/* "New scenario…" command below the list (ADR-0027) */
+.load-menu-sep {
+  height: 1px;
+  margin: 4px 6px;
+  background: var(--border);
+}
+.load-menu-new .load-menu-name {
+  color: var(--series-1);
+}

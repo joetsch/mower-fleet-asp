@@ -1,0 +1,37 @@
+/* "Add a service" (ADR-0039) — below the schedule header, both views. Collapsed to a
+   disclosure by default (UI review 2026-09-10). */
+.add-service-block {
+  margin: 0 0 16px;
+}
+
+/* The disclosure trigger — a quiet link, since adding a service is the exception. */
+.add-service-trigger {
+  font-size: 13px;
+}
+
+/* The picker, shown only once the trigger is opened. */
+.add-service {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin: 10px 0 0;
+  padding: 10px 14px;
+  font-size: 13px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+}
+
+.add-service select {
+  font: inherit;
+  background: var(--page);
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 4px 6px;
+}
+
+.add-service-note {
+  flex-basis: 100%;
+}

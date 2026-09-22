@@ -1,0 +1,181 @@
+.gantt {
+  margin: 0;
+}
+
+.gantt > figcaption {
+  color: var(--text-secondary);
+  font-size: 13px;
+  margin-bottom: 8px;
+}
+
+.gantt-scroll {
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+}
+
+.gantt-svg {
+  display: block;
+  width: 100%;
+  min-width: 900px;
+}
+
+.gantt-grid {
+  stroke: var(--gridline);
+  stroke-width: 1;
+}
+
+.gantt-now {
+  stroke: var(--text-secondary);
+  stroke-width: 1.5;
+  stroke-dasharray: 3 3;
+}
+
+.gantt-now-label {
+  fill: var(--text-secondary);
+  font-size: 10px;
+  text-anchor: middle;
+}
+
+.gantt-daylabel {
+  fill: var(--text-muted);
+  font-size: 11px;
+  text-anchor: middle;
+}
+
+.gantt-rowband {
+  fill: var(--text-primary);
+  opacity: 0.03;
+}
+
+.gantt-rowlabel {
+  fill: var(--text-secondary);
+  font-size: 12px;
+  text-anchor: end;
+  dominant-baseline: middle;
+}
+
+.gantt-history {
+  fill: var(--history-fill);
+  opacity: 0.55;
+}
+
+.gantt-bar {
+  cursor: pointer;
+}
+.gantt-bar:hover {
+  filter: brightness(1.08);
+}
+
+/* Drag-to-move (ADR-0045), only in schedule-edit mode. `grab` on the bar, `grabbing`
+   once a drag is live, and `touch-action: none` so a touch drag moves the bar instead of
+   scrolling the chart container. */
+.gantt-bar-draggable {
+  cursor: grab;
+  touch-action: none;
+}
+.gantt-svg-dragging,
+.gantt-bar-dragging {
+  cursor: grabbing;
+}
+.gantt-bar-dragging {
+  filter: brightness(1.12);
+}
+
+.gantt-drag-label {
+  fill: var(--text-primary);
+  font-size: 10px;
+  font-variant-numeric: tabular-nums;
+}
+
+.gantt-viol-mark {
+  fill: var(--status-critical);
+  font-size: 9px;
+  text-anchor: middle;
+}
+
+.gantt-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+  margin-top: 12px;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.gantt-legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.gantt-swatch {
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+  display: inline-block;
+}
+
+.gantt-swatch-history {
+  background: var(--history-fill);
+  opacity: 0.55;
+}
+
+.gantt-swatch-ring {
+  background: transparent;
+  border: 2px solid;
+}
+
+.gantt-tip {
+  position: fixed;
+  z-index: 10;
+  pointer-events: none;
+  background: var(--surface);
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 8px 10px;
+  font-size: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
+  max-width: 260px;
+}
+
+.gantt-tip-viol {
+  color: var(--status-serious);
+  margin-top: 3px;
+}
+
+/* Availability overlay (ADR-0029). The band classes themselves (`.av-avoid` / `.av-no_go`)
+   are the Availability tab's, so the two views read as one system — but a band here is a
+   full 30px row rather than a 14px strip, so the same alpha reads far heavier. Toned down
+   to sit behind the bars instead of competing with them. */
+.gantt-toggles {
+  display: flex;
+  gap: 18px;
+  align-items: center;
+  margin: 0 0 8px;
+}
+
+.gantt-svg .av-avoid {
+  opacity: 0.22;
+}
+
+.gantt-svg .av-no_go {
+  opacity: 0.12;
+}
+
+/* Schedule edit state (ADR-0035). Mower colour is the bar's fill and violations own the
+   stroke colour, so edit state gets the stroke *style* and opacity instead. */
+.gantt-bar-released {
+  opacity: 0.4;
+  stroke: var(--text-secondary);
+  stroke-width: 1.5;
+  stroke-dasharray: 3 2;
+}
+
+.gantt-bar-edited {
+  stroke: var(--text-primary);
+  stroke-width: 2;
+  stroke-dasharray: 4 2;
+}

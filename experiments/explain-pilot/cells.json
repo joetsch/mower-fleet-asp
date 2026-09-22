@@ -1,0 +1,7176 @@
+{
+ "cells": [
+  {
+   "scenario": "small-but-hard",
+   "scenario_sha256": "91124f6d50a41de26d6bc32b2ec3d3dd2c36164ea61fea8882ee524bd7e31709",
+   "seed_tag": "seed0",
+   "preferences": {
+    "tasks": [
+     {
+      "area": "H1_FW",
+      "start": 10,
+      "mower": "M2",
+      "origin": "frozen"
+     },
+     {
+      "area": "H1_FW",
+      "start": 40,
+      "mower": "M2",
+      "origin": "frozen"
+     },
+     {
+      "area": "H1_FW",
+      "start": 164,
+      "mower": "M2",
+      "origin": "edited"
+     },
+     {
+      "area": "H1_FW",
+      "start": 104,
+      "mower": "M2",
+      "origin": "frozen"
+     },
+     {
+      "area": "H1_FW",
+      "start": 137,
+      "mower": "M2",
+      "origin": "frozen"
+     },
+     {
+      "area": "H1_FW",
+      "start": 144,
+      "mower": "M1",
+      "origin": "edited"
+     },
+     {
+      "area": "H1_SR1",
+      "start": 40,
+      "mower": "M3",
+      "origin": "frozen"
+     },
+     {
+      "area": "H1_SR1",
+      "start": 155,
+      "mower": "M2",
+      "origin": "edited"
+     },
+     {
+      "area": "H1_SR2",
+      "start": 25,
+      "mower": "M3",
+      "origin": "frozen"
+     },
+     {
+      "area": "H1_SR2",
+      "start": 72,
+      "mower": "M3",
+      "origin": "frozen"
+     },
+     {
+      "area": "H1_SR2",
+      "start": 115,
+      "mower": "M3",
+      "origin": "edited"
+     },
+     {
+      "area": "H2_FW",
+      "start": 0,
+      "mower": "M1",
+      "origin": "frozen"
+     },
+     {
+      "area": "H2_FW",
+      "start": 30,
+      "mower": "M1",
+      "origin": "frozen"
+     },
+     {
+      "area": "H2_FW",
+      "start": 167,
+      "mower": "M1",
+      "origin": "edited"
+     },
+     {
+      "area": "H2_FW",
+      "start": 90,
+      "mower": "M1",
+      "origin": "frozen"
+     },
+     {
+      "area": "H2_FW",
+      "start": 96,
+      "mower": "M1",
+      "origin": "edited"
+     },
+     {
+      "area": "H2_FW",
+      "start": 135,
+      "mower": "M1",
+      "origin": "edited"
+     },
+     {
+      "area": "H2_SR1",
+      "start": 95,
+      "mower": "M2",
+      "origin": "edited"
+     },
+     {
+      "area": "H2_SR1",
+      "start": 145,
+      "mower": "M3",
+      "origin": "frozen"
+     },
+     {
+      "area": "H2_SR2",
+      "start": 118,
+      "mower": "M3",
+      "origin": "frozen"
+     },
+     {
+      "area": "H2_SR2",
+      "start": 166,
+      "mower": "M3",
+      "origin": "frozen"
+     }
+    ],
+    "mode": "weak",
+    "level": "top"
+   },
+   "replan_tasks": [
+    {
+     "area": "H1_FW",
+     "task": 1,
+     "mower": "M2",
+     "start": 10,
+     "end": 40
+    },
+    {
+     "area": "H1_FW",
+     "task": 2,
+     "mower": "M2",
+     "start": 40,
+     "end": 70
+    },
+    {
+     "area": "H1_FW",
+     "task": 3,
+     "mower": "M2",
+     "start": 74,
+     "end": 104
+    },
+    {
+     "area": "H1_FW",
+     "task": 4,
+     "mower": "M2",
+     "start": 104,
+     "end": 134
+    },
+    {
+     "area": "H1_FW",
+     "task": 5,
+     "mower": "M2",
+     "start": 137,
+     "end": 167
+    },
+    {
+     "area": "H1_FW",
+     "task": 6,
+     "mower": "M2",
+     "start": 167,
+     "end": 197
+    },
+    {
+     "area": "H1_SR1",
+     "task": 1,
+     "mower": "M3",
+     "start": 40,
+     "end": 72
+    },
+    {
+     "area": "H1_SR1",
+     "task": 2,
+     "mower": "M3",
+     "start": 86,
+     "end": 118
+    },
+    {
+     "area": "H1_SR2",
+     "task": 1,
+     "mower": "M3",
+     "start": 25,
+     "end": 38
+    },
+    {
+     "area": "H1_SR2",
+     "task": 2,
+     "mower": "M3",
+     "start": 72,
+     "end": 85
+    },
+    {
+     "area": "H1_SR2",
+     "task": 3,
+     "mower": "M1",
+     "start": 120,
+     "end": 133
+    },
+    {
+     "area": "H2_FW",
+     "task": 1,
+     "mower": "M1",
+     "start": 0,
+     "end": 30
+    },
+    {
+     "area": "H2_FW",
+     "task": 2,
+     "mower": "M1",
+     "start": 30,
+     "end": 60
+    },
+    {
+     "area": "H2_FW",
+     "task": 3,
+     "mower": "M1",
+     "start": 60,
+     "end": 90
+    },
+    {
+     "area": "H2_FW",
+     "task": 4,
+     "mower": "M1",
+     "start": 90,
+     "end": 120
+    },
+    {
+     "area": "H2_FW",
+     "task": 5,
+     "mower": "M1",
+     "start": 135,
+     "end": 165
+    },
+    {
+     "area": "H2_FW",
+     "task": 6,
+     "mower": "M1",
+     "start": 167,
+     "end": 197
+    },
+    {
+     "area": "H2_SR1",
+     "task": 1,
+     "mower": "M3",
+     "start": 1,
+     "end": 22
+    },
+    {
+     "area": "H2_SR1",
+     "task": 2,
+     "mower": "M3",
+     "start": 145,
+     "end": 166
+    },
+    {
+     "area": "H2_SR2",
+     "task": 1,
+     "mower": "M3",
+     "start": 118,
+     "end": 145
+    },
+    {
+     "area": "H2_SR2",
+     "task": 2,
+     "mower": "M3",
+     "start": 166,
+     "end": 193
+    }
+   ],
+   "replan_optimal": true
+  },
+  {
+   "scenario": "small-but-hard",
+   "scenario_sha256": "91124f6d50a41de26d6bc32b2ec3d3dd2c36164ea61fea8882ee524bd7e31709",
+   "seed_tag": "seed1",
+   "preferences": {
+    "tasks": [
+     {
+      "area": "H1_FW",
+      "start": 10,
+      "mower": "M2",
+      "origin": "frozen"
+     },
+     {
+      "area": "H1_FW",
+      "start": 158,
+      "mower": "M2",
+      "origin": "edited"
+     },
+     {
+      "area": "H1_FW",
+      "start": 55,
+      "mower": "M1",
+      "origin": "edited"
+     },
+     {
+      "area": "H1_FW",
+      "start": 104,
+      "mower": "M2",
+      "origin": "frozen"
+     },
+     {
+      "area": "H1_FW",
+      "start": 137,
+      "mower": "M2",
+      "origin": "frozen"
+     },
+     {
+      "area": "H1_FW",
+      "start": 167,
+      "mower": "M2",
+      "origin": "frozen"
+     },
+     {
+      "area": "H1_SR1",
+      "start": 87,
+      "mower": "M2",
+      "origin": "edited"
+     },
+     {
+      "area": "H1_SR1",
+      "start": 86,
+      "mower": "M3",
+      "origin": "frozen"
+     },
+     {
+      "area": "H1_SR2",
+      "start": 25,
+      "mower": "M3",
+      "origin": "frozen"
+     },
+     {
+      "area": "H1_SR2",
+      "start": 27,
+      "mower": "M3",
+      "origin": "edited"
+     },
+     {
+      "area": "H1_SR2",
+      "start": 120,
+      "mower": "M1",
+      "origin": "frozen"
+     },
+     {
+      "area": "H2_FW",
+      "start": 128,
+      "mower": "M1",
+      "origin": "edited"
+     },
+     {
+      "area": "H2_FW",
+      "start": 30,
+      "mower": "M1",
+      "origin": "frozen"
+     },
+     {
+      "area": "H2_FW",
+      "start": 60,
+      "mower": "M1",
+      "origin": "frozen"
+     },
+     {
+      "area": "H2_FW",
+      "start": 90,
+      "mower": "M1",
+      "origin": "frozen"
+     },
+     {
+      "area": "H2_FW",
+      "start": 137,
+      "mower": "M1",
+      "origin": "frozen"
+     },
+     {
+      "area": "H2_FW",
+      "start": 57,
+      "mower": "M1",
+      "origin": "edited"
+     },
+     {
+      "area": "H2_SR1",
+      "start": 122,
+      "mower": "M2",
+      "origin": "edited"
+     },
+     {
+      "area": "H2_SR1",
+      "start": 162,
+      "mower": "M2",
+      "origin": "edited"
+     },
+     {
+      "area": "H2_SR2",
+      "start": 118,
+      "mower": "M3",
+      "origin": "frozen"
+     },
+     {
+      "area": "H2_SR2",
+      "start": 166,
+      "mower": "M3",
+      "origin": "frozen"
+     }
+    ],
+    "mode": "weak",
+    "level": "top"
+   },
+   "replan_tasks": [
+    {
+     "area": "H1_FW",
+     "task": 1,
+     "mower": "M2",
+     "start": 10,
+     "end": 40
+    },
+    {
+     "area": "H1_FW",
+     "task": 2,
+     "mower": "M2",
+     "start": 44,
+     "end": 74
+    },
+    {
+     "area": "H1_FW",
+     "task": 3,
+     "mower": "M2",
+     "start": 74,
+     "end": 104
+    },
+    {
+     "area": "H1_FW",
+     "task": 4,
+     "mower": "M2",
+     "start": 104,
+     "end": 134
+    },
+    {
+     "area": "H1_FW",
+     "task": 5,
+     "mower": "M2",
+     "start": 137,
+     "end": 167
+    },
+    {
+     "area": "H1_FW",
+     "task": 6,
+     "mower": "M2",
+     "start": 167,
+     "end": 197
+    },
+    {
+     "area": "H1_SR1",
+     "task": 1,
+     "mower": "M3",
+     "start": 41,
+     "end": 73
+    },
+    {
+     "area": "H1_SR1",
+     "task": 2,
+     "mower": "M3",
+     "start": 86,
+     "end": 118
+    },
+    {
+     "area": "H1_SR2",
+     "task": 1,
+     "mower": "M3",
+     "start": 25,
+     "end": 38
+    },
+    {
+     "area": "H1_SR2",
+     "task": 2,
+     "mower": "M3",
+     "start": 73,
+     "end": 86
+    },
+    {
+     "area": "H1_SR2",
+     "task": 3,
+     "mower": "M1",
+     "start": 120,
+     "end": 133
+    },
+    {
+     "area": "H2_FW",
+     "task": 1,
+     "mower": "M1",
+     "start": 0,
+     "end": 30
+    },
+    {
+     "area": "H2_FW",
+     "task": 2,
+     "mower": "M1",
+     "start": 30,
+     "end": 60
+    },
+    {
+     "area": "H2_FW",
+     "task": 3,
+     "mower": "M1",
+     "start": 60,
+     "end": 90
+    },
+    {
+     "area": "H2_FW",
+     "task": 4,
+     "mower": "M1",
+     "start": 90,
+     "end": 120
+    },
+    {
+     "area": "H2_FW",
+     "task": 5,
+     "mower": "M1",
+     "start": 137,
+     "end": 167
+    },
+    {
+     "area": "H2_FW",
+     "task": 6,
+     "mower": "M1",
+     "start": 167,
+     "end": 197
+    },
+    {
+     "area": "H2_SR1",
+     "task": 1,
+     "mower": "M3",
+     "start": 4,
+     "end": 25
+    },
+    {
+     "area": "H2_SR1",
+     "task": 2,
+     "mower": "M3",
+     "start": 145,
+     "end": 166
+    },
+    {
+     "area": "H2_SR2",
+     "task": 1,
+     "mower": "M3",
+     "start": 118,
+     "end": 145
+    },
+    {
+     "area": "H2_SR2",
+     "task": 2,
+     "mower": "M3",
+     "start": 166,
+     "end": 193
+    }
+   ],
+   "replan_optimal": true
+  },
+  {
+   "scenario": "small-but-hard",
+   "scenario_sha256": "91124f6d50a41de26d6bc32b2ec3d3dd2c36164ea61fea8882ee524bd7e31709",
+   "seed_tag": "seed2",
+   "preferences": {
+    "tasks": [
+     {
+      "area": "H1_FW",
+      "start": 68,
+      "mower": "M1",
+      "origin": "edited"
+     },
+     {
+      "area": "H1_FW",
+      "start": 22,
+      "mower": "M2",
+      "origin": "edited"
+     },
+     {
+      "area": "H1_FW",
+      "start": 61,
+      "mower": "M1",
+      "origin": "edited"
+     },
+     {
+      "area": "H1_FW",
+      "start": 146,
+      "mower": "M1",
+      "origin": "edited"
+     },
+     {
+      "area": "H1_FW",
+      "start": 137,
+      "mower": "M2",
+      "origin": "frozen"
+     },
+     {
+      "area": "H1_FW",
+      "start": 167,
+      "mower": "M2",
+      "origin": "frozen"
+     },
+     {
+      "area": "H1_SR1",
+      "start": 40,
+      "mower": "M3",
+      "origin": "frozen"
+     },
+     {
+      "area": "H1_SR1",
+      "start": 51,
+      "mower": "M1",
+      "origin": "edited"
+     },
+     {
+      "area": "H1_SR2",
+      "start": 25,
+      "mower": "M3",
+      "origin": "frozen"
+     },
+     {
+      "area": "H1_SR2",
+      "start": 72,
+      "mower": "M3",
+      "origin": "frozen"
+     },
+     {
+      "area": "H1_SR2",
+      "start": 120,
+      "mower": "M1",
+      "origin": "frozen"
+     },
+     {
+      "area": "H2_FW",
+      "start": 12,
+      "mower": "M1",
+      "origin": "edited"
+     },
+     {
+      "area": "H2_FW",
+      "start": 30,
+      "mower": "M1",
+      "origin": "frozen"
+     },
+     {
+      "area": "H2_FW",
+      "start": 60,
+      "mower": "M1",
+      "origin": "frozen"
+     },
+     {
+      "area": "H2_FW",
+      "start": 97,
+      "mower": "M1",
+      "origin": "edited"
+     },
+     {
+      "area": "H2_FW",
+      "start": 137,
+      "mower": "M1",
+      "origin": "frozen"
+     },
+     {
+      "area": "H2_FW",
+      "start": 137,
+      "mower": "M1",
+      "origin": "edited"
+     },
+     {
+      "area": "H2_SR1",
+      "start": 4,
+      "mower": "M3",
+      "origin": "frozen"
+     },
+     {
+      "area": "H2_SR1",
+      "start": 145,
+      "mower": "M3",
+      "origin": "frozen"
+     },
+     {
+      "area": "H2_SR2",
+      "start": 118,
+      "mower": "M3",
+      "origin": "frozen"
+     },
+     {
+      "area": "H2_SR2",
+      "start": 166,
+      "mower": "M3",
+      "origin": "frozen"
+     }
+    ],
+    "mode": "weak",
+    "level": "top"
+   },
+   "replan_tasks": [
+    {
+     "area": "H1_FW",
+     "task": 1,
+     "mower": "M2",
+     "start": 10,
+     "end": 40
+    },
+    {
+     "area": "H1_FW",
+     "task": 2,
+     "mower": "M2",
+     "start": 40,
+     "end": 70
+    },
+    {
+     "area": "H1_FW",
+     "task": 3,
+     "mower": "M2",
+     "start": 70,
+     "end": 100
+    },
+    {
+     "area": "H1_FW",
+     "task": 4,
+     "mower": "M2",
+     "start": 104,
+     "end": 134
+    },
+    {
+     "area": "H1_FW",
+     "task": 5,
+     "mower": "M2",
+     "start": 137,
+     "end": 167
+    },
+    {
+     "area": "H1_FW",
+     "task": 6,
+     "mower": "M2",
+     "start": 167,
+     "end": 197
+    },
+    {
+     "area": "H1_SR1",
+     "task": 1,
+     "mower": "M3",
+     "start": 40,
+     "end": 72
+    },
+    {
+     "area": "H1_SR1",
+     "task": 2,
+     "mower": "M3",
+     "start": 85,
+     "end": 117
+    },
+    {
+     "area": "H1_SR2",
+     "task": 1,
+     "mower": "M3",
+     "start": 25,
+     "end": 38
+    },
+    {
+     "area": "H1_SR2",
+     "task": 2,
+     "mower": "M3",
+     "start": 72,
+     "end": 85
+    },
+    {
+     "area": "H1_SR2",
+     "task": 3,
+     "mower": "M1",
+     "start": 120,
+     "end": 133
+    },
+    {
+     "area": "H2_FW",
+     "task": 1,
+     "mower": "M1",
+     "start": 0,
+     "end": 30
+    },
+    {
+     "area": "H2_FW",
+     "task": 2,
+     "mower": "M1",
+     "start": 30,
+     "end": 60
+    },
+    {
+     "area": "H2_FW",
+     "task": 3,
+     "mower": "M1",
+     "start": 60,
+     "end": 90
+    },
+    {
+     "area": "H2_FW",
+     "task": 4,
+     "mower": "M1",
+     "start": 90,
+     "end": 120
+    },
+    {
+     "area": "H2_FW",
+     "task": 5,
+     "mower": "M1",
+     "start": 137,
+     "end": 167
+    },
+    {
+     "area": "H2_FW",
+     "task": 6,
+     "mower": "M1",
+     "start": 167,
+     "end": 197
+    },
+    {
+     "area": "H2_SR1",
+     "task": 1,
+     "mower": "M3",
+     "start": 4,
+     "end": 25
+    },
+    {
+     "area": "H2_SR1",
+     "task": 2,
+     "mower": "M3",
+     "start": 145,
+     "end": 166
+    },
+    {
+     "area": "H2_SR2",
+     "task": 1,
+     "mower": "M3",
+     "start": 118,
+     "end": 145
+    },
+    {
+     "area": "H2_SR2",
+     "task": 2,
+     "mower": "M3",
+     "start": 166,
+     "end": 193
+    }
+   ],
+   "replan_optimal": true
+  },
+  {
+   "scenario": "over-critical-load",
+   "scenario_sha256": "d17c185f8a13032c6b1012505b4ddda43003900cad8bd1a0309ab613c562deac",
+   "seed_tag": "seed0",
+   "preferences": {
+    "tasks": [
+     {
+      "area": "H1_FW",
+      "start": 14,
+      "mower": "M1",
+      "origin": "frozen"
+     },
+     {
+      "area": "H1_SR3",
+      "start": 100,
+      "mower": "M1",
+      "origin": "edited"
+     },
+     {
+      "area": "H1_SR3",
+      "start": 99,
+      "mower": "M1",
+      "origin": "frozen"
+     },
+     {
+      "area": "H1_SR3",
+      "start": 12,
+      "mower": "M3",
+      "origin": "edited"
+     },
+     {
+      "area": "H2_FW",
+      "start": 31,
+      "mower": "M1",
+      "origin": "frozen"
+     },
+     {
+      "area": "H2_SR1",
+      "start": 85,
+      "mower": "M1",
+      "origin": "edited"
+     },
+     {
+      "area": "H2_SR1",
+      "start": 156,
+      "mower": "M3",
+      "origin": "edited"
+     },
+     {
+      "area": "H2_SR1",
+      "start": 157,
+      "mower": "M3",
+      "origin": "edited"
+     },
+     {
+      "area": "H3_FW",
+      "start": 142,
+      "mower": "M1",
+      "origin": "frozen"
+     },
+     {
+      "area": "H3_SR1",
+      "start": 0,
+      "mower": "M3",
+      "origin": "frozen"
+     },
+     {
+      "area": "H3_SR1",
+      "start": 47,
+      "mower": "M3",
+      "origin": "frozen"
+     },
+     {
+      "area": "H3_SR1",
+      "start": 87,
+      "mower": "M3",
+      "origin": "frozen"
+     },
+     {
+      "area": "H3_SR1",
+      "start": 126,
+      "mower": "M3",
+      "origin": "frozen"
+     },
+     {
+      "area": "H4_FW",
+      "start": 43,
+      "mower": "M1",
+      "origin": "frozen"
+     },
+     {
+      "area": "H4_SR2",
+      "start": 47,
+      "mower": "M1",
+      "origin": "edited"
+     },
+     {
+      "area": "H4_SR2",
+      "start": 122,
+      "mower": "M1",
+      "origin": "frozen"
+     },
+     {
+      "area": "H4_SR2",
+      "start": 167,
+      "mower": "M1",
+      "origin": "frozen"
+     },
+     {
+      "area": "H5_FW",
+      "start": 7,
+      "mower": "M2",
+      "origin": "edited"
+     },
+     {
+      "area": "H5_FW",
+      "start": 29,
+      "mower": "M2",
+      "origin": "edited"
+     },
+     {
+      "area": "H5_FW",
+      "start": 57,
+      "mower": "M2",
+      "origin": "frozen"
+     },
+     {
+      "area": "H5_FW",
+      "start": 81,
+      "mower": "M2",
+      "origin": "frozen"
+     },
+     {
+      "area": "H5_FW",
+      "start": 158,
+      "mower": "M2",
+      "origin": "edited"
+     },
+     {
+      "area": "H5_FW",
+      "start": 157,
+      "mower": "M2",
+      "origin": "edited"
+     },
+     {
+      "area": "H5_FW",
+      "start": 151,
+      "mower": "M2",
+      "origin": "frozen"
+     },
+     {
+      "area": "H5_SR1",
+      "start": 21,
+      "mower": "M4",
+      "origin": "frozen"
+     },
+     {
+      "area": "H5_SR1",
+      "start": 67,
+      "mower": "M4",
+      "origin": "edited"
+     },
+     {
+      "area": "H5_SR2",
+      "start": 165,
+      "mower": "M4",
+      "origin": "edited"
+     },
+     {
+      "area": "H5_SR2",
+      "start": 166,
+      "mower": "M4",
+      "origin": "frozen"
+     },
+     {
+      "area": "H5_SR3",
+      "start": 46,
+      "mower": "M2",
+      "origin": "frozen"
+     },
+     {
+      "area": "H5_SR3",
+      "start": 94,
+      "mower": "M2",
+      "origin": "frozen"
+     },
+     {
+      "area": "H5_SR3",
+      "start": 138,
+      "mower": "M2",
+      "origin": "frozen"
+     }
+    ],
+    "mode": "weak",
+    "level": "top"
+   },
+   "replan_tasks": [
+    {
+     "area": "H1_FW",
+     "task": 1,
+     "mower": "M1",
+     "start": 14,
+     "end": 29
+    },
+    {
+     "area": "H1_SR3",
+     "task": 1,
+     "mower": "M1",
+     "start": 61,
+     "end": 73
+    },
+    {
+     "area": "H1_SR3",
+     "task": 2,
+     "mower": "M1",
+     "start": 73,
+     "end": 85
+    },
+    {
+     "area": "H1_SR3",
+     "task": 3,
+     "mower": "M1",
+     "start": 99,
+     "end": 111
+    },
+    {
+     "area": "H2_FW",
+     "task": 1,
+     "mower": "M1",
+     "start": 31,
+     "end": 41
+    },
+    {
+     "area": "H2_SR1",
+     "task": 1,
+     "mower": "M1",
+     "start": 85,
+     "end": 94
+    },
+    {
+     "area": "H2_SR1",
+     "task": 2,
+     "mower": "M1",
+     "start": 111,
+     "end": 120
+    },
+    {
+     "area": "H2_SR1",
+     "task": 3,
+     "mower": "M3",
+     "start": 157,
+     "end": 181
+    },
+    {
+     "area": "H3_FW",
+     "task": 1,
+     "mower": "M1",
+     "start": 142,
+     "end": 158
+    },
+    {
+     "area": "H3_SR1",
+     "task": 1,
+     "mower": "M3",
+     "start": 0,
+     "end": 21
+    },
+    {
+     "area": "H3_SR1",
+     "task": 2,
+     "mower": "M3",
+     "start": 26,
+     "end": 47
+    },
+    {
+     "area": "H3_SR1",
+     "task": 3,
+     "mower": "M3",
+     "start": 47,
+     "end": 68
+    },
+    {
+     "area": "H3_SR1",
+     "task": 4,
+     "mower": "M3",
+     "start": 126,
+     "end": 147
+    },
+    {
+     "area": "H4_FW",
+     "task": 1,
+     "mower": "M1",
+     "start": 43,
+     "end": 57
+    },
+    {
+     "area": "H4_SR2",
+     "task": 1,
+     "mower": "M3",
+     "start": 68,
+     "end": 121
+    },
+    {
+     "area": "H4_SR2",
+     "task": 2,
+     "mower": "M1",
+     "start": 122,
+     "end": 142
+    },
+    {
+     "area": "H4_SR2",
+     "task": 3,
+     "mower": "M1",
+     "start": 167,
+     "end": 187
+    },
+    {
+     "area": "H5_FW",
+     "task": 1,
+     "mower": "M2",
+     "start": 7,
+     "end": 16
+    },
+    {
+     "area": "H5_FW",
+     "task": 2,
+     "mower": "M2",
+     "start": 29,
+     "end": 38
+    },
+    {
+     "area": "H5_FW",
+     "task": 3,
+     "mower": "M2",
+     "start": 57,
+     "end": 66
+    },
+    {
+     "area": "H5_FW",
+     "task": 4,
+     "mower": "M2",
+     "start": 81,
+     "end": 90
+    },
+    {
+     "area": "H5_FW",
+     "task": 5,
+     "mower": "M2",
+     "start": 104,
+     "end": 113
+    },
+    {
+     "area": "H5_FW",
+     "task": 6,
+     "mower": "M2",
+     "start": 128,
+     "end": 137
+    },
+    {
+     "area": "H5_FW",
+     "task": 7,
+     "mower": "M2",
+     "start": 151,
+     "end": 160
+    },
+    {
+     "area": "H5_SR1",
+     "task": 1,
+     "mower": "M4",
+     "start": 21,
+     "end": 86
+    },
+    {
+     "area": "H5_SR1",
+     "task": 2,
+     "mower": "M4",
+     "start": 86,
+     "end": 151
+    },
+    {
+     "area": "H5_SR2",
+     "task": 1,
+     "mower": "M4",
+     "start": 0,
+     "end": 21
+    },
+    {
+     "area": "H5_SR2",
+     "task": 2,
+     "mower": "M4",
+     "start": 165,
+     "end": 186
+    },
+    {
+     "area": "H5_SR3",
+     "task": 1,
+     "mower": "M2",
+     "start": 46,
+     "end": 52
+    },
+    {
+     "area": "H5_SR3",
+     "task": 2,
+     "mower": "M2",
+     "start": 94,
+     "end": 100
+    },
+    {
+     "area": "H5_SR3",
+     "task": 3,
+     "mower": "M2",
+     "start": 138,
+     "end": 144
+    }
+   ],
+   "replan_optimal": true
+  },
+  {
+   "scenario": "over-critical-load",
+   "scenario_sha256": "d17c185f8a13032c6b1012505b4ddda43003900cad8bd1a0309ab613c562deac",
+   "seed_tag": "seed1",
+   "preferences": {
+    "tasks": [
+     {
+      "area": "H1_FW",
+      "start": 14,
+      "mower": "M1",
+      "origin": "frozen"
+     },
+     {
+      "area": "H1_SR3",
+      "start": 5,
+      "mower": "M3",
+      "origin": "edited"
+     },
+     {
+      "area": "H1_SR3",
+      "start": 9,
+      "mower": "M3",
+      "origin": "edited"
+     },
+     {
+      "area": "H1_SR3",
+      "start": 147,
+      "mower": "M3",
+      "origin": "frozen"
+     },
+     {
+      "area": "H2_FW",
+      "start": 31,
+      "mower": "M1",
+      "origin": "frozen"
+     },
+     {
+      "area": "H2_SR1",
+      "start": 22,
+      "mower": "M3",
+      "origin": "frozen"
+     },
+     {
+      "area": "H2_SR1",
+      "start": 70,
+      "mower": "M1",
+      "origin": "frozen"
+     },
+     {
+      "area": "H2_SR1",
+      "start": 35,
+      "mower": "M3",
+      "origin": "edited"
+     },
+     {
+      "area": "H3_FW",
+      "start": 142,
+      "mower": "M1",
+      "origin": "frozen"
+     },
+     {
+      "area": "H3_SR1",
+      "start": 0,
+      "mower": "M3",
+      "origin": "frozen"
+     },
+     {
+      "area": "H3_SR1",
+      "start": 26,
+      "mower": "M3",
+      "origin": "edited"
+     },
+     {
+      "area": "H3_SR1",
+      "start": 87,
+      "mower": "M3",
+      "origin": "frozen"
+     },
+     {
+      "area": "H3_SR1",
+      "start": 126,
+      "mower": "M3",
+      "origin": "frozen"
+     },
+     {
+      "area": "H4_FW",
+      "start": 43,
+      "mower": "M1",
+      "origin": "frozen"
+     },
+     {
+      "area": "H4_SR2",
+      "start": 69,
+      "mower": "M3",
+      "origin": "edited"
+     },
+     {
+      "area": "H4_SR2",
+      "start": 136,
+      "mower": "M1",
+      "origin": "edited"
+     },
+     {
+      "area": "H4_SR2",
+      "start": 82,
+      "mower": "M1",
+      "origin": "edited"
+     },
+     {
+      "area": "H5_FW",
+      "start": 9,
+      "mower": "M2",
+      "origin": "frozen"
+     },
+     {
+      "area": "H5_FW",
+      "start": 33,
+      "mower": "M2",
+      "origin": "frozen"
+     },
+     {
+      "area": "H5_FW",
+      "start": 57,
+      "mower": "M2",
+      "origin": "frozen"
+     },
+     {
+      "area": "H5_FW",
+      "start": 81,
+      "mower": "M2",
+      "origin": "frozen"
+     },
+     {
+      "area": "H5_FW",
+      "start": 103,
+      "mower": "M2",
+      "origin": "frozen"
+     },
+     {
+      "area": "H5_FW",
+      "start": 13,
+      "mower": "M2",
+      "origin": "edited"
+     },
+     {
+      "area": "H5_FW",
+      "start": 96,
+      "mower": "M2",
+      "origin": "edited"
+     },
+     {
+      "area": "H5_SR1",
+      "start": 56,
+      "mower": "M4",
+      "origin": "edited"
+     },
+     {
+      "area": "H5_SR1",
+      "start": 92,
+      "mower": "M4",
+      "origin": "frozen"
+     },
+     {
+      "area": "H5_SR2",
+      "start": 0,
+      "mower": "M4",
+      "origin": "frozen"
+     },
+     {
+      "area": "H5_SR2",
+      "start": 166,
+      "mower": "M4",
+      "origin": "frozen"
+     },
+     {
+      "area": "H5_SR3",
+      "start": 18,
+      "mower": "M2",
+      "origin": "edited"
+     },
+     {
+      "area": "H5_SR3",
+      "start": 143,
+      "mower": "M2",
+      "origin": "edited"
+     },
+     {
+      "area": "H5_SR3",
+      "start": 138,
+      "mower": "M2",
+      "origin": "frozen"
+     }
+    ],
+    "mode": "weak",
+    "level": "top"
+   },
+   "replan_tasks": [
+    {
+     "area": "H1_FW",
+     "task": 1,
+     "mower": "M1",
+     "start": 14,
+     "end": 29
+    },
+    {
+     "area": "H1_SR3",
+     "task": 1,
+     "mower": "M1",
+     "start": 58,
+     "end": 70
+    },
+    {
+     "area": "H1_SR3",
+     "task": 2,
+     "mower": "M1",
+     "start": 102,
+     "end": 114
+    },
+    {
+     "area": "H1_SR3",
+     "task": 3,
+     "mower": "M3",
+     "start": 147,
+     "end": 178
+    },
+    {
+     "area": "H2_FW",
+     "task": 1,
+     "mower": "M1",
+     "start": 31,
+     "end": 41
+    },
+    {
+     "area": "H2_SR1",
+     "task": 1,
+     "mower": "M3",
+     "start": 22,
+     "end": 46
+    },
+    {
+     "area": "H2_SR1",
+     "task": 2,
+     "mower": "M1",
+     "start": 70,
+     "end": 79
+    },
+    {
+     "area": "H2_SR1",
+     "task": 3,
+     "mower": "M1",
+     "start": 158,
+     "end": 167
+    },
+    {
+     "area": "H3_FW",
+     "task": 1,
+     "mower": "M1",
+     "start": 142,
+     "end": 158
+    },
+    {
+     "area": "H3_SR1",
+     "task": 1,
+     "mower": "M3",
+     "start": 0,
+     "end": 21
+    },
+    {
+     "area": "H3_SR1",
+     "task": 2,
+     "mower": "M3",
+     "start": 46,
+     "end": 67
+    },
+    {
+     "area": "H3_SR1",
+     "task": 3,
+     "mower": "M3",
+     "start": 87,
+     "end": 108
+    },
+    {
+     "area": "H3_SR1",
+     "task": 4,
+     "mower": "M3",
+     "start": 126,
+     "end": 147
+    },
+    {
+     "area": "H4_FW",
+     "task": 1,
+     "mower": "M1",
+     "start": 43,
+     "end": 57
+    },
+    {
+     "area": "H4_SR2",
+     "task": 1,
+     "mower": "M1",
+     "start": 82,
+     "end": 102
+    },
+    {
+     "area": "H4_SR2",
+     "task": 2,
+     "mower": "M1",
+     "start": 121,
+     "end": 141
+    },
+    {
+     "area": "H4_SR2",
+     "task": 3,
+     "mower": "M1",
+     "start": 167,
+     "end": 187
+    },
+    {
+     "area": "H5_FW",
+     "task": 1,
+     "mower": "M2",
+     "start": 9,
+     "end": 18
+    },
+    {
+     "area": "H5_FW",
+     "task": 2,
+     "mower": "M2",
+     "start": 33,
+     "end": 42
+    },
+    {
+     "area": "H5_FW",
+     "task": 3,
+     "mower": "M2",
+     "start": 57,
+     "end": 66
+    },
+    {
+     "area": "H5_FW",
+     "task": 4,
+     "mower": "M2",
+     "start": 81,
+     "end": 90
+    },
+    {
+     "area": "H5_FW",
+     "task": 5,
+     "mower": "M2",
+     "start": 103,
+     "end": 112
+    },
+    {
+     "area": "H5_FW",
+     "task": 6,
+     "mower": "M2",
+     "start": 127,
+     "end": 136
+    },
+    {
+     "area": "H5_FW",
+     "task": 7,
+     "mower": "M2",
+     "start": 151,
+     "end": 160
+    },
+    {
+     "area": "H5_SR1",
+     "task": 1,
+     "mower": "M4",
+     "start": 21,
+     "end": 86
+    },
+    {
+     "area": "H5_SR1",
+     "task": 2,
+     "mower": "M4",
+     "start": 92,
+     "end": 157
+    },
+    {
+     "area": "H5_SR2",
+     "task": 1,
+     "mower": "M4",
+     "start": 0,
+     "end": 21
+    },
+    {
+     "area": "H5_SR2",
+     "task": 2,
+     "mower": "M4",
+     "start": 166,
+     "end": 187
+    },
+    {
+     "area": "H5_SR3",
+     "task": 1,
+     "mower": "M2",
+     "start": 18,
+     "end": 24
+    },
+    {
+     "area": "H5_SR3",
+     "task": 2,
+     "mower": "M2",
+     "start": 66,
+     "end": 72
+    },
+    {
+     "area": "H5_SR3",
+     "task": 3,
+     "mower": "M2",
+     "start": 114,
+     "end": 120
+    },
+    {
+     "area": "H5_SR3",
+     "task": 4,
+     "mower": "M2",
+     "start": 143,
+     "end": 149
+    }
+   ],
+   "replan_optimal": true
+  },
+  {
+   "scenario": "over-critical-load",
+   "scenario_sha256": "d17c185f8a13032c6b1012505b4ddda43003900cad8bd1a0309ab613c562deac",
+   "seed_tag": "seed2",
+   "preferences": {
+    "tasks": [
+     {
+      "area": "H1_FW",
+      "start": 14,
+      "mower": "M1",
+      "origin": "frozen"
+     },
+     {
+      "area": "H1_SR3",
+      "start": 58,
+      "mower": "M1",
+      "origin": "frozen"
+     },
+     {
+      "area": "H1_SR3",
+      "start": 28,
+      "mower": "M1",
+      "origin": "edited"
+     },
+     {
+      "area": "H1_SR3",
+      "start": 76,
+      "mower": "M1",
+      "origin": "edited"
+     },
+     {
+      "area": "H2_FW",
+      "start": 31,
+      "mower": "M1",
+      "origin": "frozen"
+     },
+     {
+      "area": "H2_SR1",
+      "start": 22,
+      "mower": "M3",
+      "origin": "frozen"
+     },
+     {
+      "area": "H2_SR1",
+      "start": 70,
+      "mower": "M1",
+      "origin": "frozen"
+     },
+     {
+      "area": "H2_SR1",
+      "start": 111,
+      "mower": "M1",
+      "origin": "frozen"
+     },
+     {
+      "area": "H3_FW",
+      "start": 149,
+      "mower": "M1",
+      "origin": "edited"
+     },
+     {
+      "area": "H3_SR1",
+      "start": 148,
+      "mower": "M3",
+      "origin": "edited"
+     },
+     {
+      "area": "H3_SR1",
+      "start": 47,
+      "mower": "M3",
+      "origin": "frozen"
+     },
+     {
+      "area": "H3_SR1",
+      "start": 82,
+      "mower": "M3",
+      "origin": "edited"
+     },
+     {
+      "area": "H3_SR1",
+      "start": 126,
+      "mower": "M3",
+      "origin": "frozen"
+     },
+     {
+      "area": "H4_FW",
+      "start": 43,
+      "mower": "M1",
+      "origin": "frozen"
+     },
+     {
+      "area": "H4_SR2",
+      "start": 79,
+      "mower": "M1",
+      "origin": "frozen"
+     },
+     {
+      "area": "H4_SR2",
+      "start": 122,
+      "mower": "M1",
+      "origin": "frozen"
+     },
+     {
+      "area": "H4_SR2",
+      "start": 154,
+      "mower": "M3",
+      "origin": "edited"
+     },
+     {
+      "area": "H5_FW",
+      "start": 9,
+      "mower": "M2",
+      "origin": "frozen"
+     },
+     {
+      "area": "H5_FW",
+      "start": 33,
+      "mower": "M2",
+      "origin": "frozen"
+     },
+     {
+      "area": "H5_FW",
+      "start": 132,
+      "mower": "M2",
+      "origin": "edited"
+     },
+     {
+      "area": "H5_FW",
+      "start": 81,
+      "mower": "M2",
+      "origin": "frozen"
+     },
+     {
+      "area": "H5_FW",
+      "start": 103,
+      "mower": "M2",
+      "origin": "frozen"
+     },
+     {
+      "area": "H5_FW",
+      "start": 127,
+      "mower": "M2",
+      "origin": "frozen"
+     },
+     {
+      "area": "H5_FW",
+      "start": 151,
+      "mower": "M2",
+      "origin": "frozen"
+     },
+     {
+      "area": "H5_SR1",
+      "start": 21,
+      "mower": "M4",
+      "origin": "frozen"
+     },
+     {
+      "area": "H5_SR1",
+      "start": 98,
+      "mower": "M4",
+      "origin": "edited"
+     },
+     {
+      "area": "H5_SR2",
+      "start": 156,
+      "mower": "M4",
+      "origin": "edited"
+     },
+     {
+      "area": "H5_SR2",
+      "start": 153,
+      "mower": "M4",
+      "origin": "edited"
+     },
+     {
+      "area": "H5_SR3",
+      "start": 46,
+      "mower": "M2",
+      "origin": "frozen"
+     },
+     {
+      "area": "H5_SR3",
+      "start": 105,
+      "mower": "M2",
+      "origin": "edited"
+     },
+     {
+      "area": "H5_SR3",
+      "start": 4,
+      "mower": "M2",
+      "origin": "edited"
+     }
+    ],
+    "mode": "weak",
+    "level": "top"
+   },
+   "replan_tasks": [
+    {
+     "area": "H1_FW",
+     "task": 1,
+     "mower": "M1",
+     "start": 14,
+     "end": 29
+    },
+    {
+     "area": "H1_SR3",
+     "task": 1,
+     "mower": "M1",
+     "start": 58,
+     "end": 70
+    },
+    {
+     "area": "H1_SR3",
+     "task": 2,
+     "mower": "M1",
+     "start": 99,
+     "end": 111
+    },
+    {
+     "area": "H1_SR3",
+     "task": 3,
+     "mower": "M1",
+     "start": 165,
+     "end": 177
+    },
+    {
+     "area": "H2_FW",
+     "task": 1,
+     "mower": "M1",
+     "start": 31,
+     "end": 41
+    },
+    {
+     "area": "H2_SR1",
+     "task": 1,
+     "mower": "M3",
+     "start": 22,
+     "end": 46
+    },
+    {
+     "area": "H2_SR1",
+     "task": 2,
+     "mower": "M1",
+     "start": 70,
+     "end": 79
+    },
+    {
+     "area": "H2_SR1",
+     "task": 3,
+     "mower": "M1",
+     "start": 111,
+     "end": 120
+    },
+    {
+     "area": "H3_FW",
+     "task": 1,
+     "mower": "M1",
+     "start": 149,
+     "end": 165
+    },
+    {
+     "area": "H3_SR1",
+     "task": 1,
+     "mower": "M3",
+     "start": 0,
+     "end": 21
+    },
+    {
+     "area": "H3_SR1",
+     "task": 2,
+     "mower": "M3",
+     "start": 47,
+     "end": 68
+    },
+    {
+     "area": "H3_SR1",
+     "task": 3,
+     "mower": "M3",
+     "start": 82,
+     "end": 103
+    },
+    {
+     "area": "H3_SR1",
+     "task": 4,
+     "mower": "M3",
+     "start": 126,
+     "end": 147
+    },
+    {
+     "area": "H4_FW",
+     "task": 1,
+     "mower": "M1",
+     "start": 43,
+     "end": 57
+    },
+    {
+     "area": "H4_SR2",
+     "task": 1,
+     "mower": "M1",
+     "start": 79,
+     "end": 99
+    },
+    {
+     "area": "H4_SR2",
+     "task": 2,
+     "mower": "M1",
+     "start": 122,
+     "end": 142
+    },
+    {
+     "area": "H4_SR2",
+     "task": 3,
+     "mower": "M3",
+     "start": 154,
+     "end": 207
+    },
+    {
+     "area": "H5_FW",
+     "task": 1,
+     "mower": "M2",
+     "start": 9,
+     "end": 18
+    },
+    {
+     "area": "H5_FW",
+     "task": 2,
+     "mower": "M2",
+     "start": 33,
+     "end": 42
+    },
+    {
+     "area": "H5_FW",
+     "task": 3,
+     "mower": "M2",
+     "start": 57,
+     "end": 66
+    },
+    {
+     "area": "H5_FW",
+     "task": 4,
+     "mower": "M2",
+     "start": 81,
+     "end": 90
+    },
+    {
+     "area": "H5_FW",
+     "task": 5,
+     "mower": "M2",
+     "start": 103,
+     "end": 112
+    },
+    {
+     "area": "H5_FW",
+     "task": 6,
+     "mower": "M2",
+     "start": 127,
+     "end": 136
+    },
+    {
+     "area": "H5_FW",
+     "task": 7,
+     "mower": "M2",
+     "start": 151,
+     "end": 160
+    },
+    {
+     "area": "H5_SR1",
+     "task": 1,
+     "mower": "M4",
+     "start": 21,
+     "end": 86
+    },
+    {
+     "area": "H5_SR1",
+     "task": 2,
+     "mower": "M4",
+     "start": 86,
+     "end": 151
+    },
+    {
+     "area": "H5_SR2",
+     "task": 1,
+     "mower": "M4",
+     "start": 0,
+     "end": 21
+    },
+    {
+     "area": "H5_SR2",
+     "task": 2,
+     "mower": "M4",
+     "start": 156,
+     "end": 177
+    },
+    {
+     "area": "H5_SR3",
+     "task": 1,
+     "mower": "M2",
+     "start": 46,
+     "end": 52
+    },
+    {
+     "area": "H5_SR3",
+     "task": 2,
+     "mower": "M2",
+     "start": 90,
+     "end": 96
+    },
+    {
+     "area": "H5_SR3",
+     "task": 3,
+     "mower": "M2",
+     "start": 136,
+     "end": 142
+    }
+   ],
+   "replan_optimal": true
+  },
+  {
+   "scenario": "balanced-four-hole",
+   "scenario_sha256": "c4f7ed1b29dc477d8b196da4ad9130cd4059735134a9cad37f23a4d4b482ed81",
+   "seed_tag": "seed0",
+   "preferences": {
+    "tasks": [
+     {
+      "area": "H1_FW",
+      "start": 1,
+      "mower": "M3",
+      "origin": "frozen"
+     },
+     {
+      "area": "H1_FW",
+      "start": 25,
+      "mower": "M4",
+      "origin": "frozen"
+     },
+     {
+      "area": "H1_FW",
+      "start": 159,
+      "mower": "M4",
+      "origin": "edited"
+     },
+     {
+      "area": "H1_FW",
+      "start": 73,
+      "mower": "M4",
+      "origin": "frozen"
+     },
+     {
+      "area": "H1_FW",
+      "start": 97,
+      "mower": "M3",
+      "origin": "frozen"
+     },
+     {
+      "area": "H1_FW",
+      "start": 121,
+      "mower": "M4",
+      "origin": "frozen"
+     },
+     {
+      "area": "H1_FW",
+      "start": 142,
+      "mower": "M2",
+      "origin": "frozen"
+     },
+     {
+      "area": "H1_FW",
+      "start": 163,
+      "mower": "M4",
+      "origin": "frozen"
+     },
+     {
+      "area": "H1_SR1",
+      "start": 23,
+      "mower": "M1",
+      "origin": "edited"
+     },
+     {
+      "area": "H1_SR1",
+      "start": 56,
+      "mower": "M3",
+      "origin": "frozen"
+     },
+     {
+      "area": "H1_SR1",
+      "start": 54,
+      "mower": "M1",
+      "origin": "edited"
+     },
+     {
+      "area": "H1_SR2",
+      "start": 149,
+      "mower": "M5",
+      "origin": "edited"
+     },
+     {
+      "area": "H1_SR2",
+      "start": 69,
+      "mower": "M1",
+      "origin": "frozen"
+     },
+     {
+      "area": "H1_SR2",
+      "start": 95,
+      "mower": "M4",
+      "origin": "frozen"
+     },
+     {
+      "area": "H1_SR2",
+      "start": 167,
+      "mower": "M5",
+      "origin": "frozen"
+     },
+     {
+      "area": "H2_FW",
+      "start": 103,
+      "mower": "M1",
+      "origin": "frozen"
+     },
+     {
+      "area": "H2_FW",
+      "start": 54,
+      "mower": "M1",
+      "origin": "edited"
+     },
+     {
+      "area": "H2_FW",
+      "start": 143,
+      "mower": "M3",
+      "origin": "frozen"
+     },
+     {
+      "area": "H2_FW",
+      "start": 148,
+      "mower": "M3",
+      "origin": "frozen"
+     },
+     {
+      "area": "H2_FW",
+      "start": 157,
+      "mower": "M3",
+      "origin": "frozen"
+     },
+     {
+      "area": "H2_FW",
+      "start": 32,
+      "mower": "M3",
+      "origin": "edited"
+     },
+     {
+      "area": "H2_FW",
+      "start": 167,
+      "mower": "M2",
+      "origin": "frozen"
+     },
+     {
+      "area": "H2_SR1",
+      "start": 118,
+      "mower": "M3",
+      "origin": "frozen"
+     },
+     {
+      "area": "H2_SR1",
+      "start": 121,
+      "mower": "M1",
+      "origin": "frozen"
+     },
+     {
+      "area": "H2_SR1",
+      "start": 144,
+      "mower": "M1",
+      "origin": "frozen"
+     },
+     {
+      "area": "H2_SR2",
+      "start": 89,
+      "mower": "M1",
+      "origin": "edited"
+     },
+     {
+      "area": "H2_SR2",
+      "start": 35,
+      "mower": "M1",
+      "origin": "frozen"
+     },
+     {
+      "area": "H2_SR2",
+      "start": 68,
+      "mower": "M3",
+      "origin": "edited"
+     },
+     {
+      "area": "H2_SR2",
+      "start": 76,
+      "mower": "M3",
+      "origin": "frozen"
+     },
+     {
+      "area": "H3_FW",
+      "start": 6,
+      "mower": "M4",
+      "origin": "frozen"
+     },
+     {
+      "area": "H3_FW",
+      "start": 7,
+      "mower": "M4",
+      "origin": "edited"
+     },
+     {
+      "area": "H3_FW",
+      "start": 93,
+      "mower": "M2",
+      "origin": "edited"
+     },
+     {
+      "area": "H3_FW",
+      "start": 77,
+      "mower": "M2",
+      "origin": "frozen"
+     },
+     {
+      "area": "H3_FW",
+      "start": 51,
+      "mower": "M2",
+      "origin": "edited"
+     },
+     {
+      "area": "H3_FW",
+      "start": 134,
+      "mower": "M4",
+      "origin": "edited"
+     },
+     {
+      "area": "H3_FW",
+      "start": 152,
+      "mower": "M2",
+      "origin": "edited"
+     },
+     {
+      "area": "H3_SR1",
+      "start": 130,
+      "mower": "M5",
+      "origin": "edited"
+     },
+     {
+      "area": "H3_SR1",
+      "start": 95,
+      "mower": "M1",
+      "origin": "frozen"
+     },
+     {
+      "area": "H3_SR1",
+      "start": 130,
+      "mower": "M2",
+      "origin": "frozen"
+     },
+     {
+      "area": "H3_SR1",
+      "start": 114,
+      "mower": "M1",
+      "origin": "edited"
+     },
+     {
+      "area": "H3_SR2",
+      "start": 0,
+      "mower": "M1",
+      "origin": "frozen"
+     },
+     {
+      "area": "H3_SR2",
+      "start": 25,
+      "mower": "M3",
+      "origin": "frozen"
+     },
+     {
+      "area": "H3_SR2",
+      "start": 43,
+      "mower": "M3",
+      "origin": "frozen"
+     },
+     {
+      "area": "H3_SR2",
+      "start": 153,
+      "mower": "M4",
+      "origin": "edited"
+     },
+     {
+      "area": "H3_SR3",
+      "start": 167,
+      "mower": "M3",
+      "origin": "edited"
+     },
+     {
+      "area": "H3_SR3",
+      "start": 97,
+      "mower": "M3",
+      "origin": "edited"
+     },
+     {
+      "area": "H3_SR3",
+      "start": 1,
+      "mower": "M3",
+      "origin": "edited"
+     },
+     {
+      "area": "H4_FW",
+      "start": 1,
+      "mower": "M1",
+      "origin": "edited"
+     },
+     {
+      "area": "H4_FW",
+      "start": 66,
+      "mower": "M2",
+      "origin": "frozen"
+     },
+     {
+      "area": "H4_FW",
+      "start": 90,
+      "mower": "M5",
+      "origin": "frozen"
+     },
+     {
+      "area": "H4_FW",
+      "start": 104,
+      "mower": "M3",
+      "origin": "frozen"
+     },
+     {
+      "area": "H4_FW",
+      "start": 120,
+      "mower": "M3",
+      "origin": "frozen"
+     },
+     {
+      "area": "H4_FW",
+      "start": 124,
+      "mower": "M3",
+      "origin": "frozen"
+     },
+     {
+      "area": "H4_FW",
+      "start": 128,
+      "mower": "M3",
+      "origin": "frozen"
+     },
+     {
+      "area": "H4_SR1",
+      "start": 7,
+      "mower": "M2",
+      "origin": "edited"
+     },
+     {
+      "area": "H4_SR1",
+      "start": 94,
+      "mower": "M2",
+      "origin": "edited"
+     },
+     {
+      "area": "H4_SR1",
+      "start": 161,
+      "mower": "M4",
+      "origin": "edited"
+     },
+     {
+      "area": "H4_SR1",
+      "start": 117,
+      "mower": "M2",
+      "origin": "frozen"
+     },
+     {
+      "area": "H4_SR2",
+      "start": 81,
+      "mower": "M3",
+      "origin": "frozen"
+     },
+     {
+      "area": "H4_SR2",
+      "start": 89,
+      "mower": "M3",
+      "origin": "frozen"
+     },
+     {
+      "area": "H4_SR2",
+      "start": 155,
+      "mower": "M3",
+      "origin": "edited"
+     },
+     {
+      "area": "H4_SR3",
+      "start": 57,
+      "mower": "M4",
+      "origin": "edited"
+     },
+     {
+      "area": "H4_SR3",
+      "start": 32,
+      "mower": "M4",
+      "origin": "edited"
+     },
+     {
+      "area": "H4_SR3",
+      "start": 167,
+      "mower": "M1",
+      "origin": "frozen"
+     }
+    ],
+    "mode": "weak",
+    "level": "top"
+   },
+   "replan_tasks": [
+    {
+     "area": "H1_FW",
+     "task": 1,
+     "mower": "M3",
+     "start": 16,
+     "end": 23
+    },
+    {
+     "area": "H1_FW",
+     "task": 2,
+     "mower": "M3",
+     "start": 31,
+     "end": 42
+    },
+    {
+     "area": "H1_FW",
+     "task": 3,
+     "mower": "M3",
+     "start": 61,
+     "end": 68
+    },
+    {
+     "area": "H1_FW",
+     "task": 4,
+     "mower": "M3",
+     "start": 70,
+     "end": 77
+    },
+    {
+     "area": "H1_FW",
+     "task": 5,
+     "mower": "M3",
+     "start": 77,
+     "end": 88
+    },
+    {
+     "area": "H1_FW",
+     "task": 6,
+     "mower": "M4",
+     "start": 142,
+     "end": 163
+    },
+    {
+     "area": "H1_SR1",
+     "task": 1,
+     "mower": "M1",
+     "start": 40,
+     "end": 90
+    },
+    {
+     "area": "H1_SR1",
+     "task": 2,
+     "mower": "M3",
+     "start": 118,
+     "end": 138
+    },
+    {
+     "area": "H1_SR1",
+     "task": 3,
+     "mower": "M1",
+     "start": 167,
+     "end": 217
+    },
+    {
+     "area": "H1_SR2",
+     "task": 1,
+     "mower": "M5",
+     "start": 64,
+     "end": 90
+    },
+    {
+     "area": "H1_SR2",
+     "task": 2,
+     "mower": "M5",
+     "start": 90,
+     "end": 116
+    },
+    {
+     "area": "H1_SR2",
+     "task": 3,
+     "mower": "M4",
+     "start": 116,
+     "end": 142
+    },
+    {
+     "area": "H1_SR2",
+     "task": 4,
+     "mower": "M5",
+     "start": 167,
+     "end": 193
+    },
+    {
+     "area": "H2_FW",
+     "task": 1,
+     "mower": "M2",
+     "start": 0,
+     "end": 18
+    },
+    {
+     "area": "H2_FW",
+     "task": 2,
+     "mower": "M1",
+     "start": 103,
+     "end": 121
+    },
+    {
+     "area": "H2_FW",
+     "task": 3,
+     "mower": "M2",
+     "start": 126,
+     "end": 144
+    },
+    {
+     "area": "H2_FW",
+     "task": 4,
+     "mower": "M3",
+     "start": 144,
+     "end": 149
+    },
+    {
+     "area": "H2_FW",
+     "task": 5,
+     "mower": "M3",
+     "start": 149,
+     "end": 158
+    },
+    {
+     "area": "H2_FW",
+     "task": 6,
+     "mower": "M3",
+     "start": 158,
+     "end": 163
+    },
+    {
+     "area": "H2_FW",
+     "task": 7,
+     "mower": "M2",
+     "start": 167,
+     "end": 185
+    },
+    {
+     "area": "H2_SR1",
+     "task": 1,
+     "mower": "M3",
+     "start": 68,
+     "end": 70
+    },
+    {
+     "area": "H2_SR1",
+     "task": 2,
+     "mower": "M3",
+     "start": 90,
+     "end": 92
+    },
+    {
+     "area": "H2_SR1",
+     "task": 3,
+     "mower": "M3",
+     "start": 142,
+     "end": 144
+    },
+    {
+     "area": "H2_SR2",
+     "task": 1,
+     "mower": "M1",
+     "start": 0,
+     "end": 17
+    },
+    {
+     "area": "H2_SR2",
+     "task": 2,
+     "mower": "M3",
+     "start": 47,
+     "end": 52
+    },
+    {
+     "area": "H2_SR2",
+     "task": 3,
+     "mower": "M1",
+     "start": 90,
+     "end": 103
+    },
+    {
+     "area": "H2_SR2",
+     "task": 4,
+     "mower": "M3",
+     "start": 104,
+     "end": 113
+    },
+    {
+     "area": "H3_FW",
+     "task": 1,
+     "mower": "M5",
+     "start": 0,
+     "end": 18
+    },
+    {
+     "area": "H3_FW",
+     "task": 2,
+     "mower": "M4",
+     "start": 25,
+     "end": 43
+    },
+    {
+     "area": "H3_FW",
+     "task": 3,
+     "mower": "M5",
+     "start": 43,
+     "end": 57
+    },
+    {
+     "area": "H3_FW",
+     "task": 4,
+     "mower": "M2",
+     "start": 61,
+     "end": 75
+    },
+    {
+     "area": "H3_FW",
+     "task": 5,
+     "mower": "M4",
+     "start": 75,
+     "end": 93
+    },
+    {
+     "area": "H3_FW",
+     "task": 6,
+     "mower": "M4",
+     "start": 93,
+     "end": 111
+    },
+    {
+     "area": "H3_FW",
+     "task": 7,
+     "mower": "M4",
+     "start": 166,
+     "end": 184
+    },
+    {
+     "area": "H3_SR1",
+     "task": 1,
+     "mower": "M5",
+     "start": 32,
+     "end": 43
+    },
+    {
+     "area": "H3_SR1",
+     "task": 2,
+     "mower": "M2",
+     "start": 103,
+     "end": 114
+    },
+    {
+     "area": "H3_SR1",
+     "task": 3,
+     "mower": "M5",
+     "start": 128,
+     "end": 139
+    },
+    {
+     "area": "H3_SR1",
+     "task": 4,
+     "mower": "M5",
+     "start": 154,
+     "end": 165
+    },
+    {
+     "area": "H3_SR2",
+     "task": 1,
+     "mower": "M4",
+     "start": 44,
+     "end": 60
+    },
+    {
+     "area": "H3_SR2",
+     "task": 2,
+     "mower": "M3",
+     "start": 92,
+     "end": 98
+    },
+    {
+     "area": "H3_SR2",
+     "task": 3,
+     "mower": "M1",
+     "start": 124,
+     "end": 144
+    },
+    {
+     "area": "H3_SR2",
+     "task": 4,
+     "mower": "M2",
+     "start": 147,
+     "end": 167
+    },
+    {
+     "area": "H3_SR3",
+     "task": 1,
+     "mower": "M3",
+     "start": 4,
+     "end": 12
+    },
+    {
+     "area": "H3_SR3",
+     "task": 2,
+     "mower": "M3",
+     "start": 23,
+     "end": 31
+    },
+    {
+     "area": "H3_SR3",
+     "task": 3,
+     "mower": "M3",
+     "start": 52,
+     "end": 60
+    },
+    {
+     "area": "H4_FW",
+     "task": 1,
+     "mower": "M3",
+     "start": 0,
+     "end": 4
+    },
+    {
+     "area": "H4_FW",
+     "task": 2,
+     "mower": "M5",
+     "start": 19,
+     "end": 30
+    },
+    {
+     "area": "H4_FW",
+     "task": 3,
+     "mower": "M3",
+     "start": 113,
+     "end": 117
+    },
+    {
+     "area": "H4_FW",
+     "task": 4,
+     "mower": "M5",
+     "start": 117,
+     "end": 128
+    },
+    {
+     "area": "H4_FW",
+     "task": 5,
+     "mower": "M3",
+     "start": 138,
+     "end": 142
+    },
+    {
+     "area": "H4_FW",
+     "task": 6,
+     "mower": "M5",
+     "start": 142,
+     "end": 153
+    },
+    {
+     "area": "H4_FW",
+     "task": 7,
+     "mower": "M3",
+     "start": 163,
+     "end": 167
+    },
+    {
+     "area": "H4_SR1",
+     "task": 1,
+     "mower": "M4",
+     "start": 6,
+     "end": 23
+    },
+    {
+     "area": "H4_SR1",
+     "task": 2,
+     "mower": "M1",
+     "start": 23,
+     "end": 36
+    },
+    {
+     "area": "H4_SR1",
+     "task": 3,
+     "mower": "M2",
+     "start": 82,
+     "end": 99
+    },
+    {
+     "area": "H4_SR1",
+     "task": 4,
+     "mower": "M3",
+     "start": 99,
+     "end": 104
+    },
+    {
+     "area": "H4_SR2",
+     "task": 1,
+     "mower": "M2",
+     "start": 18,
+     "end": 28
+    },
+    {
+     "area": "H4_SR2",
+     "task": 2,
+     "mower": "M3",
+     "start": 43,
+     "end": 47
+    },
+    {
+     "area": "H4_SR2",
+     "task": 3,
+     "mower": "M2",
+     "start": 114,
+     "end": 124
+    },
+    {
+     "area": "H4_SR3",
+     "task": 1,
+     "mower": "M2",
+     "start": 28,
+     "end": 51
+    },
+    {
+     "area": "H4_SR3",
+     "task": 2,
+     "mower": "M1",
+     "start": 144,
+     "end": 167
+    },
+    {
+     "area": "H4_SR3",
+     "task": 3,
+     "mower": "M3",
+     "start": 167,
+     "end": 174
+    }
+   ],
+   "replan_optimal": false
+  },
+  {
+   "scenario": "balanced-four-hole",
+   "scenario_sha256": "c4f7ed1b29dc477d8b196da4ad9130cd4059735134a9cad37f23a4d4b482ed81",
+   "seed_tag": "seed2",
+   "preferences": {
+    "tasks": [
+     {
+      "area": "H1_FW",
+      "start": 1,
+      "mower": "M3",
+      "origin": "frozen"
+     },
+     {
+      "area": "H1_FW",
+      "start": 25,
+      "mower": "M4",
+      "origin": "frozen"
+     },
+     {
+      "area": "H1_FW",
+      "start": 49,
+      "mower": "M3",
+      "origin": "frozen"
+     },
+     {
+      "area": "H1_FW",
+      "start": 73,
+      "mower": "M4",
+      "origin": "frozen"
+     },
+     {
+      "area": "H1_FW",
+      "start": 71,
+      "mower": "M3",
+      "origin": "edited"
+     },
+     {
+      "area": "H1_FW",
+      "start": 165,
+      "mower": "M2",
+      "origin": "edited"
+     },
+     {
+      "area": "H1_FW",
+      "start": 112,
+      "mower": "M4",
+      "origin": "edited"
+     },
+     {
+      "area": "H1_FW",
+      "start": 163,
+      "mower": "M4",
+      "origin": "frozen"
+     },
+     {
+      "area": "H1_SR1",
+      "start": 2,
+      "mower": "M5",
+      "origin": "frozen"
+     },
+     {
+      "area": "H1_SR1",
+      "start": 22,
+      "mower": "M1",
+      "origin": "edited"
+     },
+     {
+      "area": "H1_SR1",
+      "start": 3,
+      "mower": "M1",
+      "origin": "edited"
+     },
+     {
+      "area": "H1_SR2",
+      "start": 1,
+      "mower": "M2",
+      "origin": "frozen"
+     },
+     {
+      "area": "H1_SR2",
+      "start": 69,
+      "mower": "M1",
+      "origin": "frozen"
+     },
+     {
+      "area": "H1_SR2",
+      "start": 95,
+      "mower": "M4",
+      "origin": "frozen"
+     },
+     {
+      "area": "H1_SR2",
+      "start": 118,
+      "mower": "M5",
+      "origin": "edited"
+     },
+     {
+      "area": "H2_FW",
+      "start": 50,
+      "mower": "M2",
+      "origin": "edited"
+     },
+     {
+      "area": "H2_FW",
+      "start": 125,
+      "mower": "M1",
+      "origin": "frozen"
+     },
+     {
+      "area": "H2_FW",
+      "start": 47,
+      "mower": "M3",
+      "origin": "edited"
+     },
+     {
+      "area": "H2_FW",
+      "start": 148,
+      "mower": "M3",
+      "origin": "frozen"
+     },
+     {
+      "area": "H2_FW",
+      "start": 157,
+      "mower": "M3",
+      "origin": "frozen"
+     },
+     {
+      "area": "H2_FW",
+      "start": 150,
+      "mower": "M1",
+      "origin": "edited"
+     },
+     {
+      "area": "H2_FW",
+      "start": 53,
+      "mower": "M1",
+      "origin": "edited"
+     },
+     {
+      "area": "H2_SR1",
+      "start": 124,
+      "mower": "M3",
+      "origin": "edited"
+     },
+     {
+      "area": "H2_SR1",
+      "start": 100,
+      "mower": "M1",
+      "origin": "edited"
+     },
+     {
+      "area": "H2_SR1",
+      "start": 129,
+      "mower": "M3",
+      "origin": "edited"
+     },
+     {
+      "area": "H2_SR2",
+      "start": 8,
+      "mower": "M3",
+      "origin": "frozen"
+     },
+     {
+      "area": "H2_SR2",
+      "start": 35,
+      "mower": "M1",
+      "origin": "frozen"
+     },
+     {
+      "area": "H2_SR2",
+      "start": 52,
+      "mower": "M1",
+      "origin": "frozen"
+     },
+     {
+      "area": "H2_SR2",
+      "start": 76,
+      "mower": "M3",
+      "origin": "frozen"
+     },
+     {
+      "area": "H3_FW",
+      "start": 6,
+      "mower": "M4",
+      "origin": "frozen"
+     },
+     {
+      "area": "H3_FW",
+      "start": 79,
+      "mower": "M5",
+      "origin": "edited"
+     },
+     {
+      "area": "H3_FW",
+      "start": 54,
+      "mower": "M5",
+      "origin": "frozen"
+     },
+     {
+      "area": "H3_FW",
+      "start": 77,
+      "mower": "M2",
+      "origin": "frozen"
+     },
+     {
+      "area": "H3_FW",
+      "start": 101,
+      "mower": "M5",
+      "origin": "frozen"
+     },
+     {
+      "area": "H3_FW",
+      "start": 125,
+      "mower": "M5",
+      "origin": "frozen"
+     },
+     {
+      "area": "H3_FW",
+      "start": 145,
+      "mower": "M4",
+      "origin": "frozen"
+     },
+     {
+      "area": "H3_SR1",
+      "start": 72,
+      "mower": "M5",
+      "origin": "frozen"
+     },
+     {
+      "area": "H3_SR1",
+      "start": 124,
+      "mower": "M1",
+      "origin": "edited"
+     },
+     {
+      "area": "H3_SR1",
+      "start": 130,
+      "mower": "M2",
+      "origin": "frozen"
+     },
+     {
+      "area": "H3_SR1",
+      "start": 153,
+      "mower": "M3",
+      "origin": "frozen"
+     },
+     {
+      "area": "H3_SR2",
+      "start": 0,
+      "mower": "M1",
+      "origin": "frozen"
+     },
+     {
+      "area": "H3_SR2",
+      "start": 93,
+      "mower": "M2",
+      "origin": "edited"
+     },
+     {
+      "area": "H3_SR2",
+      "start": 43,
+      "mower": "M3",
+      "origin": "frozen"
+     },
+     {
+      "area": "H3_SR2",
+      "start": 103,
+      "mower": "M3",
+      "origin": "edited"
+     },
+     {
+      "area": "H3_SR3",
+      "start": 17,
+      "mower": "M3",
+      "origin": "frozen"
+     },
+     {
+      "area": "H3_SR3",
+      "start": 31,
+      "mower": "M3",
+      "origin": "frozen"
+     },
+     {
+      "area": "H3_SR3",
+      "start": 144,
+      "mower": "M3",
+      "origin": "edited"
+     },
+     {
+      "area": "H4_FW",
+      "start": 51,
+      "mower": "M2",
+      "origin": "frozen"
+     },
+     {
+      "area": "H4_FW",
+      "start": 140,
+      "mower": "M3",
+      "origin": "edited"
+     },
+     {
+      "area": "H4_FW",
+      "start": 90,
+      "mower": "M5",
+      "origin": "frozen"
+     },
+     {
+      "area": "H4_FW",
+      "start": 75,
+      "mower": "M1",
+      "origin": "edited"
+     },
+     {
+      "area": "H4_FW",
+      "start": 120,
+      "mower": "M3",
+      "origin": "frozen"
+     },
+     {
+      "area": "H4_FW",
+      "start": 37,
+      "mower": "M2",
+      "origin": "edited"
+     },
+     {
+      "area": "H4_FW",
+      "start": 128,
+      "mower": "M3",
+      "origin": "frozen"
+     },
+     {
+      "area": "H4_SR1",
+      "start": 22,
+      "mower": "M1",
+      "origin": "frozen"
+     },
+     {
+      "area": "H4_SR1",
+      "start": 95,
+      "mower": "M2",
+      "origin": "frozen"
+     },
+     {
+      "area": "H4_SR1",
+      "start": 93,
+      "mower": "M4",
+      "origin": "edited"
+     },
+     {
+      "area": "H4_SR1",
+      "start": 117,
+      "mower": "M2",
+      "origin": "frozen"
+     },
+     {
+      "area": "H4_SR2",
+      "start": 167,
+      "mower": "M3",
+      "origin": "edited"
+     },
+     {
+      "area": "H4_SR2",
+      "start": 89,
+      "mower": "M3",
+      "origin": "frozen"
+     },
+     {
+      "area": "H4_SR2",
+      "start": 164,
+      "mower": "M2",
+      "origin": "edited"
+     },
+     {
+      "area": "H4_SR3",
+      "start": 147,
+      "mower": "M5",
+      "origin": "edited"
+     },
+     {
+      "area": "H4_SR3",
+      "start": 143,
+      "mower": "M5",
+      "origin": "frozen"
+     },
+     {
+      "area": "H4_SR3",
+      "start": 82,
+      "mower": "M3",
+      "origin": "edited"
+     }
+    ],
+    "mode": "weak",
+    "level": "top"
+   },
+   "replan_tasks": [
+    {
+     "area": "H1_FW",
+     "task": 1,
+     "mower": "M3",
+     "start": 0,
+     "end": 7
+    },
+    {
+     "area": "H1_FW",
+     "task": 2,
+     "mower": "M4",
+     "start": 24,
+     "end": 45
+    },
+    {
+     "area": "H1_FW",
+     "task": 3,
+     "mower": "M3",
+     "start": 49,
+     "end": 56
+    },
+    {
+     "area": "H1_FW",
+     "task": 4,
+     "mower": "M3",
+     "start": 56,
+     "end": 67
+    },
+    {
+     "area": "H1_FW",
+     "task": 5,
+     "mower": "M2",
+     "start": 67,
+     "end": 88
+    },
+    {
+     "area": "H1_FW",
+     "task": 6,
+     "mower": "M3",
+     "start": 141,
+     "end": 148
+    },
+    {
+     "area": "H1_SR1",
+     "task": 1,
+     "mower": "M3",
+     "start": 7,
+     "end": 27
+    },
+    {
+     "area": "H1_SR1",
+     "task": 2,
+     "mower": "M5",
+     "start": 41,
+     "end": 91
+    },
+    {
+     "area": "H1_SR1",
+     "task": 3,
+     "mower": "M4",
+     "start": 91,
+     "end": 141
+    },
+    {
+     "area": "H1_SR2",
+     "task": 1,
+     "mower": "M1",
+     "start": 17,
+     "end": 43
+    },
+    {
+     "area": "H1_SR2",
+     "task": 2,
+     "mower": "M1",
+     "start": 44,
+     "end": 70
+    },
+    {
+     "area": "H1_SR2",
+     "task": 3,
+     "mower": "M5",
+     "start": 91,
+     "end": 117
+    },
+    {
+     "area": "H1_SR2",
+     "task": 4,
+     "mower": "M2",
+     "start": 167,
+     "end": 193
+    },
+    {
+     "area": "H2_FW",
+     "task": 1,
+     "mower": "M3",
+     "start": 80,
+     "end": 89
+    },
+    {
+     "area": "H2_FW",
+     "task": 2,
+     "mower": "M3",
+     "start": 91,
+     "end": 96
+    },
+    {
+     "area": "H2_FW",
+     "task": 3,
+     "mower": "M3",
+     "start": 96,
+     "end": 101
+    },
+    {
+     "area": "H2_FW",
+     "task": 4,
+     "mower": "M1",
+     "start": 103,
+     "end": 121
+    },
+    {
+     "area": "H2_FW",
+     "task": 5,
+     "mower": "M3",
+     "start": 148,
+     "end": 153
+    },
+    {
+     "area": "H2_FW",
+     "task": 6,
+     "mower": "M3",
+     "start": 157,
+     "end": 162
+    },
+    {
+     "area": "H2_FW",
+     "task": 7,
+     "mower": "M1",
+     "start": 167,
+     "end": 185
+    },
+    {
+     "area": "H2_SR1",
+     "task": 1,
+     "mower": "M1",
+     "start": 70,
+     "end": 73
+    },
+    {
+     "area": "H2_SR1",
+     "task": 2,
+     "mower": "M3",
+     "start": 101,
+     "end": 103
+    },
+    {
+     "area": "H2_SR1",
+     "task": 3,
+     "mower": "M1",
+     "start": 147,
+     "end": 150
+    },
+    {
+     "area": "H2_SR2",
+     "task": 1,
+     "mower": "M1",
+     "start": 74,
+     "end": 91
+    },
+    {
+     "area": "H2_SR2",
+     "task": 2,
+     "mower": "M3",
+     "start": 103,
+     "end": 108
+    },
+    {
+     "area": "H2_SR2",
+     "task": 3,
+     "mower": "M1",
+     "start": 122,
+     "end": 139
+    },
+    {
+     "area": "H2_SR2",
+     "task": 4,
+     "mower": "M1",
+     "start": 150,
+     "end": 167
+    },
+    {
+     "area": "H3_FW",
+     "task": 1,
+     "mower": "M5",
+     "start": 23,
+     "end": 41
+    },
+    {
+     "area": "H3_FW",
+     "task": 2,
+     "mower": "M2",
+     "start": 49,
+     "end": 67
+    },
+    {
+     "area": "H3_FW",
+     "task": 3,
+     "mower": "M4",
+     "start": 73,
+     "end": 91
+    },
+    {
+     "area": "H3_FW",
+     "task": 4,
+     "mower": "M2",
+     "start": 91,
+     "end": 105
+    },
+    {
+     "area": "H3_FW",
+     "task": 5,
+     "mower": "M2",
+     "start": 115,
+     "end": 129
+    },
+    {
+     "area": "H3_FW",
+     "task": 6,
+     "mower": "M5",
+     "start": 149,
+     "end": 167
+    },
+    {
+     "area": "H3_FW",
+     "task": 7,
+     "mower": "M5",
+     "start": 167,
+     "end": 185
+    },
+    {
+     "area": "H3_SR1",
+     "task": 1,
+     "mower": "M3",
+     "start": 46,
+     "end": 49
+    },
+    {
+     "area": "H3_SR1",
+     "task": 2,
+     "mower": "M5",
+     "start": 128,
+     "end": 139
+    },
+    {
+     "area": "H3_SR1",
+     "task": 3,
+     "mower": "M5",
+     "start": 142,
+     "end": 149
+    },
+    {
+     "area": "H3_SR1",
+     "task": 4,
+     "mower": "M3",
+     "start": 166,
+     "end": 169
+    },
+    {
+     "area": "H3_SR2",
+     "task": 1,
+     "mower": "M2",
+     "start": 26,
+     "end": 46
+    },
+    {
+     "area": "H3_SR2",
+     "task": 2,
+     "mower": "M3",
+     "start": 120,
+     "end": 126
+    },
+    {
+     "area": "H3_SR2",
+     "task": 3,
+     "mower": "M3",
+     "start": 126,
+     "end": 132
+    },
+    {
+     "area": "H3_SR2",
+     "task": 4,
+     "mower": "M2",
+     "start": 147,
+     "end": 167
+    },
+    {
+     "area": "H3_SR3",
+     "task": 1,
+     "mower": "M3",
+     "start": 112,
+     "end": 120
+    },
+    {
+     "area": "H3_SR3",
+     "task": 2,
+     "mower": "M4",
+     "start": 141,
+     "end": 167
+    },
+    {
+     "area": "H3_SR3",
+     "task": 3,
+     "mower": "M4",
+     "start": 167,
+     "end": 193
+    },
+    {
+     "area": "H4_FW",
+     "task": 1,
+     "mower": "M2",
+     "start": 0,
+     "end": 15
+    },
+    {
+     "area": "H4_FW",
+     "task": 2,
+     "mower": "M2",
+     "start": 15,
+     "end": 26
+    },
+    {
+     "area": "H4_FW",
+     "task": 3,
+     "mower": "M3",
+     "start": 37,
+     "end": 41
+    },
+    {
+     "area": "H4_FW",
+     "task": 4,
+     "mower": "M1",
+     "start": 91,
+     "end": 102
+    },
+    {
+     "area": "H4_FW",
+     "task": 5,
+     "mower": "M5",
+     "start": 117,
+     "end": 128
+    },
+    {
+     "area": "H4_FW",
+     "task": 6,
+     "mower": "M3",
+     "start": 136,
+     "end": 140
+    },
+    {
+     "area": "H4_FW",
+     "task": 7,
+     "mower": "M3",
+     "start": 162,
+     "end": 166
+    },
+    {
+     "area": "H4_SR1",
+     "task": 1,
+     "mower": "M1",
+     "start": 0,
+     "end": 17
+    },
+    {
+     "area": "H4_SR1",
+     "task": 2,
+     "mower": "M3",
+     "start": 31,
+     "end": 36
+    },
+    {
+     "area": "H4_SR1",
+     "task": 3,
+     "mower": "M3",
+     "start": 41,
+     "end": 46
+    },
+    {
+     "area": "H4_SR1",
+     "task": 4,
+     "mower": "M2",
+     "start": 129,
+     "end": 146
+    },
+    {
+     "area": "H4_SR2",
+     "task": 1,
+     "mower": "M4",
+     "start": 5,
+     "end": 19
+    },
+    {
+     "area": "H4_SR2",
+     "task": 2,
+     "mower": "M3",
+     "start": 27,
+     "end": 31
+    },
+    {
+     "area": "H4_SR2",
+     "task": 3,
+     "mower": "M3",
+     "start": 69,
+     "end": 73
+    },
+    {
+     "area": "H4_SR3",
+     "task": 1,
+     "mower": "M5",
+     "start": 0,
+     "end": 23
+    },
+    {
+     "area": "H4_SR3",
+     "task": 2,
+     "mower": "M4",
+     "start": 50,
+     "end": 73
+    },
+    {
+     "area": "H4_SR3",
+     "task": 3,
+     "mower": "M3",
+     "start": 73,
+     "end": 80
+    }
+   ],
+   "replan_optimal": false
+  },
+  {
+   "scenario": "six-hole-course",
+   "scenario_sha256": "a76644eaefd5f5650c48dbe682672a3c20b7945909d710fcf71779229adf9c18",
+   "seed_tag": "seed0",
+   "preferences": {
+    "tasks": [
+     {
+      "area": "H1_FW",
+      "start": 36,
+      "mower": "M5",
+      "origin": "frozen"
+     },
+     {
+      "area": "H1_FW",
+      "start": 59,
+      "mower": "M3",
+      "origin": "frozen"
+     },
+     {
+      "area": "H1_FW",
+      "start": 70,
+      "mower": "M5",
+      "origin": "edited"
+     },
+     {
+      "area": "H1_FW",
+      "start": 105,
+      "mower": "M5",
+      "origin": "frozen"
+     },
+     {
+      "area": "H1_FW",
+      "start": 127,
+      "mower": "M3",
+      "origin": "frozen"
+     },
+     {
+      "area": "H1_FW",
+      "start": 151,
+      "mower": "M5",
+      "origin": "frozen"
+     },
+     {
+      "area": "H1_SR1",
+      "start": 145,
+      "mower": "M3",
+      "origin": "edited"
+     },
+     {
+      "area": "H1_SR1",
+      "start": 95,
+      "mower": "M5",
+      "origin": "frozen"
+     },
+     {
+      "area": "H1_SR1",
+      "start": 123,
+      "mower": "M3",
+      "origin": "frozen"
+     },
+     {
+      "area": "H1_SR1",
+      "start": 127,
+      "mower": "M1",
+      "origin": "frozen"
+     },
+     {
+      "area": "H2_FW",
+      "start": 9,
+      "mower": "M3",
+      "origin": "frozen"
+     },
+     {
+      "area": "H2_FW",
+      "start": 28,
+      "mower": "M3",
+      "origin": "frozen"
+     },
+     {
+      "area": "H2_FW",
+      "start": 46,
+      "mower": "M3",
+      "origin": "frozen"
+     },
+     {
+      "area": "H2_FW",
+      "start": 67,
+      "mower": "M3",
+      "origin": "frozen"
+     },
+     {
+      "area": "H2_FW",
+      "start": 73,
+      "mower": "M3",
+      "origin": "edited"
+     },
+     {
+      "area": "H2_FW",
+      "start": 26,
+      "mower": "M3",
+      "origin": "edited"
+     },
+     {
+      "area": "H2_FW",
+      "start": 112,
+      "mower": "M3",
+      "origin": "frozen"
+     },
+     {
+      "area": "H2_FW",
+      "start": 150,
+      "mower": "M3",
+      "origin": "edited"
+     },
+     {
+      "area": "H2_FW",
+      "start": 150,
+      "mower": "M3",
+      "origin": "edited"
+     },
+     {
+      "area": "H2_FW",
+      "start": 156,
+      "mower": "M3",
+      "origin": "frozen"
+     },
+     {
+      "area": "H2_SR1",
+      "start": 130,
+      "mower": "M5",
+      "origin": "edited"
+     },
+     {
+      "area": "H2_SR1",
+      "start": 129,
+      "mower": "M5",
+      "origin": "frozen"
+     },
+     {
+      "area": "H2_SR1",
+      "start": 167,
+      "mower": "M5",
+      "origin": "frozen"
+     },
+     {
+      "area": "H3_FW",
+      "start": 140,
+      "mower": "M3",
+      "origin": "frozen"
+     },
+     {
+      "area": "H3_FW",
+      "start": 145,
+      "mower": "M3",
+      "origin": "frozen"
+     },
+     {
+      "area": "H3_FW",
+      "start": 150,
+      "mower": "M3",
+      "origin": "frozen"
+     },
+     {
+      "area": "H3_FW",
+      "start": 161,
+      "mower": "M3",
+      "origin": "frozen"
+     },
+     {
+      "area": "H3_FW",
+      "start": 167,
+      "mower": "M3",
+      "origin": "frozen"
+     },
+     {
+      "area": "H3_SR1",
+      "start": 96,
+      "mower": "M3",
+      "origin": "edited"
+     },
+     {
+      "area": "H3_SR1",
+      "start": 8,
+      "mower": "M5",
+      "origin": "frozen"
+     },
+     {
+      "area": "H3_SR1",
+      "start": 130,
+      "mower": "M1",
+      "origin": "edited"
+     },
+     {
+      "area": "H3_SR1",
+      "start": 58,
+      "mower": "M1",
+      "origin": "frozen"
+     },
+     {
+      "area": "H3_SR1",
+      "start": 36,
+      "mower": "M5",
+      "origin": "edited"
+     },
+     {
+      "area": "H3_SR2",
+      "start": 152,
+      "mower": "M3",
+      "origin": "edited"
+     },
+     {
+      "area": "H3_SR2",
+      "start": 11,
+      "mower": "M5",
+      "origin": "edited"
+     },
+     {
+      "area": "H3_SR2",
+      "start": 53,
+      "mower": "M5",
+      "origin": "frozen"
+     },
+     {
+      "area": "H3_SR2",
+      "start": 90,
+      "mower": "M5",
+      "origin": "edited"
+     },
+     {
+      "area": "H3_SR3",
+      "start": 59,
+      "mower": "M5",
+      "origin": "frozen"
+     },
+     {
+      "area": "H3_SR3",
+      "start": 70,
+      "mower": "M5",
+      "origin": "frozen"
+     },
+     {
+      "area": "H4_FW",
+      "start": 14,
+      "mower": "M3",
+      "origin": "frozen"
+     },
+     {
+      "area": "H4_FW",
+      "start": 155,
+      "mower": "M3",
+      "origin": "edited"
+     },
+     {
+      "area": "H4_FW",
+      "start": 159,
+      "mower": "M3",
+      "origin": "edited"
+     },
+     {
+      "area": "H4_FW",
+      "start": 84,
+      "mower": "M3",
+      "origin": "edited"
+     },
+     {
+      "area": "H4_FW",
+      "start": 0,
+      "mower": "M5",
+      "origin": "edited"
+     },
+     {
+      "area": "H4_FW",
+      "start": 121,
+      "mower": "M5",
+      "origin": "frozen"
+     },
+     {
+      "area": "H4_FW",
+      "start": 144,
+      "mower": "M5",
+      "origin": "frozen"
+     },
+     {
+      "area": "H4_SR1",
+      "start": 80,
+      "mower": "M5",
+      "origin": "edited"
+     },
+     {
+      "area": "H4_SR1",
+      "start": 45,
+      "mower": "M5",
+      "origin": "frozen"
+     },
+     {
+      "area": "H4_SR1",
+      "start": 117,
+      "mower": "M1",
+      "origin": "frozen"
+     },
+     {
+      "area": "H4_SR2",
+      "start": 69,
+      "mower": "M1",
+      "origin": "edited"
+     },
+     {
+      "area": "H4_SR2",
+      "start": 113,
+      "mower": "M5",
+      "origin": "frozen"
+     },
+     {
+      "area": "H4_SR2",
+      "start": 28,
+      "mower": "M1",
+      "origin": "edited"
+     },
+     {
+      "area": "H4_SR2",
+      "start": 167,
+      "mower": "M1",
+      "origin": "frozen"
+     },
+     {
+      "area": "H4_SR3",
+      "start": 29,
+      "mower": "M1",
+      "origin": "frozen"
+     },
+     {
+      "area": "H4_SR3",
+      "start": 117,
+      "mower": "M3",
+      "origin": "edited"
+     },
+     {
+      "area": "H4_SR3",
+      "start": 96,
+      "mower": "M3",
+      "origin": "frozen"
+     },
+     {
+      "area": "H5_FW",
+      "start": 106,
+      "mower": "M4",
+      "origin": "edited"
+     },
+     {
+      "area": "H5_FW",
+      "start": 26,
+      "mower": "M4",
+      "origin": "frozen"
+     },
+     {
+      "area": "H5_FW",
+      "start": 50,
+      "mower": "M4",
+      "origin": "frozen"
+     },
+     {
+      "area": "H5_FW",
+      "start": 153,
+      "mower": "M4",
+      "origin": "edited"
+     },
+     {
+      "area": "H5_FW",
+      "start": 94,
+      "mower": "M4",
+      "origin": "frozen"
+     },
+     {
+      "area": "H5_FW",
+      "start": 35,
+      "mower": "M4",
+      "origin": "edited"
+     },
+     {
+      "area": "H5_FW",
+      "start": 129,
+      "mower": "M4",
+      "origin": "frozen"
+     },
+     {
+      "area": "H5_FW",
+      "start": 149,
+      "mower": "M4",
+      "origin": "frozen"
+     },
+     {
+      "area": "H5_SR1",
+      "start": 107,
+      "mower": "M4",
+      "origin": "frozen"
+     },
+     {
+      "area": "H5_SR1",
+      "start": 147,
+      "mower": "M2",
+      "origin": "edited"
+     },
+     {
+      "area": "H5_SR1",
+      "start": 142,
+      "mower": "M4",
+      "origin": "frozen"
+     },
+     {
+      "area": "H5_SR1",
+      "start": 154,
+      "mower": "M4",
+      "origin": "frozen"
+     },
+     {
+      "area": "H5_SR2",
+      "start": 3,
+      "mower": "M2",
+      "origin": "edited"
+     },
+     {
+      "area": "H5_SR2",
+      "start": 107,
+      "mower": "M2",
+      "origin": "frozen"
+     },
+     {
+      "area": "H5_SR2",
+      "start": 87,
+      "mower": "M2",
+      "origin": "edited"
+     },
+     {
+      "area": "H5_SR2",
+      "start": 25,
+      "mower": "M2",
+      "origin": "edited"
+     },
+     {
+      "area": "H5_SR3",
+      "start": 165,
+      "mower": "M2",
+      "origin": "edited"
+     },
+     {
+      "area": "H5_SR3",
+      "start": 70,
+      "mower": "M4",
+      "origin": "frozen"
+     },
+     {
+      "area": "H5_SR3",
+      "start": 83,
+      "mower": "M2",
+      "origin": "frozen"
+     },
+     {
+      "area": "H5_SR3",
+      "start": 125,
+      "mower": "M4",
+      "origin": "frozen"
+     },
+     {
+      "area": "H6_FW",
+      "start": 9,
+      "mower": "M4",
+      "origin": "frozen"
+     },
+     {
+      "area": "H6_FW",
+      "start": 111,
+      "mower": "M2",
+      "origin": "edited"
+     },
+     {
+      "area": "H6_FW",
+      "start": 119,
+      "mower": "M4",
+      "origin": "edited"
+     },
+     {
+      "area": "H6_FW",
+      "start": 117,
+      "mower": "M2",
+      "origin": "edited"
+     },
+     {
+      "area": "H6_FW",
+      "start": 7,
+      "mower": "M2",
+      "origin": "edited"
+     },
+     {
+      "area": "H6_FW",
+      "start": 124,
+      "mower": "M2",
+      "origin": "frozen"
+     },
+     {
+      "area": "H6_FW",
+      "start": 145,
+      "mower": "M2",
+      "origin": "frozen"
+     },
+     {
+      "area": "H6_SR1",
+      "start": 22,
+      "mower": "M4",
+      "origin": "frozen"
+     },
+     {
+      "area": "H6_SR1",
+      "start": 58,
+      "mower": "M4",
+      "origin": "edited"
+     },
+     {
+      "area": "H6_SR1",
+      "start": 116,
+      "mower": "M4",
+      "origin": "frozen"
+     },
+     {
+      "area": "H6_SR1",
+      "start": 39,
+      "mower": "M4",
+      "origin": "edited"
+     }
+    ],
+    "mode": "weak",
+    "level": "top"
+   },
+   "replan_tasks": [
+    {
+     "area": "H1_FW",
+     "task": 1,
+     "mower": "M5",
+     "start": 0,
+     "end": 8
+    },
+    {
+     "area": "H1_FW",
+     "task": 2,
+     "mower": "M5",
+     "start": 36,
+     "end": 44
+    },
+    {
+     "area": "H1_FW",
+     "task": 3,
+     "mower": "M3",
+     "start": 59,
+     "end": 67
+    },
+    {
+     "area": "H1_FW",
+     "task": 4,
+     "mower": "M5",
+     "start": 70,
+     "end": 78
+    },
+    {
+     "area": "H1_FW",
+     "task": 5,
+     "mower": "M3",
+     "start": 79,
+     "end": 87
+    },
+    {
+     "area": "H1_FW",
+     "task": 6,
+     "mower": "M5",
+     "start": 87,
+     "end": 95
+    },
+    {
+     "area": "H1_FW",
+     "task": 7,
+     "mower": "M5",
+     "start": 105,
+     "end": 113
+    },
+    {
+     "area": "H1_FW",
+     "task": 8,
+     "mower": "M3",
+     "start": 127,
+     "end": 135
+    },
+    {
+     "area": "H1_FW",
+     "task": 9,
+     "mower": "M5",
+     "start": 135,
+     "end": 143
+    },
+    {
+     "area": "H1_FW",
+     "task": 10,
+     "mower": "M5",
+     "start": 151,
+     "end": 159
+    },
+    {
+     "area": "H1_SR1",
+     "task": 1,
+     "mower": "M3",
+     "start": 13,
+     "end": 17
+    },
+    {
+     "area": "H1_SR1",
+     "task": 2,
+     "mower": "M5",
+     "start": 95,
+     "end": 99
+    },
+    {
+     "area": "H1_SR1",
+     "task": 3,
+     "mower": "M3",
+     "start": 123,
+     "end": 127
+    },
+    {
+     "area": "H1_SR1",
+     "task": 4,
+     "mower": "M1",
+     "start": 127,
+     "end": 137
+    },
+    {
+     "area": "H1_SR1",
+     "task": 5,
+     "mower": "M3",
+     "start": 145,
+     "end": 149
+    },
+    {
+     "area": "H2_FW",
+     "task": 1,
+     "mower": "M3",
+     "start": 3,
+     "end": 8
+    },
+    {
+     "area": "H2_FW",
+     "task": 2,
+     "mower": "M3",
+     "start": 8,
+     "end": 13
+    },
+    {
+     "area": "H2_FW",
+     "task": 3,
+     "mower": "M3",
+     "start": 22,
+     "end": 27
+    },
+    {
+     "area": "H2_FW",
+     "task": 4,
+     "mower": "M3",
+     "start": 102,
+     "end": 107
+    },
+    {
+     "area": "H2_FW",
+     "task": 5,
+     "mower": "M3",
+     "start": 107,
+     "end": 112
+    },
+    {
+     "area": "H2_FW",
+     "task": 6,
+     "mower": "M3",
+     "start": 140,
+     "end": 145
+    },
+    {
+     "area": "H2_FW",
+     "task": 7,
+     "mower": "M3",
+     "start": 158,
+     "end": 163
+    },
+    {
+     "area": "H2_SR1",
+     "task": 1,
+     "mower": "M5",
+     "start": 10,
+     "end": 25
+    },
+    {
+     "area": "H2_SR1",
+     "task": 2,
+     "mower": "M5",
+     "start": 120,
+     "end": 135
+    },
+    {
+     "area": "H2_SR1",
+     "task": 3,
+     "mower": "M5",
+     "start": 167,
+     "end": 182
+    },
+    {
+     "area": "H3_FW",
+     "task": 1,
+     "mower": "M3",
+     "start": 17,
+     "end": 22
+    },
+    {
+     "area": "H3_FW",
+     "task": 2,
+     "mower": "M3",
+     "start": 46,
+     "end": 51
+    },
+    {
+     "area": "H3_FW",
+     "task": 3,
+     "mower": "M3",
+     "start": 54,
+     "end": 59
+    },
+    {
+     "area": "H3_FW",
+     "task": 4,
+     "mower": "M3",
+     "start": 97,
+     "end": 102
+    },
+    {
+     "area": "H3_FW",
+     "task": 5,
+     "mower": "M3",
+     "start": 135,
+     "end": 140
+    },
+    {
+     "area": "H3_SR1",
+     "task": 1,
+     "mower": "M3",
+     "start": 38,
+     "end": 46
+    },
+    {
+     "area": "H3_SR1",
+     "task": 2,
+     "mower": "M5",
+     "start": 56,
+     "end": 64
+    },
+    {
+     "area": "H3_SR1",
+     "task": 3,
+     "mower": "M5",
+     "start": 79,
+     "end": 87
+    },
+    {
+     "area": "H3_SR1",
+     "task": 4,
+     "mower": "M1",
+     "start": 162,
+     "end": 183
+    },
+    {
+     "area": "H3_SR2",
+     "task": 1,
+     "mower": "M5",
+     "start": 64,
+     "end": 70
+    },
+    {
+     "area": "H3_SR2",
+     "task": 2,
+     "mower": "M1",
+     "start": 83,
+     "end": 98
+    },
+    {
+     "area": "H3_SR2",
+     "task": 3,
+     "mower": "M5",
+     "start": 99,
+     "end": 105
+    },
+    {
+     "area": "H3_SR2",
+     "task": 4,
+     "mower": "M1",
+     "start": 137,
+     "end": 152
+    },
+    {
+     "area": "H3_SR2",
+     "task": 5,
+     "mower": "M3",
+     "start": 152,
+     "end": 158
+    },
+    {
+     "area": "H3_SR3",
+     "task": 1,
+     "mower": "M5",
+     "start": 25,
+     "end": 36
+    },
+    {
+     "area": "H3_SR3",
+     "task": 2,
+     "mower": "M3",
+     "start": 112,
+     "end": 123
+    },
+    {
+     "area": "H4_FW",
+     "task": 1,
+     "mower": "M5",
+     "start": 44,
+     "end": 50
+    },
+    {
+     "area": "H4_FW",
+     "task": 2,
+     "mower": "M5",
+     "start": 50,
+     "end": 56
+    },
+    {
+     "area": "H4_FW",
+     "task": 3,
+     "mower": "M3",
+     "start": 67,
+     "end": 73
+    },
+    {
+     "area": "H4_FW",
+     "task": 4,
+     "mower": "M3",
+     "start": 73,
+     "end": 79
+    },
+    {
+     "area": "H4_FW",
+     "task": 5,
+     "mower": "M3",
+     "start": 87,
+     "end": 93
+    },
+    {
+     "area": "H4_SR1",
+     "task": 1,
+     "mower": "M5",
+     "start": 116,
+     "end": 120
+    },
+    {
+     "area": "H4_SR1",
+     "task": 2,
+     "mower": "M1",
+     "start": 152,
+     "end": 162
+    },
+    {
+     "area": "H4_SR1",
+     "task": 3,
+     "mower": "M3",
+     "start": 163,
+     "end": 167
+    },
+    {
+     "area": "H4_SR2",
+     "task": 1,
+     "mower": "M1",
+     "start": 31,
+     "end": 53
+    },
+    {
+     "area": "H4_SR2",
+     "task": 2,
+     "mower": "M1",
+     "start": 61,
+     "end": 83
+    },
+    {
+     "area": "H4_SR2",
+     "task": 3,
+     "mower": "M5",
+     "start": 143,
+     "end": 151
+    },
+    {
+     "area": "H4_SR2",
+     "task": 4,
+     "mower": "M5",
+     "start": 159,
+     "end": 167
+    },
+    {
+     "area": "H4_SR3",
+     "task": 1,
+     "mower": "M3",
+     "start": 27,
+     "end": 38
+    },
+    {
+     "area": "H4_SR3",
+     "task": 2,
+     "mower": "M1",
+     "start": 98,
+     "end": 127
+    },
+    {
+     "area": "H4_SR3",
+     "task": 3,
+     "mower": "M3",
+     "start": 167,
+     "end": 178
+    },
+    {
+     "area": "H5_FW",
+     "task": 1,
+     "mower": "M4",
+     "start": 26,
+     "end": 31
+    },
+    {
+     "area": "H5_FW",
+     "task": 2,
+     "mower": "M4",
+     "start": 31,
+     "end": 36
+    },
+    {
+     "area": "H5_FW",
+     "task": 3,
+     "mower": "M4",
+     "start": 50,
+     "end": 55
+    },
+    {
+     "area": "H5_FW",
+     "task": 4,
+     "mower": "M4",
+     "start": 102,
+     "end": 107
+    },
+    {
+     "area": "H5_FW",
+     "task": 5,
+     "mower": "M4",
+     "start": 140,
+     "end": 145
+    },
+    {
+     "area": "H5_FW",
+     "task": 6,
+     "mower": "M4",
+     "start": 154,
+     "end": 159
+    },
+    {
+     "area": "H5_FW",
+     "task": 7,
+     "mower": "M4",
+     "start": 167,
+     "end": 172
+    },
+    {
+     "area": "H5_SR1",
+     "task": 1,
+     "mower": "M4",
+     "start": 107,
+     "end": 114
+    },
+    {
+     "area": "H5_SR1",
+     "task": 2,
+     "mower": "M2",
+     "start": 115,
+     "end": 133
+    },
+    {
+     "area": "H5_SR1",
+     "task": 3,
+     "mower": "M2",
+     "start": 133,
+     "end": 151
+    },
+    {
+     "area": "H5_SR1",
+     "task": 4,
+     "mower": "M2",
+     "start": 154,
+     "end": 172
+    },
+    {
+     "area": "H5_SR2",
+     "task": 1,
+     "mower": "M2",
+     "start": 3,
+     "end": 11
+    },
+    {
+     "area": "H5_SR2",
+     "task": 2,
+     "mower": "M2",
+     "start": 25,
+     "end": 33
+    },
+    {
+     "area": "H5_SR2",
+     "task": 3,
+     "mower": "M2",
+     "start": 87,
+     "end": 95
+    },
+    {
+     "area": "H5_SR2",
+     "task": 4,
+     "mower": "M2",
+     "start": 107,
+     "end": 115
+    },
+    {
+     "area": "H5_SR3",
+     "task": 1,
+     "mower": "M4",
+     "start": 70,
+     "end": 74
+    },
+    {
+     "area": "H5_SR3",
+     "task": 2,
+     "mower": "M4",
+     "start": 83,
+     "end": 87
+    },
+    {
+     "area": "H5_SR3",
+     "task": 3,
+     "mower": "M4",
+     "start": 98,
+     "end": 102
+    },
+    {
+     "area": "H5_SR3",
+     "task": 4,
+     "mower": "M4",
+     "start": 125,
+     "end": 129
+    },
+    {
+     "area": "H6_FW",
+     "task": 1,
+     "mower": "M4",
+     "start": 7,
+     "end": 13
+    },
+    {
+     "area": "H6_FW",
+     "task": 2,
+     "mower": "M4",
+     "start": 13,
+     "end": 19
+    },
+    {
+     "area": "H6_FW",
+     "task": 3,
+     "mower": "M4",
+     "start": 74,
+     "end": 80
+    },
+    {
+     "area": "H6_FW",
+     "task": 4,
+     "mower": "M4",
+     "start": 92,
+     "end": 98
+    },
+    {
+     "area": "H6_FW",
+     "task": 5,
+     "mower": "M4",
+     "start": 118,
+     "end": 124
+    },
+    {
+     "area": "H6_FW",
+     "task": 6,
+     "mower": "M4",
+     "start": 134,
+     "end": 140
+    },
+    {
+     "area": "H6_FW",
+     "task": 7,
+     "mower": "M4",
+     "start": 146,
+     "end": 152
+    },
+    {
+     "area": "H6_FW",
+     "task": 8,
+     "mower": "M4",
+     "start": 160,
+     "end": 166
+    },
+    {
+     "area": "H6_SR1",
+     "task": 1,
+     "mower": "M4",
+     "start": 22,
+     "end": 24
+    },
+    {
+     "area": "H6_SR1",
+     "task": 2,
+     "mower": "M4",
+     "start": 39,
+     "end": 41
+    },
+    {
+     "area": "H6_SR1",
+     "task": 3,
+     "mower": "M4",
+     "start": 58,
+     "end": 60
+    },
+    {
+     "area": "H6_SR1",
+     "task": 4,
+     "mower": "M4",
+     "start": 116,
+     "end": 118
+    }
+   ],
+   "replan_optimal": false
+  },
+  {
+   "scenario": "six-hole-course",
+   "scenario_sha256": "a76644eaefd5f5650c48dbe682672a3c20b7945909d710fcf71779229adf9c18",
+   "seed_tag": "seed1",
+   "preferences": {
+    "tasks": [
+     {
+      "area": "H1_FW",
+      "start": 36,
+      "mower": "M5",
+      "origin": "frozen"
+     },
+     {
+      "area": "H1_FW",
+      "start": 59,
+      "mower": "M3",
+      "origin": "frozen"
+     },
+     {
+      "area": "H1_FW",
+      "start": 83,
+      "mower": "M3",
+      "origin": "frozen"
+     },
+     {
+      "area": "H1_FW",
+      "start": 105,
+      "mower": "M5",
+      "origin": "frozen"
+     },
+     {
+      "area": "H1_FW",
+      "start": 127,
+      "mower": "M3",
+      "origin": "frozen"
+     },
+     {
+      "area": "H1_FW",
+      "start": 151,
+      "mower": "M5",
+      "origin": "frozen"
+     },
+     {
+      "area": "H1_SR1",
+      "start": 49,
+      "mower": "M5",
+      "origin": "frozen"
+     },
+     {
+      "area": "H1_SR1",
+      "start": 95,
+      "mower": "M5",
+      "origin": "frozen"
+     },
+     {
+      "area": "H1_SR1",
+      "start": 123,
+      "mower": "M3",
+      "origin": "frozen"
+     },
+     {
+      "area": "H1_SR1",
+      "start": 83,
+      "mower": "M3",
+      "origin": "edited"
+     },
+     {
+      "area": "H2_FW",
+      "start": 9,
+      "mower": "M3",
+      "origin": "frozen"
+     },
+     {
+      "area": "H2_FW",
+      "start": 28,
+      "mower": "M3",
+      "origin": "frozen"
+     },
+     {
+      "area": "H2_FW",
+      "start": 96,
+      "mower": "M3",
+      "origin": "edited"
+     },
+     {
+      "area": "H2_FW",
+      "start": 162,
+      "mower": "M3",
+      "origin": "edited"
+     },
+     {
+      "area": "H2_FW",
+      "start": 91,
+      "mower": "M3",
+      "origin": "frozen"
+     },
+     {
+      "area": "H2_FW",
+      "start": 107,
+      "mower": "M3",
+      "origin": "frozen"
+     },
+     {
+      "area": "H2_FW",
+      "start": 5,
+      "mower": "M3",
+      "origin": "edited"
+     },
+     {
+      "area": "H2_FW",
+      "start": 118,
+      "mower": "M3",
+      "origin": "frozen"
+     },
+     {
+      "area": "H2_FW",
+      "start": 147,
+      "mower": "M3",
+      "origin": "edited"
+     },
+     {
+      "area": "H2_FW",
+      "start": 28,
+      "mower": "M3",
+      "origin": "edited"
+     },
+     {
+      "area": "H2_SR1",
+      "start": 19,
+      "mower": "M5",
+      "origin": "edited"
+     },
+     {
+      "area": "H2_SR1",
+      "start": 129,
+      "mower": "M5",
+      "origin": "frozen"
+     },
+     {
+      "area": "H2_SR1",
+      "start": 167,
+      "mower": "M5",
+      "origin": "frozen"
+     },
+     {
+      "area": "H3_FW",
+      "start": 87,
+      "mower": "M3",
+      "origin": "edited"
+     },
+     {
+      "area": "H3_FW",
+      "start": 145,
+      "mower": "M3",
+      "origin": "frozen"
+     },
+     {
+      "area": "H3_FW",
+      "start": 46,
+      "mower": "M3",
+      "origin": "edited"
+     },
+     {
+      "area": "H3_FW",
+      "start": 161,
+      "mower": "M3",
+      "origin": "frozen"
+     },
+     {
+      "area": "H3_FW",
+      "start": 7,
+      "mower": "M3",
+      "origin": "edited"
+     },
+     {
+      "area": "H3_SR1",
+      "start": 0,
+      "mower": "M5",
+      "origin": "frozen"
+     },
+     {
+      "area": "H3_SR1",
+      "start": 8,
+      "mower": "M5",
+      "origin": "frozen"
+     },
+     {
+      "area": "H3_SR1",
+      "start": 20,
+      "mower": "M3",
+      "origin": "frozen"
+     },
+     {
+      "area": "H3_SR1",
+      "start": 144,
+      "mower": "M1",
+      "origin": "edited"
+     },
+     {
+      "area": "H3_SR1",
+      "start": 137,
+      "mower": "M1",
+      "origin": "frozen"
+     },
+     {
+      "area": "H3_SR2",
+      "start": 3,
+      "mower": "M3",
+      "origin": "frozen"
+     },
+     {
+      "area": "H3_SR2",
+      "start": 39,
+      "mower": "M3",
+      "origin": "frozen"
+     },
+     {
+      "area": "H3_SR2",
+      "start": 53,
+      "mower": "M5",
+      "origin": "frozen"
+     },
+     {
+      "area": "H3_SR2",
+      "start": 126,
+      "mower": "M1",
+      "origin": "edited"
+     },
+     {
+      "area": "H3_SR3",
+      "start": 104,
+      "mower": "M5",
+      "origin": "edited"
+     },
+     {
+      "area": "H3_SR3",
+      "start": 54,
+      "mower": "M5",
+      "origin": "edited"
+     },
+     {
+      "area": "H4_FW",
+      "start": 163,
+      "mower": "M5",
+      "origin": "edited"
+     },
+     {
+      "area": "H4_FW",
+      "start": 33,
+      "mower": "M3",
+      "origin": "frozen"
+     },
+     {
+      "area": "H4_FW",
+      "start": 53,
+      "mower": "M3",
+      "origin": "frozen"
+     },
+     {
+      "area": "H4_FW",
+      "start": 75,
+      "mower": "M3",
+      "origin": "frozen"
+     },
+     {
+      "area": "H4_FW",
+      "start": 158,
+      "mower": "M5",
+      "origin": "edited"
+     },
+     {
+      "area": "H4_FW",
+      "start": 110,
+      "mower": "M5",
+      "origin": "edited"
+     },
+     {
+      "area": "H4_FW",
+      "start": 160,
+      "mower": "M3",
+      "origin": "edited"
+     },
+     {
+      "area": "H4_SR1",
+      "start": 31,
+      "mower": "M5",
+      "origin": "frozen"
+     },
+     {
+      "area": "H4_SR1",
+      "start": 146,
+      "mower": "M5",
+      "origin": "edited"
+     },
+     {
+      "area": "H4_SR1",
+      "start": 117,
+      "mower": "M1",
+      "origin": "frozen"
+     },
+     {
+      "area": "H4_SR2",
+      "start": 80,
+      "mower": "M1",
+      "origin": "frozen"
+     },
+     {
+      "area": "H4_SR2",
+      "start": 113,
+      "mower": "M5",
+      "origin": "frozen"
+     },
+     {
+      "area": "H4_SR2",
+      "start": 159,
+      "mower": "M5",
+      "origin": "frozen"
+     },
+     {
+      "area": "H4_SR2",
+      "start": 167,
+      "mower": "M1",
+      "origin": "frozen"
+     },
+     {
+      "area": "H4_SR3",
+      "start": 29,
+      "mower": "M1",
+      "origin": "frozen"
+     },
+     {
+      "area": "H4_SR3",
+      "start": 93,
+      "mower": "M3",
+      "origin": "edited"
+     },
+     {
+      "area": "H4_SR3",
+      "start": 96,
+      "mower": "M3",
+      "origin": "frozen"
+     },
+     {
+      "area": "H5_FW",
+      "start": 142,
+      "mower": "M4",
+      "origin": "edited"
+     },
+     {
+      "area": "H5_FW",
+      "start": 26,
+      "mower": "M4",
+      "origin": "frozen"
+     },
+     {
+      "area": "H5_FW",
+      "start": 50,
+      "mower": "M4",
+      "origin": "frozen"
+     },
+     {
+      "area": "H5_FW",
+      "start": 74,
+      "mower": "M4",
+      "origin": "frozen"
+     },
+     {
+      "area": "H5_FW",
+      "start": 94,
+      "mower": "M4",
+      "origin": "frozen"
+     },
+     {
+      "area": "H5_FW",
+      "start": 118,
+      "mower": "M4",
+      "origin": "frozen"
+     },
+     {
+      "area": "H5_FW",
+      "start": 152,
+      "mower": "M4",
+      "origin": "edited"
+     },
+     {
+      "area": "H5_FW",
+      "start": 149,
+      "mower": "M4",
+      "origin": "frozen"
+     },
+     {
+      "area": "H5_SR1",
+      "start": 34,
+      "mower": "M2",
+      "origin": "edited"
+     },
+     {
+      "area": "H5_SR1",
+      "start": 135,
+      "mower": "M4",
+      "origin": "frozen"
+     },
+     {
+      "area": "H5_SR1",
+      "start": 142,
+      "mower": "M4",
+      "origin": "frozen"
+     },
+     {
+      "area": "H5_SR1",
+      "start": 154,
+      "mower": "M4",
+      "origin": "frozen"
+     },
+     {
+      "area": "H5_SR2",
+      "start": 35,
+      "mower": "M2",
+      "origin": "edited"
+     },
+     {
+      "area": "H5_SR2",
+      "start": 82,
+      "mower": "M2",
+      "origin": "edited"
+     },
+     {
+      "area": "H5_SR2",
+      "start": 133,
+      "mower": "M2",
+      "origin": "edited"
+     },
+     {
+      "area": "H5_SR2",
+      "start": 163,
+      "mower": "M2",
+      "origin": "frozen"
+     },
+     {
+      "area": "H5_SR3",
+      "start": 120,
+      "mower": "M2",
+      "origin": "edited"
+     },
+     {
+      "area": "H5_SR3",
+      "start": 70,
+      "mower": "M4",
+      "origin": "frozen"
+     },
+     {
+      "area": "H5_SR3",
+      "start": 134,
+      "mower": "M4",
+      "origin": "edited"
+     },
+     {
+      "area": "H5_SR3",
+      "start": 125,
+      "mower": "M4",
+      "origin": "frozen"
+     },
+     {
+      "area": "H6_FW",
+      "start": 47,
+      "mower": "M2",
+      "origin": "edited"
+     },
+     {
+      "area": "H6_FW",
+      "start": 33,
+      "mower": "M4",
+      "origin": "frozen"
+     },
+     {
+      "area": "H6_FW",
+      "start": 55,
+      "mower": "M4",
+      "origin": "frozen"
+     },
+     {
+      "area": "H6_FW",
+      "start": 59,
+      "mower": "M4",
+      "origin": "edited"
+     },
+     {
+      "area": "H6_FW",
+      "start": 100,
+      "mower": "M4",
+      "origin": "frozen"
+     },
+     {
+      "area": "H6_FW",
+      "start": 104,
+      "mower": "M4",
+      "origin": "edited"
+     },
+     {
+      "area": "H6_FW",
+      "start": 67,
+      "mower": "M2",
+      "origin": "edited"
+     },
+     {
+      "area": "H6_SR1",
+      "start": 95,
+      "mower": "M4",
+      "origin": "edited"
+     },
+     {
+      "area": "H6_SR1",
+      "start": 10,
+      "mower": "M2",
+      "origin": "edited"
+     },
+     {
+      "area": "H6_SR1",
+      "start": 33,
+      "mower": "M4",
+      "origin": "edited"
+     },
+     {
+      "area": "H6_SR1",
+      "start": 164,
+      "mower": "M4",
+      "origin": "frozen"
+     }
+    ],
+    "mode": "weak",
+    "level": "top"
+   },
+   "replan_tasks": [
+    {
+     "area": "H1_FW",
+     "task": 1,
+     "mower": "M5",
+     "start": 45,
+     "end": 53
+    },
+    {
+     "area": "H1_FW",
+     "task": 2,
+     "mower": "M3",
+     "start": 59,
+     "end": 67
+    },
+    {
+     "area": "H1_FW",
+     "task": 3,
+     "mower": "M5",
+     "start": 88,
+     "end": 96
+    },
+    {
+     "area": "H1_FW",
+     "task": 4,
+     "mower": "M5",
+     "start": 104,
+     "end": 112
+    },
+    {
+     "area": "H1_FW",
+     "task": 5,
+     "mower": "M3",
+     "start": 127,
+     "end": 135
+    },
+    {
+     "area": "H1_FW",
+     "task": 6,
+     "mower": "M3",
+     "start": 151,
+     "end": 159
+    },
+    {
+     "area": "H1_SR1",
+     "task": 1,
+     "mower": "M3",
+     "start": 83,
+     "end": 87
+    },
+    {
+     "area": "H1_SR1",
+     "task": 2,
+     "mower": "M3",
+     "start": 95,
+     "end": 99
+    },
+    {
+     "area": "H1_SR1",
+     "task": 3,
+     "mower": "M5",
+     "start": 123,
+     "end": 127
+    },
+    {
+     "area": "H1_SR1",
+     "task": 4,
+     "mower": "M1",
+     "start": 156,
+     "end": 166
+    },
+    {
+     "area": "H2_FW",
+     "task": 1,
+     "mower": "M3",
+     "start": 12,
+     "end": 17
+    },
+    {
+     "area": "H2_FW",
+     "task": 2,
+     "mower": "M3",
+     "start": 17,
+     "end": 22
+    },
+    {
+     "area": "H2_FW",
+     "task": 3,
+     "mower": "M3",
+     "start": 22,
+     "end": 27
+    },
+    {
+     "area": "H2_FW",
+     "task": 4,
+     "mower": "M3",
+     "start": 53,
+     "end": 58
+    },
+    {
+     "area": "H2_FW",
+     "task": 5,
+     "mower": "M3",
+     "start": 135,
+     "end": 140
+    },
+    {
+     "area": "H2_SR1",
+     "task": 1,
+     "mower": "M5",
+     "start": 19,
+     "end": 34
+    },
+    {
+     "area": "H2_SR1",
+     "task": 2,
+     "mower": "M5",
+     "start": 129,
+     "end": 144
+    },
+    {
+     "area": "H2_SR1",
+     "task": 3,
+     "mower": "M5",
+     "start": 167,
+     "end": 182
+    },
+    {
+     "area": "H3_FW",
+     "task": 1,
+     "mower": "M3",
+     "start": 7,
+     "end": 12
+    },
+    {
+     "area": "H3_FW",
+     "task": 2,
+     "mower": "M3",
+     "start": 39,
+     "end": 44
+    },
+    {
+     "area": "H3_FW",
+     "task": 3,
+     "mower": "M3",
+     "start": 46,
+     "end": 51
+    },
+    {
+     "area": "H3_FW",
+     "task": 4,
+     "mower": "M3",
+     "start": 87,
+     "end": 92
+    },
+    {
+     "area": "H3_FW",
+     "task": 5,
+     "mower": "M3",
+     "start": 99,
+     "end": 104
+    },
+    {
+     "area": "H3_FW",
+     "task": 6,
+     "mower": "M3",
+     "start": 140,
+     "end": 145
+    },
+    {
+     "area": "H3_FW",
+     "task": 7,
+     "mower": "M3",
+     "start": 145,
+     "end": 150
+    },
+    {
+     "area": "H3_FW",
+     "task": 8,
+     "mower": "M3",
+     "start": 161,
+     "end": 166
+    },
+    {
+     "area": "H3_SR1",
+     "task": 1,
+     "mower": "M5",
+     "start": 65,
+     "end": 73
+    },
+    {
+     "area": "H3_SR1",
+     "task": 2,
+     "mower": "M3",
+     "start": 75,
+     "end": 83
+    },
+    {
+     "area": "H3_SR1",
+     "task": 3,
+     "mower": "M5",
+     "start": 96,
+     "end": 104
+    },
+    {
+     "area": "H3_SR1",
+     "task": 4,
+     "mower": "M1",
+     "start": 104,
+     "end": 125
+    },
+    {
+     "area": "H3_SR2",
+     "task": 1,
+     "mower": "M5",
+     "start": 3,
+     "end": 9
+    },
+    {
+     "area": "H3_SR2",
+     "task": 2,
+     "mower": "M5",
+     "start": 39,
+     "end": 45
+    },
+    {
+     "area": "H3_SR2",
+     "task": 3,
+     "mower": "M1",
+     "start": 53,
+     "end": 68
+    },
+    {
+     "area": "H3_SR2",
+     "task": 4,
+     "mower": "M3",
+     "start": 69,
+     "end": 75
+    },
+    {
+     "area": "H3_SR2",
+     "task": 5,
+     "mower": "M1",
+     "start": 126,
+     "end": 141
+    },
+    {
+     "area": "H3_SR3",
+     "task": 1,
+     "mower": "M5",
+     "start": 54,
+     "end": 65
+    },
+    {
+     "area": "H3_SR3",
+     "task": 2,
+     "mower": "M3",
+     "start": 104,
+     "end": 115
+    },
+    {
+     "area": "H4_FW",
+     "task": 1,
+     "mower": "M5",
+     "start": 13,
+     "end": 19
+    },
+    {
+     "area": "H4_FW",
+     "task": 2,
+     "mower": "M3",
+     "start": 27,
+     "end": 33
+    },
+    {
+     "area": "H4_FW",
+     "task": 3,
+     "mower": "M3",
+     "start": 33,
+     "end": 39
+    },
+    {
+     "area": "H4_FW",
+     "task": 4,
+     "mower": "M5",
+     "start": 73,
+     "end": 79
+    },
+    {
+     "area": "H4_FW",
+     "task": 5,
+     "mower": "M3",
+     "start": 121,
+     "end": 127
+    },
+    {
+     "area": "H4_SR1",
+     "task": 1,
+     "mower": "M3",
+     "start": 3,
+     "end": 7
+    },
+    {
+     "area": "H4_SR1",
+     "task": 2,
+     "mower": "M3",
+     "start": 117,
+     "end": 121
+    },
+    {
+     "area": "H4_SR1",
+     "task": 3,
+     "mower": "M1",
+     "start": 146,
+     "end": 156
+    },
+    {
+     "area": "H4_SR2",
+     "task": 1,
+     "mower": "M1",
+     "start": 31,
+     "end": 53
+    },
+    {
+     "area": "H4_SR2",
+     "task": 2,
+     "mower": "M5",
+     "start": 80,
+     "end": 88
+    },
+    {
+     "area": "H4_SR2",
+     "task": 3,
+     "mower": "M5",
+     "start": 113,
+     "end": 121
+    },
+    {
+     "area": "H4_SR2",
+     "task": 4,
+     "mower": "M5",
+     "start": 159,
+     "end": 167
+    },
+    {
+     "area": "H4_SR2",
+     "task": 5,
+     "mower": "M1",
+     "start": 167,
+     "end": 189
+    },
+    {
+     "area": "H4_SR3",
+     "task": 1,
+     "mower": "M1",
+     "start": 75,
+     "end": 104
+    },
+    {
+     "area": "H4_SR3",
+     "task": 2,
+     "mower": "M5",
+     "start": 144,
+     "end": 155
+    },
+    {
+     "area": "H4_SR3",
+     "task": 3,
+     "mower": "M3",
+     "start": 166,
+     "end": 177
+    },
+    {
+     "area": "H5_FW",
+     "task": 1,
+     "mower": "M4",
+     "start": 26,
+     "end": 31
+    },
+    {
+     "area": "H5_FW",
+     "task": 2,
+     "mower": "M4",
+     "start": 50,
+     "end": 55
+    },
+    {
+     "area": "H5_FW",
+     "task": 3,
+     "mower": "M4",
+     "start": 74,
+     "end": 79
+    },
+    {
+     "area": "H5_FW",
+     "task": 4,
+     "mower": "M4",
+     "start": 94,
+     "end": 99
+    },
+    {
+     "area": "H5_FW",
+     "task": 5,
+     "mower": "M4",
+     "start": 118,
+     "end": 123
+    },
+    {
+     "area": "H5_FW",
+     "task": 6,
+     "mower": "M4",
+     "start": 142,
+     "end": 147
+    },
+    {
+     "area": "H5_FW",
+     "task": 7,
+     "mower": "M4",
+     "start": 167,
+     "end": 172
+    },
+    {
+     "area": "H5_SR1",
+     "task": 1,
+     "mower": "M4",
+     "start": 34,
+     "end": 41
+    },
+    {
+     "area": "H5_SR1",
+     "task": 2,
+     "mower": "M4",
+     "start": 104,
+     "end": 111
+    },
+    {
+     "area": "H5_SR1",
+     "task": 3,
+     "mower": "M4",
+     "start": 111,
+     "end": 118
+    },
+    {
+     "area": "H5_SR1",
+     "task": 4,
+     "mower": "M2",
+     "start": 142,
+     "end": 160
+    },
+    {
+     "area": "H5_SR1",
+     "task": 5,
+     "mower": "M4",
+     "start": 160,
+     "end": 167
+    },
+    {
+     "area": "H5_SR2",
+     "task": 1,
+     "mower": "M2",
+     "start": 0,
+     "end": 8
+    },
+    {
+     "area": "H5_SR2",
+     "task": 2,
+     "mower": "M2",
+     "start": 70,
+     "end": 78
+    },
+    {
+     "area": "H5_SR2",
+     "task": 3,
+     "mower": "M2",
+     "start": 79,
+     "end": 87
+    },
+    {
+     "area": "H5_SR2",
+     "task": 4,
+     "mower": "M2",
+     "start": 163,
+     "end": 171
+    },
+    {
+     "area": "H5_SR3",
+     "task": 1,
+     "mower": "M4",
+     "start": 125,
+     "end": 129
+    },
+    {
+     "area": "H5_SR3",
+     "task": 2,
+     "mower": "M4",
+     "start": 134,
+     "end": 138
+    },
+    {
+     "area": "H5_SR3",
+     "task": 3,
+     "mower": "M4",
+     "start": 138,
+     "end": 142
+    },
+    {
+     "area": "H6_FW",
+     "task": 1,
+     "mower": "M4",
+     "start": 2,
+     "end": 8
+    },
+    {
+     "area": "H6_FW",
+     "task": 2,
+     "mower": "M2",
+     "start": 16,
+     "end": 33
+    },
+    {
+     "area": "H6_FW",
+     "task": 3,
+     "mower": "M2",
+     "start": 44,
+     "end": 61
+    },
+    {
+     "area": "H6_FW",
+     "task": 4,
+     "mower": "M4",
+     "start": 61,
+     "end": 67
+    },
+    {
+     "area": "H6_FW",
+     "task": 5,
+     "mower": "M4",
+     "start": 68,
+     "end": 74
+    },
+    {
+     "area": "H6_FW",
+     "task": 6,
+     "mower": "M4",
+     "start": 81,
+     "end": 87
+    },
+    {
+     "area": "H6_FW",
+     "task": 7,
+     "mower": "M4",
+     "start": 87,
+     "end": 93
+    },
+    {
+     "area": "H6_SR1",
+     "task": 1,
+     "mower": "M2",
+     "start": 10,
+     "end": 15
+    },
+    {
+     "area": "H6_SR1",
+     "task": 2,
+     "mower": "M2",
+     "start": 33,
+     "end": 38
+    },
+    {
+     "area": "H6_SR1",
+     "task": 3,
+     "mower": "M4",
+     "start": 56,
+     "end": 58
+    },
+    {
+     "area": "H6_SR1",
+     "task": 4,
+     "mower": "M2",
+     "start": 95,
+     "end": 100
+    }
+   ],
+   "replan_optimal": false
+  },
+  {
+   "scenario": "six-hole-course",
+   "scenario_sha256": "a76644eaefd5f5650c48dbe682672a3c20b7945909d710fcf71779229adf9c18",
+   "seed_tag": "seed2",
+   "preferences": {
+    "tasks": [
+     {
+      "area": "H1_FW",
+      "start": 36,
+      "mower": "M5",
+      "origin": "frozen"
+     },
+     {
+      "area": "H1_FW",
+      "start": 59,
+      "mower": "M3",
+      "origin": "frozen"
+     },
+     {
+      "area": "H1_FW",
+      "start": 138,
+      "mower": "M3",
+      "origin": "edited"
+     },
+     {
+      "area": "H1_FW",
+      "start": 62,
+      "mower": "M3",
+      "origin": "edited"
+     },
+     {
+      "area": "H1_FW",
+      "start": 127,
+      "mower": "M3",
+      "origin": "frozen"
+     },
+     {
+      "area": "H1_FW",
+      "start": 15,
+      "mower": "M3",
+      "origin": "edited"
+     },
+     {
+      "area": "H1_SR1",
+      "start": 49,
+      "mower": "M5",
+      "origin": "frozen"
+     },
+     {
+      "area": "H1_SR1",
+      "start": 95,
+      "mower": "M5",
+      "origin": "frozen"
+     },
+     {
+      "area": "H1_SR1",
+      "start": 123,
+      "mower": "M3",
+      "origin": "frozen"
+     },
+     {
+      "area": "H1_SR1",
+      "start": 127,
+      "mower": "M1",
+      "origin": "frozen"
+     },
+     {
+      "area": "H2_FW",
+      "start": 26,
+      "mower": "M3",
+      "origin": "edited"
+     },
+     {
+      "area": "H2_FW",
+      "start": 28,
+      "mower": "M3",
+      "origin": "frozen"
+     },
+     {
+      "area": "H2_FW",
+      "start": 46,
+      "mower": "M3",
+      "origin": "frozen"
+     },
+     {
+      "area": "H2_FW",
+      "start": 67,
+      "mower": "M3",
+      "origin": "frozen"
+     },
+     {
+      "area": "H2_FW",
+      "start": 91,
+      "mower": "M3",
+      "origin": "frozen"
+     },
+     {
+      "area": "H2_FW",
+      "start": 100,
+      "mower": "M3",
+      "origin": "edited"
+     },
+     {
+      "area": "H2_FW",
+      "start": 112,
+      "mower": "M3",
+      "origin": "frozen"
+     },
+     {
+      "area": "H2_FW",
+      "start": 118,
+      "mower": "M3",
+      "origin": "frozen"
+     },
+     {
+      "area": "H2_FW",
+      "start": 135,
+      "mower": "M3",
+      "origin": "frozen"
+     },
+     {
+      "area": "H2_FW",
+      "start": 7,
+      "mower": "M3",
+      "origin": "edited"
+     },
+     {
+      "area": "H2_SR1",
+      "start": 16,
+      "mower": "M5",
+      "origin": "frozen"
+     },
+     {
+      "area": "H2_SR1",
+      "start": 129,
+      "mower": "M5",
+      "origin": "frozen"
+     },
+     {
+      "area": "H2_SR1",
+      "start": 167,
+      "mower": "M5",
+      "origin": "frozen"
+     },
+     {
+      "area": "H3_FW",
+      "start": 134,
+      "mower": "M3",
+      "origin": "edited"
+     },
+     {
+      "area": "H3_FW",
+      "start": 117,
+      "mower": "M3",
+      "origin": "edited"
+     },
+     {
+      "area": "H3_FW",
+      "start": 150,
+      "mower": "M3",
+      "origin": "frozen"
+     },
+     {
+      "area": "H3_FW",
+      "start": 161,
+      "mower": "M3",
+      "origin": "frozen"
+     },
+     {
+      "area": "H3_FW",
+      "start": 167,
+      "mower": "M3",
+      "origin": "frozen"
+     },
+     {
+      "area": "H3_SR1",
+      "start": 16,
+      "mower": "M3",
+      "origin": "edited"
+     },
+     {
+      "area": "H3_SR1",
+      "start": 8,
+      "mower": "M5",
+      "origin": "frozen"
+     },
+     {
+      "area": "H3_SR1",
+      "start": 20,
+      "mower": "M3",
+      "origin": "frozen"
+     },
+     {
+      "area": "H3_SR1",
+      "start": 58,
+      "mower": "M1",
+      "origin": "frozen"
+     },
+     {
+      "area": "H3_SR1",
+      "start": 20,
+      "mower": "M5",
+      "origin": "edited"
+     },
+     {
+      "area": "H3_SR2",
+      "start": 3,
+      "mower": "M3",
+      "origin": "frozen"
+     },
+     {
+      "area": "H3_SR2",
+      "start": 105,
+      "mower": "M5",
+      "origin": "edited"
+     },
+     {
+      "area": "H3_SR2",
+      "start": 53,
+      "mower": "M5",
+      "origin": "frozen"
+     },
+     {
+      "area": "H3_SR2",
+      "start": 132,
+      "mower": "M1",
+      "origin": "edited"
+     },
+     {
+      "area": "H3_SR3",
+      "start": 41,
+      "mower": "M1",
+      "origin": "edited"
+     },
+     {
+      "area": "H3_SR3",
+      "start": 70,
+      "mower": "M5",
+      "origin": "frozen"
+     },
+     {
+      "area": "H4_FW",
+      "start": 14,
+      "mower": "M3",
+      "origin": "frozen"
+     },
+     {
+      "area": "H4_FW",
+      "start": 33,
+      "mower": "M3",
+      "origin": "frozen"
+     },
+     {
+      "area": "H4_FW",
+      "start": 53,
+      "mower": "M3",
+      "origin": "frozen"
+     },
+     {
+      "area": "H4_FW",
+      "start": 1,
+      "mower": "M5",
+      "origin": "edited"
+     },
+     {
+      "area": "H4_FW",
+      "start": 97,
+      "mower": "M3",
+      "origin": "edited"
+     },
+     {
+      "area": "H4_FW",
+      "start": 121,
+      "mower": "M5",
+      "origin": "frozen"
+     },
+     {
+      "area": "H4_FW",
+      "start": 44,
+      "mower": "M3",
+      "origin": "edited"
+     },
+     {
+      "area": "H4_SR1",
+      "start": 164,
+      "mower": "M5",
+      "origin": "edited"
+     },
+     {
+      "area": "H4_SR1",
+      "start": 45,
+      "mower": "M5",
+      "origin": "frozen"
+     },
+     {
+      "area": "H4_SR1",
+      "start": 80,
+      "mower": "M5",
+      "origin": "edited"
+     },
+     {
+      "area": "H4_SR2",
+      "start": 80,
+      "mower": "M1",
+      "origin": "frozen"
+     },
+     {
+      "area": "H4_SR2",
+      "start": 113,
+      "mower": "M5",
+      "origin": "frozen"
+     },
+     {
+      "area": "H4_SR2",
+      "start": 159,
+      "mower": "M5",
+      "origin": "frozen"
+     },
+     {
+      "area": "H4_SR2",
+      "start": 65,
+      "mower": "M5",
+      "origin": "edited"
+     },
+     {
+      "area": "H4_SR3",
+      "start": 64,
+      "mower": "M3",
+      "origin": "edited"
+     },
+     {
+      "area": "H4_SR3",
+      "start": 81,
+      "mower": "M5",
+      "origin": "frozen"
+     },
+     {
+      "area": "H4_SR3",
+      "start": 96,
+      "mower": "M3",
+      "origin": "frozen"
+     },
+     {
+      "area": "H5_FW",
+      "start": 2,
+      "mower": "M4",
+      "origin": "frozen"
+     },
+     {
+      "area": "H5_FW",
+      "start": 87,
+      "mower": "M4",
+      "origin": "edited"
+     },
+     {
+      "area": "H5_FW",
+      "start": 50,
+      "mower": "M4",
+      "origin": "frozen"
+     },
+     {
+      "area": "H5_FW",
+      "start": 114,
+      "mower": "M4",
+      "origin": "edited"
+     },
+     {
+      "area": "H5_FW",
+      "start": 164,
+      "mower": "M4",
+      "origin": "edited"
+     },
+     {
+      "area": "H5_FW",
+      "start": 118,
+      "mower": "M4",
+      "origin": "frozen"
+     },
+     {
+      "area": "H5_FW",
+      "start": 87,
+      "mower": "M4",
+      "origin": "edited"
+     },
+     {
+      "area": "H5_FW",
+      "start": 149,
+      "mower": "M4",
+      "origin": "frozen"
+     },
+     {
+      "area": "H5_SR1",
+      "start": 107,
+      "mower": "M4",
+      "origin": "frozen"
+     },
+     {
+      "area": "H5_SR1",
+      "start": 31,
+      "mower": "M4",
+      "origin": "edited"
+     },
+     {
+      "area": "H5_SR1",
+      "start": 142,
+      "mower": "M4",
+      "origin": "frozen"
+     },
+     {
+      "area": "H5_SR1",
+      "start": 154,
+      "mower": "M4",
+      "origin": "frozen"
+     },
+     {
+      "area": "H5_SR2",
+      "start": 41,
+      "mower": "M2",
+      "origin": "frozen"
+     },
+     {
+      "area": "H5_SR2",
+      "start": 36,
+      "mower": "M2",
+      "origin": "edited"
+     },
+     {
+      "area": "H5_SR2",
+      "start": 129,
+      "mower": "M2",
+      "origin": "edited"
+     },
+     {
+      "area": "H5_SR2",
+      "start": 163,
+      "mower": "M2",
+      "origin": "frozen"
+     },
+     {
+      "area": "H5_SR3",
+      "start": 32,
+      "mower": "M2",
+      "origin": "frozen"
+     },
+     {
+      "area": "H5_SR3",
+      "start": 70,
+      "mower": "M4",
+      "origin": "frozen"
+     },
+     {
+      "area": "H5_SR3",
+      "start": 76,
+      "mower": "M4",
+      "origin": "edited"
+     },
+     {
+      "area": "H5_SR3",
+      "start": 125,
+      "mower": "M4",
+      "origin": "frozen"
+     },
+     {
+      "area": "H6_FW",
+      "start": 9,
+      "mower": "M4",
+      "origin": "frozen"
+     },
+     {
+      "area": "H6_FW",
+      "start": 60,
+      "mower": "M2",
+      "origin": "edited"
+     },
+     {
+      "area": "H6_FW",
+      "start": 55,
+      "mower": "M4",
+      "origin": "frozen"
+     },
+     {
+      "area": "H6_FW",
+      "start": 79,
+      "mower": "M4",
+      "origin": "frozen"
+     },
+     {
+      "area": "H6_FW",
+      "start": 100,
+      "mower": "M4",
+      "origin": "frozen"
+     },
+     {
+      "area": "H6_FW",
+      "start": 127,
+      "mower": "M4",
+      "origin": "edited"
+     },
+     {
+      "area": "H6_FW",
+      "start": 36,
+      "mower": "M4",
+      "origin": "edited"
+     },
+     {
+      "area": "H6_SR1",
+      "start": 33,
+      "mower": "M2",
+      "origin": "edited"
+     },
+     {
+      "area": "H6_SR1",
+      "start": 146,
+      "mower": "M2",
+      "origin": "edited"
+     },
+     {
+      "area": "H6_SR1",
+      "start": 127,
+      "mower": "M4",
+      "origin": "edited"
+     },
+     {
+      "area": "H6_SR1",
+      "start": 50,
+      "mower": "M2",
+      "origin": "edited"
+     }
+    ],
+    "mode": "weak",
+    "level": "top"
+   },
+   "replan_tasks": [
+    {
+     "area": "H1_FW",
+     "task": 1,
+     "mower": "M5",
+     "start": 0,
+     "end": 8
+    },
+    {
+     "area": "H1_FW",
+     "task": 2,
+     "mower": "M3",
+     "start": 19,
+     "end": 27
+    },
+    {
+     "area": "H1_FW",
+     "task": 3,
+     "mower": "M5",
+     "start": 28,
+     "end": 36
+    },
+    {
+     "area": "H1_FW",
+     "task": 4,
+     "mower": "M3",
+     "start": 38,
+     "end": 46
+    },
+    {
+     "area": "H1_FW",
+     "task": 5,
+     "mower": "M3",
+     "start": 59,
+     "end": 67
+    },
+    {
+     "area": "H1_FW",
+     "task": 6,
+     "mower": "M3",
+     "start": 158,
+     "end": 166
+    },
+    {
+     "area": "H1_SR1",
+     "task": 1,
+     "mower": "M5",
+     "start": 91,
+     "end": 95
+    },
+    {
+     "area": "H1_SR1",
+     "task": 2,
+     "mower": "M3",
+     "start": 96,
+     "end": 100
+    },
+    {
+     "area": "H1_SR1",
+     "task": 3,
+     "mower": "M1",
+     "start": 120,
+     "end": 130
+    },
+    {
+     "area": "H1_SR1",
+     "task": 4,
+     "mower": "M1",
+     "start": 153,
+     "end": 163
+    },
+    {
+     "area": "H2_FW",
+     "task": 1,
+     "mower": "M3",
+     "start": 9,
+     "end": 14
+    },
+    {
+     "area": "H2_FW",
+     "task": 2,
+     "mower": "M3",
+     "start": 14,
+     "end": 19
+    },
+    {
+     "area": "H2_FW",
+     "task": 3,
+     "mower": "M3",
+     "start": 33,
+     "end": 38
+    },
+    {
+     "area": "H2_FW",
+     "task": 4,
+     "mower": "M3",
+     "start": 46,
+     "end": 51
+    },
+    {
+     "area": "H2_FW",
+     "task": 5,
+     "mower": "M3",
+     "start": 67,
+     "end": 72
+    },
+    {
+     "area": "H2_FW",
+     "task": 6,
+     "mower": "M3",
+     "start": 72,
+     "end": 77
+    },
+    {
+     "area": "H2_FW",
+     "task": 7,
+     "mower": "M3",
+     "start": 91,
+     "end": 96
+    },
+    {
+     "area": "H2_FW",
+     "task": 8,
+     "mower": "M3",
+     "start": 100,
+     "end": 105
+    },
+    {
+     "area": "H2_SR1",
+     "task": 1,
+     "mower": "M5",
+     "start": 54,
+     "end": 69
+    },
+    {
+     "area": "H2_SR1",
+     "task": 2,
+     "mower": "M5",
+     "start": 95,
+     "end": 110
+    },
+    {
+     "area": "H2_SR1",
+     "task": 3,
+     "mower": "M5",
+     "start": 167,
+     "end": 182
+    },
+    {
+     "area": "H3_FW",
+     "task": 1,
+     "mower": "M3",
+     "start": 105,
+     "end": 110
+    },
+    {
+     "area": "H3_FW",
+     "task": 2,
+     "mower": "M3",
+     "start": 110,
+     "end": 115
+    },
+    {
+     "area": "H3_FW",
+     "task": 3,
+     "mower": "M3",
+     "start": 115,
+     "end": 120
+    },
+    {
+     "area": "H3_FW",
+     "task": 4,
+     "mower": "M3",
+     "start": 120,
+     "end": 125
+    },
+    {
+     "area": "H3_FW",
+     "task": 5,
+     "mower": "M3",
+     "start": 146,
+     "end": 151
+    },
+    {
+     "area": "H3_SR1",
+     "task": 1,
+     "mower": "M5",
+     "start": 36,
+     "end": 44
+    },
+    {
+     "area": "H3_SR1",
+     "task": 2,
+     "mower": "M5",
+     "start": 69,
+     "end": 77
+    },
+    {
+     "area": "H3_SR1",
+     "task": 3,
+     "mower": "M3",
+     "start": 137,
+     "end": 145
+    },
+    {
+     "area": "H3_SR1",
+     "task": 4,
+     "mower": "M3",
+     "start": 167,
+     "end": 175
+    },
+    {
+     "area": "H3_SR2",
+     "task": 1,
+     "mower": "M3",
+     "start": 3,
+     "end": 9
+    },
+    {
+     "area": "H3_SR2",
+     "task": 2,
+     "mower": "M3",
+     "start": 53,
+     "end": 59
+    },
+    {
+     "area": "H3_SR2",
+     "task": 3,
+     "mower": "M1",
+     "start": 105,
+     "end": 120
+    },
+    {
+     "area": "H3_SR2",
+     "task": 4,
+     "mower": "M5",
+     "start": 120,
+     "end": 126
+    },
+    {
+     "area": "H3_SR2",
+     "task": 5,
+     "mower": "M5",
+     "start": 132,
+     "end": 138
+    },
+    {
+     "area": "H3_SR3",
+     "task": 1,
+     "mower": "M1",
+     "start": 41,
+     "end": 71
+    },
+    {
+     "area": "H3_SR3",
+     "task": 2,
+     "mower": "M3",
+     "start": 77,
+     "end": 88
+    },
+    {
+     "area": "H4_FW",
+     "task": 1,
+     "mower": "M3",
+     "start": 27,
+     "end": 33
+    },
+    {
+     "area": "H4_FW",
+     "task": 2,
+     "mower": "M5",
+     "start": 85,
+     "end": 91
+    },
+    {
+     "area": "H4_FW",
+     "task": 3,
+     "mower": "M5",
+     "start": 126,
+     "end": 132
+    },
+    {
+     "area": "H4_FW",
+     "task": 4,
+     "mower": "M3",
+     "start": 152,
+     "end": 158
+    },
+    {
+     "area": "H4_FW",
+     "task": 5,
+     "mower": "M5",
+     "start": 161,
+     "end": 167
+    },
+    {
+     "area": "H4_SR1",
+     "task": 1,
+     "mower": "M1",
+     "start": 28,
+     "end": 38
+    },
+    {
+     "area": "H4_SR1",
+     "task": 2,
+     "mower": "M5",
+     "start": 45,
+     "end": 49
+    },
+    {
+     "area": "H4_SR1",
+     "task": 3,
+     "mower": "M5",
+     "start": 80,
+     "end": 84
+    },
+    {
+     "area": "H4_SR1",
+     "task": 4,
+     "mower": "M1",
+     "start": 164,
+     "end": 174
+    },
+    {
+     "area": "H4_SR2",
+     "task": 1,
+     "mower": "M5",
+     "start": 9,
+     "end": 17
+    },
+    {
+     "area": "H4_SR2",
+     "task": 2,
+     "mower": "M5",
+     "start": 17,
+     "end": 25
+    },
+    {
+     "area": "H4_SR2",
+     "task": 3,
+     "mower": "M1",
+     "start": 80,
+     "end": 102
+    },
+    {
+     "area": "H4_SR2",
+     "task": 4,
+     "mower": "M5",
+     "start": 110,
+     "end": 118
+    },
+    {
+     "area": "H4_SR2",
+     "task": 5,
+     "mower": "M1",
+     "start": 130,
+     "end": 152
+    },
+    {
+     "area": "H4_SR3",
+     "task": 1,
+     "mower": "M3",
+     "start": 125,
+     "end": 136
+    },
+    {
+     "area": "H4_SR3",
+     "task": 2,
+     "mower": "M5",
+     "start": 138,
+     "end": 149
+    },
+    {
+     "area": "H4_SR3",
+     "task": 3,
+     "mower": "M5",
+     "start": 149,
+     "end": 160
+    },
+    {
+     "area": "H5_FW",
+     "task": 1,
+     "mower": "M4",
+     "start": 2,
+     "end": 7
+    },
+    {
+     "area": "H5_FW",
+     "task": 2,
+     "mower": "M4",
+     "start": 50,
+     "end": 55
+    },
+    {
+     "area": "H5_FW",
+     "task": 3,
+     "mower": "M4",
+     "start": 87,
+     "end": 92
+    },
+    {
+     "area": "H5_FW",
+     "task": 4,
+     "mower": "M4",
+     "start": 114,
+     "end": 119
+    },
+    {
+     "area": "H5_FW",
+     "task": 5,
+     "mower": "M4",
+     "start": 129,
+     "end": 134
+    },
+    {
+     "area": "H5_FW",
+     "task": 6,
+     "mower": "M4",
+     "start": 149,
+     "end": 154
+    },
+    {
+     "area": "H5_FW",
+     "task": 7,
+     "mower": "M4",
+     "start": 164,
+     "end": 169
+    },
+    {
+     "area": "H5_SR1",
+     "task": 1,
+     "mower": "M4",
+     "start": 80,
+     "end": 87
+    },
+    {
+     "area": "H5_SR1",
+     "task": 2,
+     "mower": "M2",
+     "start": 111,
+     "end": 129
+    },
+    {
+     "area": "H5_SR1",
+     "task": 3,
+     "mower": "M4",
+     "start": 142,
+     "end": 149
+    },
+    {
+     "area": "H5_SR1",
+     "task": 4,
+     "mower": "M4",
+     "start": 157,
+     "end": 164
+    },
+    {
+     "area": "H5_SR2",
+     "task": 1,
+     "mower": "M2",
+     "start": 95,
+     "end": 103
+    },
+    {
+     "area": "H5_SR2",
+     "task": 2,
+     "mower": "M2",
+     "start": 103,
+     "end": 111
+    },
+    {
+     "area": "H5_SR2",
+     "task": 3,
+     "mower": "M2",
+     "start": 129,
+     "end": 137
+    },
+    {
+     "area": "H5_SR2",
+     "task": 4,
+     "mower": "M2",
+     "start": 159,
+     "end": 167
+    },
+    {
+     "area": "H5_SR3",
+     "task": 1,
+     "mower": "M2",
+     "start": 32,
+     "end": 41
+    },
+    {
+     "area": "H5_SR3",
+     "task": 2,
+     "mower": "M4",
+     "start": 70,
+     "end": 74
+    },
+    {
+     "area": "H5_SR3",
+     "task": 3,
+     "mower": "M4",
+     "start": 76,
+     "end": 80
+    },
+    {
+     "area": "H5_SR3",
+     "task": 4,
+     "mower": "M4",
+     "start": 125,
+     "end": 129
+    },
+    {
+     "area": "H6_FW",
+     "task": 1,
+     "mower": "M4",
+     "start": 9,
+     "end": 15
+    },
+    {
+     "area": "H6_FW",
+     "task": 2,
+     "mower": "M4",
+     "start": 15,
+     "end": 21
+    },
+    {
+     "area": "H6_FW",
+     "task": 3,
+     "mower": "M2",
+     "start": 42,
+     "end": 59
+    },
+    {
+     "area": "H6_FW",
+     "task": 4,
+     "mower": "M2",
+     "start": 60,
+     "end": 77
+    },
+    {
+     "area": "H6_FW",
+     "task": 5,
+     "mower": "M2",
+     "start": 77,
+     "end": 94
+    },
+    {
+     "area": "H6_FW",
+     "task": 6,
+     "mower": "M4",
+     "start": 136,
+     "end": 142
+    },
+    {
+     "area": "H6_FW",
+     "task": 7,
+     "mower": "M2",
+     "start": 167,
+     "end": 184
+    },
+    {
+     "area": "H6_SR1",
+     "task": 1,
+     "mower": "M2",
+     "start": 27,
+     "end": 32
+    },
+    {
+     "area": "H6_SR1",
+     "task": 2,
+     "mower": "M4",
+     "start": 134,
+     "end": 136
+    },
+    {
+     "area": "H6_SR1",
+     "task": 3,
+     "mower": "M2",
+     "start": 137,
+     "end": 142
+    },
+    {
+     "area": "H6_SR1",
+     "task": 4,
+     "mower": "M4",
+     "start": 155,
+     "end": 157
+    }
+   ],
+   "replan_optimal": false
+  }
+ ],
+ "skipped": [
+  "balanced-four-hole/seed1: no re-plan within 20 s"
+ ]
+}

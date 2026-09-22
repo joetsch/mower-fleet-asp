@@ -1,0 +1,34 @@
+{
+  "arms": [
+    "cold",
+    "weak@top",
+    "weak@tiebreak",
+    "weak-graded",
+    "heur[10,true]",
+    "heur[1,true]",
+    "heur-soft"
+  ],
+  "freeze_fractions": [
+    0.3
+  ],
+  "base_seed": 1,
+  "budget_s": 60.0,
+  "t1_budget_s": 60.0,
+  "portfolio_repeats": 3,
+  "t1_config": "jumpy",
+  "tool_versions": {
+    "python": "3.11.15",
+    "clingo": "5.8.2",
+    "clingcon": "5.2.1.post2",
+    "numpy": "2.4.6",
+    "typer": "0.27.2"
+  },
+  "host": {
+    "platform": "macOS-26.6.2-arm64-arm-64bit",
+    "processor": "arm",
+    "cpu_count": "8"
+  },
+  "started_utc": "2026-09-16T14:03:57+00:00",
+  "finished_utc": "2026-09-16T16:23:49+00:00",
+  "skipped": []
+}

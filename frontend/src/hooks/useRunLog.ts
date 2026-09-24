@@ -48,6 +48,10 @@ export interface RollEntry {
   /** Weekday + clock of the new now, e.g. "Tue 13:00". */
   nowLabel: string;
   outcome: RollOutcome | null;
+  /** The re-solve ended without producing a plan — stopped, or it failed. Distinct from
+   *  `outcome === null`, which means it is still running. The roll itself stands: "now"
+   *  moved and the past was folded into history; only the new plan is missing. */
+  failed: boolean;
 }
 
 interface Snapshot {
@@ -69,6 +73,8 @@ export interface RunLog {
   }) => void;
   /** Fill in the pending entry once its re-solve settles. */
   settle: (outcome: RollOutcome) => void;
+  /** Mark the pending entry as having produced no plan (stopped, or failed). */
+  abandon: () => void;
   /** Step the run log back one roll — pairs with "Undo". */
   undo: () => void;
   /** Drop the whole log — the scenario it describes is gone. */
@@ -96,7 +102,7 @@ export function useRunLog(): RunLog {
     }) => {
       setStack((s) => [...s, { executed, rolls }]);
       setExecuted((prev) => [...rebase(prev, hours), ...rebase(executedThisRoll, hours)]);
-      setRolls((prev) => [...prev, { hours, nowLabel, outcome: null }]);
+      setRolls((prev) => [...prev, { hours, nowLabel, outcome: null, failed: false }]);
     },
     [executed, rolls],
   );
@@ -104,6 +110,15 @@ export function useRunLog(): RunLog {
   const settle = useCallback((outcome: RollOutcome) => {
     setRolls((prev) =>
       prev.map((r, i) => (i === prev.length - 1 ? { ...r, outcome } : r)),
+    );
+  }, []);
+
+  /** The re-solve ended with no plan of its own. Without this the pending row was filled
+   *  from whatever `result` happened to hold — which, after a stop, is the plan from
+   *  *before* the roll, so every figure in the row described the wrong week. */
+  const abandon = useCallback(() => {
+    setRolls((prev) =>
+      prev.map((r, i) => (i === prev.length - 1 ? { ...r, failed: true } : r)),
     );
   }, []);
 
@@ -124,7 +139,8 @@ export function useRunLog(): RunLog {
     setStack([]);
   }, []);
 
-  const pending = rolls.length > 0 && rolls[rolls.length - 1].outcome === null;
+  const last = rolls[rolls.length - 1];
+  const pending = last !== undefined && last.outcome === null && !last.failed;
 
-  return { executed, rolls, pending, begin, settle, undo, reset };
+  return { executed, rolls, pending, begin, settle, abandon, undo, reset };
 }

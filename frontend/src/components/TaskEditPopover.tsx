@@ -86,6 +86,7 @@ export function TaskEditPopover({
           onCommit={onMove}
           label={`start hour for ${task.area}`}
           commitOnChange
+          max={scenario.horizon_hours - 1}
         />
       </label>
 

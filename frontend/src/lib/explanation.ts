@@ -18,6 +18,7 @@ import { clockLabel } from "./schedule";
 import type {
   ConflictingTask,
   EditExplanation,
+  PreferenceLevel,
   PreferredTask,
   ReinstatedService,
   RippleMove,
@@ -41,8 +42,18 @@ export function droppedEdits(
 }
 
 /** One sentence per outcome — the *reason* half of an `EditExplanation`. The edit's own
- *  area/clock/mower is rendered by the caller alongside this, not repeated here. */
-export function explanationSentence(edit: EditExplanation): string {
+ *  area/clock/mower is rendered by the caller alongside this, not repeated here.
+ *
+ *  `level` is the stability setting the *re-solve* ran at (`PreferenceReport.level`), and
+ *  only the `not_yet_found` wording depends on it. "The search had not found it yet" is a
+ *  claim about the search, and it rests on preferences outranking every service-quality
+ *  level — true at `top`, the default and the only setting outside expert mode. Below that
+ *  the optimiser may trade the edit for plan quality at a *proven* optimum, so blaming the
+ *  search would be false; `null` (heuristic mode) has no preference objective at all. */
+export function explanationSentence(
+  edit: EditExplanation,
+  level?: PreferenceLevel | null,
+): string {
   switch (edit.outcome) {
     case "blocked_statically":
     case "conflicts_with":
@@ -53,8 +64,11 @@ export function explanationSentence(edit: EditExplanation): string {
       return "no schedule could ever place this — a rule of the scenario rules it out on " +
         "its own (an unavailable hour, or no mower able to reach it)";
     case "not_yet_found":
-      return "a schedule keeping this alongside everything else you kept does exist — the " +
-        "search had not found it yet";
+      return level === undefined || level === "top"
+        ? "a schedule keeping this alongside everything else you kept does exist — the " +
+          "search had not found it yet"
+        : "a schedule keeping this alongside everything else you kept does exist — at this " +
+          "stability setting the solver may trade an edit away for a better plan";
     case "not_determined":
       return "ran out of time working this out before reaching an answer";
   }
@@ -74,11 +88,32 @@ export function minimalCaveat(edit: EditExplanation): string | null {
   return "not proven to be the smallest possible conflict — the explain budget ran out first";
 }
 
+/** The area name is *not* repeated here — `ExplanationPanel` already prefixes the row.
+ *
+ *  `submitted_count` is the plan *before* this re-solve — the payload plus whatever was
+ *  released from the area (2026-09-24 amendment) — never "what you asked for": a released
+ *  service is the opposite of asking, and a sentence that named it that way is exactly
+ *  what a released service reappearing must not say (owner report, pre-workshop review).
+ *  Never "back in the plan" either — that implies something was removed and came back,
+ *  which is not true of a genuinely new addition, and the wording no longer distinguishes
+ *  the two on the frontend's side (the backend already does, via `released`).
+ *
+ *  Only `forced_by_minimum` licenses naming the minimum as the cause. The backend raises
+ *  this row on a plain count mismatch, and the commonest case — releasing a service from
+ *  an area already at its minimum — is precisely the one the minimum did *not* force; the
+ *  extra service is the max-interval objective's doing. Saying "needs at least N" there
+ *  asserts a cause nobody checked. */
 export function reinstatedSentence(r: ReinstatedService): string {
   const added = r.actual_count - r.submitted_count;
+  const services = added === 1 ? "service" : "services";
+  if (!r.forced_by_minimum) {
+    return `the solver added ${added} ${services} that ${added === 1 ? "was" : "were"} not ` +
+      `in the plan before — the minimum was already met, so this is most likely to shorten ` +
+      `the gaps between services`;
+  }
   const noun = r.min_services === 1 ? "service" : "services";
-  return `${r.area} needs at least ${r.min_services} ${noun} this week — you asked for ` +
-    `${r.submitted_count}, so the solver added ${added} back`;
+  return `needs at least ${r.min_services} ${noun} this week — the plan had ` +
+    `${r.submitted_count}, so the solver added ${added}`;
 }
 
 export function rippleSentence(r: RippleMove): string {

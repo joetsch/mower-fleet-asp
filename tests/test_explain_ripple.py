@@ -63,3 +63,30 @@ def test_added_origin_counts_as_an_edit_for_attribution():
     moves = ripple_moves([frozen, added], schedule)
     assert len(moves) == 1
     assert moves[0].shares_mower_with == "C"
+
+
+def test_a_kept_edit_is_attributed_by_the_mower_it_actually_got():
+    """The hint names a mower, so it must be the one in the plan.
+
+    An edit whose hour was kept but whose mower was not is a normal weak@top outcome. The
+    map from mower to "your edit to X" was built from the *requested* mower, so a moved
+    service could be told it shares a mower with an edit that is not on that mower — and
+    the edit it really shares one with went unattributed.
+    """
+    schedule = Schedule(
+        tasks=[
+            # The edit to B asked for M1 and got M2.
+            ScheduledTask(area="B", task=1, mower="M2", start=10, end=14),
+        ],
+        violations=[],
+        cost=[],
+    )
+    preferences = [
+        PreferredTask(area="B", start=10, mower="M1", origin="edited"),
+        # A was on M2 and has moved; it shares a mower with where the edit actually landed.
+        PreferredTask(area="A", start=30, mower="M2", origin="frozen"),
+    ]
+
+    (move,) = ripple_moves(preferences, schedule)
+    assert move.area == "A"
+    assert move.shares_mower_with == "B", "attributed by the requested mower, not the real one"

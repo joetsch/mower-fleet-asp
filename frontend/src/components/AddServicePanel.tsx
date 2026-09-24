@@ -82,6 +82,7 @@ export function AddServicePanel({
             label="start hour for the new service"
             commitOnChange
             disabled={disabled}
+            max={scenario.horizon_hours - 1}
           />
           <button
             type="button"

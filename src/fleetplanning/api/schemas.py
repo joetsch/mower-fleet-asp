@@ -126,6 +126,16 @@ class ExplainRequest(BaseModel):
         description="The edits submitted to the solve being explained."
     )
     schedule: Schedule = Field(description="The schedule that solve returned.")
+    released: dict[str, int] = Field(
+        default_factory=dict,
+        description="Area name -> count of tasks released from it before this re-solve "
+        "(out of the payload, ADR-0035 decision 3). Never derivable from `preferences` "
+        "alone — a release is the absence of a task, not a value in it — so the frontend, "
+        "the only side that knows what was released, sends it explicitly. Lets the "
+        "`reinstated` explanation compare against the plan before the re-solve rather than "
+        "the payload alone, so a released service the area's own minimum brings back is "
+        "not reported (it is exactly what release means may happen).",
+    )
     budget_s: float | None = Field(
         default=None,
         gt=0,

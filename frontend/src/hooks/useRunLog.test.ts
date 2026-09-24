@@ -59,11 +59,31 @@ describe("useRunLog", () => {
     act(() => result.current.begin({ hours: 24, nowLabel: "Tue 13:00", executedThisRoll: [] }));
 
     expect(result.current.pending).toBe(true);
-    expect(result.current.rolls).toEqual([{ hours: 24, nowLabel: "Tue 13:00", outcome: null }]);
+    expect(result.current.rolls).toEqual([
+      { hours: 24, nowLabel: "Tue 13:00", outcome: null, failed: false },
+    ]);
 
     act(() => result.current.settle(outcome));
     expect(result.current.pending).toBe(false);
     expect(result.current.rolls[0].outcome).toEqual(outcome);
+  });
+
+  // A roll's re-solve can end with no plan of its own (stopped, or failed). The entry must
+  // stop being pending without borrowing figures from whatever plan is on screen — which,
+  // after a stop, is the one from before the roll.
+  it("marks a roll as having produced no plan, and stops pending", () => {
+    const { result } = renderHook(() => useRunLog());
+    act(() => result.current.begin({ hours: 24, nowLabel: "Tue 13:00", executedThisRoll: [] }));
+    expect(result.current.pending).toBe(true);
+
+    act(() => result.current.abandon());
+    expect(result.current.pending).toBe(false);
+    expect(result.current.rolls[0]).toEqual({
+      hours: 24,
+      nowLabel: "Tue 13:00",
+      outcome: null,
+      failed: true,
+    });
   });
 
   it("steps back one roll on undo, executed track and entries together", () => {
@@ -76,7 +96,9 @@ describe("useRunLog", () => {
     expect(result.current.executed).toHaveLength(2);
 
     act(() => result.current.undo());
-    expect(result.current.rolls).toEqual([{ hours: 24, nowLabel: "Tue", outcome }]);
+    expect(result.current.rolls).toEqual([
+      { hours: 24, nowLabel: "Tue", outcome, failed: false },
+    ]);
     // back to the first step's state: A1 started at 4, rebased once by -24
     expect(result.current.executed.map((t) => [t.area, t.start])).toEqual([["A1", -20]]);
   });

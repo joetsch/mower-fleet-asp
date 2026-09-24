@@ -60,6 +60,7 @@ from clingcon import ClingconTheory
 from clingo.ast import ProgramBuilder, parse_string
 from pydantic import BaseModel
 
+from fleetplanning.explain import plan_consistent_kept
 from fleetplanning.generator.runinfo import tool_versions as _tool_versions
 from fleetplanning.model import PreferredTask, Scenario, ScheduledTask, SolvePreferences
 from fleetplanning.scenarios import registry
@@ -151,7 +152,11 @@ def static_conflict(
 
     edit_row = _row(edit.area, edit.mower, edit.start)
     if edit_row is None:
-        return "no legal completion row for this (area, mower, start)"
+        # No placement at all, so no interval to compare and nothing to conflict with:
+        # fall through and let the counterfactual call it individually impossible, exactly
+        # as `explain/static.py` now does. (Unreachable in this study — perturb-k samples
+        # from `legal_starts` — but the two copies must not drift again.)
+        return None
     edit_end = edit_row.completion
 
     for other in kept:
@@ -587,7 +592,12 @@ def explain_cell(
     rows = build_completion_table(scenario)
     preferences = cell.preferences
     kept_starts = {(t.area, t.start) for t in cell.replan_tasks}
-    kept = [p for p in preferences.tasks if (p.area, p.start) in kept_starts]
+    # As the *plan* realises them, not as they were requested — see the shared helper.
+    # Assuming a kept preference's requested mower when the solver honoured only its hour
+    # can make the assumption set unsatisfiable on its own, at which point every dropped
+    # edit "conflicts" with it and minimisation returns a contradiction among the kept
+    # services. That is what produced this study's conflict numbers before 2026-09-23.
+    kept = plan_consistent_kept(preferences.tasks, cell.replan_tasks)
     dropped_edited = [
         p
         for p in preferences.tasks
@@ -598,7 +608,8 @@ def explain_cell(
 
     records: list[ExplainRecord] = []
     started = time.perf_counter()
-    g = ground_for_explanation(scenario, rows, preferences, opt_mode)
+    grounding_payload = preferences.model_copy(update={"tasks": [*kept, *dropped_edited]})
+    g = ground_for_explanation(scenario, rows, grounding_payload, opt_mode)
     for edit in dropped_edited:
         tier1 = static_conflict(edit, kept, rows)
         if tier1 is not None:

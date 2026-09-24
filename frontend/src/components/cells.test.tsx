@@ -39,4 +39,29 @@ describe("HourCell", () => {
     await user.clear(screen.getByLabelText("h"));
     expect(onCommit).toHaveBeenCalledWith(0);
   });
+
+  // Dragging a bar is bounded by `ganttScale.clampStart`; typing an hour was not bounded
+  // at all. A negative or fractional hour fails `PreferredTask.start` (int, ge=0) and
+  // surfaces as a raw 422 in the error banner, and an hour past the end of the week is
+  // reported with a no-go-window reason that does not fit it.
+  it("clamps a typed hour into the week and keeps it whole", async () => {
+    const user = userEvent.setup();
+    const onCommit = vi.fn();
+    render(
+      <HourCell value={5} onCommit={onCommit} label="h" commitOnChange max={167} />,
+    );
+    const input = screen.getByLabelText("h");
+
+    await user.clear(input);
+    await user.type(input, "-3");
+    expect(onCommit).toHaveBeenLastCalledWith(0);
+
+    await user.clear(input);
+    await user.type(input, "999");
+    expect(onCommit).toHaveBeenLastCalledWith(167);
+
+    await user.clear(input);
+    await user.type(input, "4.5");
+    expect(onCommit).toHaveBeenLastCalledWith(4);
+  });
 });

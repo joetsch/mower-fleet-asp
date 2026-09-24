@@ -460,6 +460,14 @@
             "$ref": "#/components/schemas/SolvePreferences",
             "description": "The edits submitted to the solve being explained."
           },
+          "released": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "description": "Area name -> count of tasks released from it before this re-solve (out of the payload, ADR-0035 decision 3). Never derivable from `preferences` alone \u2014 a release is the absence of a task, not a value in it \u2014 so the frontend, the only side that knows what was released, sends it explicitly. Lets the `reinstated` explanation compare against the plan before the re-solve rather than the payload alone, so a released service the area's own minimum brings back is not reported (it is exactly what release means may happen).",
+            "title": "Released",
+            "type": "object"
+          },
           "scenario": {
             "anyOf": [
               {
@@ -740,7 +748,7 @@
         "type": "object"
       },
       "ReinstatedService": {
-        "description": "An area whose schedule carries more tasks than the user's submitted plan named for\nit \u2014 almost always a released task the area's own service-count minimum brought back.\nInvisible to the kept/dropped count (there is no negative preference, ADR-0035\ndecision 3: release means \"out of the payload\", not \"never do this\"), so this is the\none explanation class that needs no dropped edit to trigger.",
+        "description": "An area whose schedule carries more tasks than its *baseline* named for it \u2014\nservices the solver added beyond what the plan before the re-solve already had.\nInvisible to the kept/dropped count (there is no negative preference, ADR-0035\ndecision 3: release means \"out of the payload\", not \"never do this\"), so this is the\none explanation class that needs no dropped edit to trigger.\n\nA released service brought straight back by the area's own service-count minimum is\n*not* reported \u2014 that is exactly what release means may happen, not a mismatch to\nexplain (amendment, 2026-09-24: ``submitted_count`` folds in whatever was released from\nthe area, so the baseline is the plan before the re-solve, not the payload alone).",
         "properties": {
           "actual_count": {
             "title": "Actual Count",
@@ -750,11 +758,18 @@
             "title": "Area",
             "type": "string"
           },
+          "forced_by_minimum": {
+            "default": false,
+            "description": "Whether the area's service-count minimum actually required the extra service (``submitted_count < min_services``). When False the minimum was already met and the solver added it for its own reasons \u2014 the max-interval objective, typically. The UI must not name the minimum as the cause in that case.",
+            "title": "Forced By Minimum",
+            "type": "boolean"
+          },
           "min_services": {
             "title": "Min Services",
             "type": "integer"
           },
           "submitted_count": {
+            "description": "The plan before this re-solve: the payload's count for this area plus whatever was released from it. Not literally 'submitted' any more \u2014 kept the name since the frontend and ADR-0048 already read it that way.",
             "title": "Submitted Count",
             "type": "integer"
           }

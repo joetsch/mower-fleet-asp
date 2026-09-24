@@ -93,6 +93,17 @@ describe("explainSolve", () => {
     expect(body().budget_s).toBe(15);
   });
 
+  it("omits released when empty or absent, includes it when given", async () => {
+    await explainSolve({ scenarioId: "toy-course" }, preferences, schedule);
+    expect(body()).not.toHaveProperty("released");
+
+    await explainSolve({ scenarioId: "toy-course" }, preferences, schedule, undefined, {});
+    expect(body()).not.toHaveProperty("released");
+
+    await explainSolve({ scenarioId: "toy-course" }, preferences, schedule, undefined, { A1: 2 });
+    expect(body().released).toEqual({ A1: 2 });
+  });
+
   it("resolves to the report, not the wrapper envelope", async () => {
     const report = await explainSolve({ scenarioId: "toy-course" }, preferences, schedule);
     expect(report).toEqual({ edits: [], reinstated: [], ripple: [], budget_s: 8, budget_exhausted: false });

@@ -44,3 +44,18 @@ def test_service_bounds_honour_an_explicit_override():
     # the other areas still come from the derivation
     other = scenario.areas[1].name
     assert derived.service_bounds(edited)[other] == derived.service_bounds(scenario)[other]
+
+
+def test_explicit_max_alone_below_the_derived_minimum_wins():
+    # "Drop a service" (lib/scenarioEdits.ts's dropOneService) sets only max_services, one
+    # below the plan's current count. If the derivation's own minimum is higher, an explicit
+    # cap must still win -- otherwise the dropped service silently comes back (owner report,
+    # 2026-09-24: "Drop to 1" on an area derived at (2, 4) produced (2, 2), not (1, 1)).
+    scenario = toy_course()
+    target = scenario.areas[0].name
+    derived_lo, _ = derived.service_bounds(scenario)[target]
+    assert derived_lo >= 2, "fixture assumption: this area's derived minimum is at least 2"
+    data = scenario.model_dump()
+    data["areas"][0]["max_services"] = 1
+    edited = type(scenario).model_validate(data)
+    assert derived.service_bounds(edited)[target] == (1, 1)

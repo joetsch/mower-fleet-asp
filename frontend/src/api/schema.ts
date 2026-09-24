@@ -509,6 +509,13 @@ export interface components {
             budget_s?: number | null;
             /** @description The edits submitted to the solve being explained. */
             preferences: components["schemas"]["SolvePreferences"];
+            /**
+             * Released
+             * @description Area name -> count of tasks released from it before this re-solve (out of the payload, ADR-0035 decision 3). Never derivable from `preferences` alone — a release is the absence of a task, not a value in it — so the frontend, the only side that knows what was released, sends it explicitly. Lets the `reinstated` explanation compare against the plan before the re-solve rather than the payload alone, so a released service the area's own minimum brings back is not reported (it is exactly what release means may happen).
+             */
+            released?: {
+                [key: string]: number;
+            };
             /** @description A full problem instance. */
             scenario?: components["schemas"]["Scenario"] | null;
             /**
@@ -662,20 +669,34 @@ export interface components {
         };
         /**
          * ReinstatedService
-         * @description An area whose schedule carries more tasks than the user's submitted plan named for
-         *     it — almost always a released task the area's own service-count minimum brought back.
+         * @description An area whose schedule carries more tasks than its *baseline* named for it —
+         *     services the solver added beyond what the plan before the re-solve already had.
          *     Invisible to the kept/dropped count (there is no negative preference, ADR-0035
          *     decision 3: release means "out of the payload", not "never do this"), so this is the
          *     one explanation class that needs no dropped edit to trigger.
+         *
+         *     A released service brought straight back by the area's own service-count minimum is
+         *     *not* reported — that is exactly what release means may happen, not a mismatch to
+         *     explain (amendment, 2026-09-24: ``submitted_count`` folds in whatever was released from
+         *     the area, so the baseline is the plan before the re-solve, not the payload alone).
          */
         ReinstatedService: {
             /** Actual Count */
             actual_count: number;
             /** Area */
             area: string;
+            /**
+             * Forced By Minimum
+             * @description Whether the area's service-count minimum actually required the extra service (``submitted_count < min_services``). When False the minimum was already met and the solver added it for its own reasons — the max-interval objective, typically. The UI must not name the minimum as the cause in that case.
+             * @default false
+             */
+            forced_by_minimum: boolean;
             /** Min Services */
             min_services: number;
-            /** Submitted Count */
+            /**
+             * Submitted Count
+             * @description The plan before this re-solve: the payload's count for this area plus whatever was released from it. Not literally 'submitted' any more — kept the name since the frontend and ADR-0048 already read it that way.
+             */
             submitted_count: number;
         };
         /**

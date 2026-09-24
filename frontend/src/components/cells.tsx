@@ -95,6 +95,8 @@ export function HourCell({
   disabled,
   label,
   commitOnChange = false,
+  min,
+  max,
 }: {
   value: number;
   onCommit: (hour: number) => void;
@@ -110,7 +112,20 @@ export function HourCell({
    * fresh task uids). Without it a user who nudged the number spinner saw nothing happen
    * until they also pressed Enter. */
   commitOnChange?: boolean;
+  /** Bounds for a typed hour. Dragging a bar is already clamped by
+   *  `lib/ganttScale.ts::clampStart`; typing was not bounded at all, so a negative or
+   *  fractional hour reached `PreferredTask.start` (int, ge=0) and surfaced as a raw 422,
+   *  and an hour past the end of the week came back with a no-go-window reason that does
+   *  not fit it. Defaults keep the field usable where no horizon is in scope. */
+  min?: number;
+  max?: number;
 }) {
+  // Whole hours only, and inside the bounds: the committed value and what the backend
+  // will accept must not disagree.
+  const commit = (raw: number) => {
+    const whole = Number.isFinite(raw) ? Math.trunc(raw) : (min ?? 0);
+    onCommit(Math.min(max ?? Number.MAX_SAFE_INTEGER, Math.max(min ?? 0, whole)));
+  };
   if (commitOnChange) {
     return (
       <span className="cell-num">
@@ -119,12 +134,15 @@ export function HourCell({
           className={`cell-input cell-input-narrow${error ? " cell-input-invalid" : ""}`}
           defaultValue={value}
           disabled={disabled}
+          min={min}
+          max={max}
+          step={1}
           aria-label={label}
           aria-invalid={error ? true : undefined}
-          // Empty commits 0 (a valid start-of-week hour) rather than being skipped, so the
-          // field and the committed value never disagree — clearing then acting on it
-          // can't submit a stale value (code-review follow-up).
-          onChange={(e) => onCommit(e.target.value === "" ? 0 : Number(e.target.value))}
+          // Empty commits the lower bound (a valid start-of-week hour) rather than being
+          // skipped, so the field and the committed value never disagree — clearing then
+          // acting on it can't submit a stale value (code-review follow-up).
+          onChange={(e) => commit(e.target.value === "" ? (min ?? 0) : Number(e.target.value))}
         />
         {error && <span className="field-error">{error}</span>}
       </span>
@@ -138,11 +156,14 @@ export function HourCell({
         className={`cell-input cell-input-narrow${error ? " cell-input-invalid" : ""}`}
         defaultValue={value}
         disabled={disabled}
+        min={min}
+        max={max}
+        step={1}
         aria-label={label}
         aria-invalid={error ? true : undefined}
         onBlur={(e) => {
-          const v = e.target.value === "" ? 0 : Number(e.target.value);
-          if (v !== value) onCommit(v);
+          const v = e.target.value === "" ? (min ?? 0) : Number(e.target.value);
+          if (v !== value) commit(v);
         }}
         onKeyDown={(e) => {
           if (e.key === "Enter") (e.target as HTMLInputElement).blur();

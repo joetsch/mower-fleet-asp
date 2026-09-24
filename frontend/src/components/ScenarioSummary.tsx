@@ -12,7 +12,7 @@ import { FleetTab } from "./scenario/FleetTab";
 import { HistoryTab } from "./scenario/HistoryTab";
 import "./ScenarioSummary.css";
 
-type Tab = "areas" | "fleet" | "availability" | "history";
+export type Tab = "areas" | "fleet" | "availability" | "history";
 
 function loadWord(lf: number): string {
   if (lf < 0.85) return "comfortable";
@@ -40,6 +40,12 @@ interface Props {
   /** Called just before a structural delete (ADR-0027) with the scenario as it was and a
    * label like `area "Green 2"`, so `App` can offer an Undo. */
   onRowRemoved?: (before: Scenario, label: string) => void;
+  /** Which tab is open, or none (UI review, 2026-09-24 — the four tabs cluttered the
+   *  screen when nobody had asked to see one). Controlled by `App` rather than local state
+   *  so "Edit scenario" / "New scenario…" / "Drop a service" can open Areas on the caller's
+   *  behalf. */
+  tab: Tab | null;
+  onTabChange: (t: Tab | null) => void;
 }
 
 export function ScenarioSummary({
@@ -52,6 +58,8 @@ export function ScenarioSummary({
   solving = false,
   onChange,
   onRowRemoved,
+  tab,
+  onTabChange,
 }: Props) {
   const bounds = derived.bounds;
   const edit = (next: Scenario) => onChange?.(next);
@@ -60,7 +68,6 @@ export function ScenarioSummary({
     onRowRemoved?.(scenario, label);
     onChange?.(next);
   };
-  const [tab, setTab] = useState<Tab>("areas");
   const [tip, setTip] = useState<Tip>(null);
 
   // Sorted for the read view; original order while editing so a rename or a hole change
@@ -181,7 +188,14 @@ export function ScenarioSummary({
 
       <div className="tab-bar">
         {(["areas", "fleet", "availability", "history"] as Tab[]).map((t) => (
-          <button key={t} className={tab === t ? "active" : ""} onClick={() => setTab(t)}>
+          <button
+            key={t}
+            className={tab === t ? "active" : ""}
+            aria-pressed={tab === t}
+            // Clicking the open tab closes it — collapsed is a real state, not just the
+            // absence of a selection.
+            onClick={() => onTabChange(tab === t ? null : t)}
+          >
             {t === "availability" ? "Availability" : t[0].toUpperCase() + t.slice(1)}
           </button>
         ))}

@@ -12,7 +12,7 @@ import { AddServicePanel } from "./components/AddServicePanel";
 import { ExplanationPanel } from "./components/ExplanationPanel";
 import { GanttSchedule } from "./components/GanttSchedule";
 import { LoadScenarioMenu } from "./components/LoadScenarioMenu";
-import { ScenarioSummary } from "./components/ScenarioSummary";
+import { type Tab as ScenarioTab, ScenarioSummary } from "./components/ScenarioSummary";
 import { ScheduleTable } from "./components/ScheduleTable";
 import { SolveProgress } from "./components/SolveProgress";
 import { useScenarioDraft } from "./hooks/useScenarioDraft";
@@ -40,11 +40,18 @@ import {
   type StabilitySetting,
   agreementSentence,
   isInPayload,
+  optimumContext,
   preferencesFor,
+  releasedCounts,
   toPreferences,
 } from "./lib/schedulePreferences";
 import { droppedEdits } from "./lib/explanation";
-import type { ExplanationReport, PreferenceReport, ScenarioBundle } from "./types";
+import type {
+  ExplanationReport,
+  PreferenceReport,
+  ScenarioBundle,
+  SolveResult,
+} from "./types";
 import "./App.css";
 
 type Theme = "system" | "light" | "dark";
@@ -114,6 +121,11 @@ export default function App() {
   const [theme, setTheme] = useTheme();
   const [expert, setExpert] = useExpertMode();
   const [view, setView] = useState<View>("chart");
+  // Which scenario tab is open, or none (UI review, 2026-09-24 — the four tabs cluttered
+  // the screen when nobody had asked to see one). Lifted out of ScenarioSummary so
+  // "Edit scenario" / "New scenario…" / "Drop a service" can open Areas on the user's
+  // behalf, rather than leaving them to hunt for the tab bar themselves.
+  const [scenarioTab, setScenarioTab] = useState<ScenarioTab | null>(null);
   const [timeLimit, setTimeLimit] = useState(20);
   // How far a "Move forward" step advances "now" (ADR-0042). Default 24 h — the
   // production loop's default cadence. Not persisted, like `timeLimit`.
@@ -135,6 +147,9 @@ export default function App() {
   // backend's own default", never sent as a literal value.
   const [explainBudgetChoice, setExplainBudgetChoice] = useState<number | undefined>(undefined);
   const [error, setError] = useState<string | null>(null);
+  // The plan a Move forward started from, so its run-log row can tell a plan produced by
+  // this roll's re-solve from the one that was already on screen (ADR-0042 follow-up).
+  const rollBaseline = useRef<SolveResult | null>(null);
   // The whole anytime-solve machine (ADR-0022) — result, solving, the poll timer and the
   // job's identity — lives in its own hook, so every caller that has to abandon a solve
   // calls one `discardSolve()` instead of open-coding the reset. Destructured so the
@@ -184,9 +199,17 @@ export default function App() {
   // When a Move-forward step's re-solve settles, fill in its run-log entry (ADR-0042).
   // The solve runs asynchronously (ADR-0022); `pending` is true only between `begin`
   // (in `moveForward`) and this effect firing once `solving` drops with a schedule.
-  const { pending: rollPending, settle: settleRoll } = runLog;
+  const { pending: rollPending, settle: settleRoll, abandon: abandonRoll } = runLog;
   useEffect(() => {
-    if (solving || !rollPending || !result?.schedule) return;
+    if (solving || !rollPending) return;
+    // Only a plan this roll's own re-solve produced may fill the row. After a stop or a
+    // failure `result` still holds the plan from *before* the roll, and settling from it
+    // reported that week's services, kept/carried, quality and solve time as if they were
+    // this step's. Identity is the test: `rollBaseline` is the result the roll started on.
+    if (!result?.schedule || result === rollBaseline.current) {
+      abandonRoll();
+      return;
+    }
     const frozen = result.preferences?.agreement.by_origin?.frozen;
     settleRoll({
       services: result.schedule.tasks.length,
@@ -199,7 +222,7 @@ export default function App() {
       // was carried by the heuristic mechanism, which prices nothing (ADR-0032).
       setting: result.preferences ? (result.preferences.level ?? "heuristic") : null,
     });
-  }, [solving, result, rollPending, settleRoll]);
+  }, [solving, result, rollPending, settleRoll, abandonRoll]);
   // Everything the scenario editor works on (ADR-0024 / 0026 / 0027) — the draft, the
   // catalogue, the debounced derived figures, the Undo strip and the edit-mode toolbar
   // state. Ending a draft is one `resetDraftState()` rather than eight setters.
@@ -284,12 +307,21 @@ export default function App() {
     // The note describes an edit to the plan being replaced, so it does not survive the
     // replan it was warning about.
     setReleased(null);
+    // Re-solve is how editing *finishes* (ADR-0053). The payload is read from `planTasks`
+    // just below, so closing the editor here loses nothing — and it must close, because a
+    // solve rebuilds the working copy from every incumbent it polls, which would silently
+    // discard anything typed while it ran. Not the toggle's own handler: that discards.
+    setEditingSchedule(false);
+    setEditingTask(null);
     if (result) history.push({ result, scenario: null, planTasks });
     void runSolve(
       solveTarget(),
       timeLimit,
       expert ? clingoArgsTokens : undefined,
       cold ? NO_PREFERENCES : toPreferences(planTasks, stability),
+      // "Re-solve from scratch" ignores the plan on screen entirely, releases included —
+      // there is nothing for `POST /api/explain`'s `reinstated` check to compare against.
+      cold ? undefined : releasedCounts(planTasks),
     );
   };
 
@@ -313,6 +345,7 @@ export default function App() {
     const n = areaServiceCount(area);
     setReleased(null);
     editRequirements(workingScenario, bundle.scenario, (s) => dropOneService(s, area, n));
+    setScenarioTab("areas"); // so the changed bound is actually visible
     scenarioCardRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
@@ -348,6 +381,7 @@ export default function App() {
       // with them, so an un-re-solved edit the roll just carried is not lost on Undo.
       history.push({ result, scenario: workingScenario, planTasks });
       setReleased(null);
+      rollBaseline.current = result;
       // Record the step in the run log: the tasks now in the past join the cumulative
       // "executed" track, and a pending entry opens for this step's re-solve.
       runLog.begin({
@@ -402,6 +436,10 @@ export default function App() {
   // Whether any task would go into the next re-solve's payload — drives the toolbar's
   // "release all" / "keep all" toggle (ADR-0038).
   const anyKept = planTasks.some(isInPayload);
+  // What the "proven optimal" line may claim — see `optimumContext`.
+  const { constrained: constrainedOptimum, hasEdits: carriedEdits } = optimumContext(
+    result?.preferences ?? null,
+  );
   // Schedule edit mode is separate from *scenario* edit mode: one changes the plan, the
   // other changes the requirements the plan is computed from. Domain data, so both are
   // default-view controls, not expert-mode ones (ADR-0011).
@@ -433,6 +471,7 @@ export default function App() {
       const b = await fetchScenarioTemplate();
       showUnsaved(b);
       startNew(b.scenario);
+      setScenarioTab("areas"); // otherwise the editor opens with nothing visible to edit
     } catch (e) {
       setError((e as Error).message);
     }
@@ -443,14 +482,20 @@ export default function App() {
   // a native `window.confirm` — that blocks the event loop and looks nothing like the
   // rest of the app. `guardDiscard` wraps only the *user-initiated* transitions; the
   // post-delete `selectScenario` in `doDelete` must not ask, its draft is already gone.
-  const [pendingDiscard, setPendingDiscard] = useState<(() => void) | null>(null);
+  // What a confirmed discard would throw away — the strip words itself from this, so the
+  // callback below stays free of render-scoped values that would defeat its memoization.
+  const [pendingDiscard, setPendingDiscard] = useState<{
+    what: "scenario" | "plan";
+    run: () => void;
+  } | null>(null);
   const guardDiscard = useCallback(
     (run: () => void) => {
       // `isNew` counts as unsaved even before the first keystroke: a from-scratch draft has
       // no file behind it, so leaving it — to switch scenario or start another new one —
       // throws it away just as a dirty draft would.
-      if (dirty || isNew) setPendingDiscard(() => run);
-      else run();
+      if (dirty || isNew) {
+        setPendingDiscard({ what: "scenario", run });
+      } else run();
     },
     [dirty, isNew, setPendingDiscard],
   );
@@ -569,6 +614,7 @@ export default function App() {
             currentId={isNew ? "new (unsaved)" : scenarioId}
             onSelect={(id) => guardDiscard(() => selectScenario(id))}
             onNew={() => guardDiscard(doNewScenario)}
+            disabled={editingSchedule}
           />
           <Switch label="expert mode" on={expert} onChange={setExpert} />
           <label className="theme-toggle">
@@ -582,24 +628,20 @@ export default function App() {
         </div>
       </header>
 
-      {pendingDiscard && (
-        <div className="discard-row">
-          <span>Discard unsaved changes to “{workingScenario?.name}”?</span>
-          <button
-            type="button"
-            className="danger"
-            onClick={() => {
-              const run = pendingDiscard;
-              setPendingDiscard(null);
-              run();
-            }}
-          >
-            Discard
-          </button>
-          <button type="button" onClick={() => setPendingDiscard(null)}>
-            Keep editing
-          </button>
-        </div>
+      {/* Only the scenario-discard variant lives here. The plan-discard one is rendered
+          right beside the "edit schedule" toggle that raises it (UI review, 2026-09-24) —
+          this bar sits above the fold on a tall schedule, so a prompt about the toggle
+          three sections below went unseen (owner report). */}
+      {pendingDiscard?.what === "scenario" && (
+        <DiscardPrompt
+          text={`Discard unsaved changes to “${workingScenario?.name ?? "this scenario"}”?`}
+          onDiscard={() => {
+            const { run } = pendingDiscard;
+            setPendingDiscard(null);
+            run();
+          }}
+          onKeepEditing={() => setPendingDiscard(null)}
+        />
       )}
       {error && <div className="app-error">Error: {error}</div>}
       {!workingScenario && !error && (scenarios === null || scenarios.length > 0) && (
@@ -693,8 +735,12 @@ export default function App() {
                 )}
                 <button
                   type="button"
-                  onClick={() => (editing ? stopEditing() : startEditing(scenario))}
-                  disabled={solving || persisting}
+                  onClick={() => {
+                    if (editing) return stopEditing();
+                    startEditing(scenario);
+                    setScenarioTab("areas"); // otherwise editing opens with nothing visible
+                  }}
+                  disabled={solving || persisting || editingSchedule}
                 >
                   {editing ? "Done editing" : "Edit scenario"}
                 </button>
@@ -813,6 +859,8 @@ export default function App() {
               solving={solving}
               onChange={applyDraft}
               onRowRemoved={rowRemoved}
+              tab={scenarioTab}
+              onTabChange={setScenarioTab}
             />
           </section>
 
@@ -844,7 +892,7 @@ export default function App() {
                 <button
                   className="secondary"
                   onClick={undoReplan}
-                  disabled={solving}
+                  disabled={solving || editingSchedule}
                   title="Step back to the previous plan — and, after a Move forward, to the previous “now”."
                 >
                   Undo
@@ -852,7 +900,9 @@ export default function App() {
               )}
               {result && !solving && (
                 <span className="muted replan-hint">
-                  Re-solve keeps every task you have not released.
+                  {stability === "cold"
+                    ? "Re-solve will plan the week from scratch, ignoring the plan on screen."
+                    : "Re-solve asks the solver to keep every service you have not released."}
                 </span>
               )}
               <label>
@@ -897,7 +947,13 @@ export default function App() {
                   type="button"
                   className={`move-forward-key${rollPending ? " is-rolling" : ""}`}
                   onClick={() => void moveForward()}
-                  disabled={solving || fieldErrors.length > 0}
+                  // `editingSchedule` alone is not enough: Undo can restore a working copy
+                  // that still carries an un-re-solved edit while leaving the editor toggle
+                  // closed (owner report, 2026-09-24 — the modal rule in ADR-0053 only
+                  // reopens the editor via the toggle, not via Undo). `planEdited` is the
+                  // fact that actually matters — a roll must never execute a plan the
+                  // solver has not seen.
+                  disabled={solving || editingSchedule || planEdited || fieldErrors.length > 0}
                   aria-busy={rollPending || undefined}
                 >
                   <svg viewBox="0 0 24 16" aria-hidden="true" focusable="false">
@@ -1030,20 +1086,25 @@ export default function App() {
                   <Stat
                     label="proven optimal"
                     value={
-                      // A preference-bearing solve optimises the preference level *above*
-                      // every service-quality level (ADR-0034), so a proven optimum is the
-                      // best plan **that keeps the edits** — not the best plan. Saying
-                      // plain "yes" here would overclaim exactly the way ADR-0035's copy
-                      // rule forbids.
-                      result.optimal
-                        ? result.preferences
-                          ? "yes — best that keeps your edits"
-                          : "yes"
-                        : "no — best so far"
+                      // A weak-mode solve puts the preference level *above* every
+                      // service-quality level (ADR-0034), so a proven optimum is the best
+                      // plan **subject to that payload** — not the best plan outright.
+                      // But three things have to be true before the edits can be named:
+                      // the payload has to exist, it has to be weak mode (in heuristic
+                      // mode the objective is untouched, ADR-0032, so the optimum is the
+                      // plain one), and it has to contain an edit — a Move forward carries
+                      // the plan and no edits at all (ADR-0051).
+                      !result.optimal
+                        ? "no — best so far"
+                        : !constrainedOptimum
+                          ? "yes"
+                          : carriedEdits
+                            ? "yes — best that keeps your edits"
+                            : "yes — best that keeps this plan"
                     }
                     hint={
-                      result.optimal && result.preferences
-                        ? "Optimal within the plan you asked to keep — Re-solve from scratch may score better."
+                      result.optimal && constrainedOptimum
+                        ? `Optimal within the ${carriedEdits ? "edits" : "plan"} you asked to keep — Re-solve from scratch may score better.`
                         : undefined
                     }
                   />
@@ -1075,9 +1136,9 @@ export default function App() {
                           />
                           {unmetEdits !== null && (
                             <Stat
-                              label="unmet edits"
+                              label="unmet preference halves"
                               value={String(unmetEdits)}
-                              hint={`preference weak constraints left unsatisfied — the separate cost level the '${result.preferences?.level}' stability setting puts them at (pref_level=${result.preferences?.pref_level}, ADR-0034)`}
+                              hint={`preference weak constraints left unsatisfied — an hour and a mower count separately, and untouched services count too, so this is not a number of edits (pref_level=${result.preferences?.pref_level} at the '${result.preferences?.level}' setting, ADR-0034)`}
                             />
                           )}
                         </>
@@ -1129,17 +1190,37 @@ export default function App() {
                       label="edit schedule"
                       on={editingSchedule}
                       onChange={(on) => {
-                        setEditingSchedule(on);
-                        if (!on) {
+                        if (on) return setEditingSchedule(true);
+                        // Re-solve is the commit path (ADR-0053), so this is the only way
+                        // to lose plan edits — ask before it costs someone their work.
+                        const close = () => {
+                          setEditingSchedule(false);
                           resetPlanEdits();
                           setReleased(null);
                           setEditingTask(null);
-                        }
+                        };
+                        if (planEdited) {
+                          setPendingDiscard({ what: "plan", run: close });
+                        } else close();
                       }}
                       disabled={solving}
                     />
                   </div>
                 </div>
+
+                {/* Local to the toggle that raised it (UI review, 2026-09-24) — see the
+                    comment on the scenario-discard variant near the header. */}
+                {pendingDiscard?.what === "plan" && (
+                  <DiscardPrompt
+                    text="Discard your edits to the plan?"
+                    onDiscard={() => {
+                      const { run } = pendingDiscard;
+                      setPendingDiscard(null);
+                      run();
+                    }}
+                    onKeepEditing={() => setPendingDiscard(null)}
+                  />
+                )}
 
                 {released && (
                   <div className="undo-row">
@@ -1185,7 +1266,7 @@ export default function App() {
 
                 {planEdited && (
                   <p className="muted schedule-stale">
-                    Issues shown are from the last solved plan — re-solve to check the edited one.
+                    Issues are hidden while the plan is edited — re-solve to check the edited one.
                   </p>
                 )}
 
@@ -1283,7 +1364,10 @@ function PreferenceBanner({
   onExplainBudgetChange: (v: number | undefined) => void;
   onExplain: () => void;
 }) {
-  const sentence = agreementSentence(report);
+  // The "N of M preferences kept overall" clause is expert-only (owner report, 2026-09-24):
+  // it fires on every re-solve, edited or not, and a default-view user with no edits of
+  // their own has no way to place where the number comes from.
+  const sentence = agreementSentence(report, expert);
   const explainedKeys = new Set((explanation?.edits ?? []).map((e) => `${e.area}#${e.start}`));
   const dropped = report.dropped.filter((d) => !explainedKeys.has(`${d.area}#${d.start}`));
   if (!sentence && dropped.length === 0 && droppedCount === 0 && !explanation) return null;
@@ -1306,10 +1390,35 @@ function PreferenceBanner({
         report={explanation}
         startHour={startHour}
         expert={expert}
+        level={report.level ?? null}
         explainBudget={explainBudget}
         onExplainBudgetChange={onExplainBudgetChange}
         onExplain={onExplain}
       />
+    </div>
+  );
+}
+
+/** The "Discard …?" confirmation strip, shared by the scenario-discard and plan-discard
+ *  variants — same markup, rendered wherever the action it warns about lives (App.tsx). */
+function DiscardPrompt({
+  text,
+  onDiscard,
+  onKeepEditing,
+}: {
+  text: string;
+  onDiscard: () => void;
+  onKeepEditing: () => void;
+}) {
+  return (
+    <div className="discard-row">
+      <span>{text}</span>
+      <button type="button" className="danger" onClick={onDiscard}>
+        Discard
+      </button>
+      <button type="button" onClick={onKeepEditing}>
+        Keep editing
+      </button>
     </div>
   );
 }
@@ -1330,6 +1439,10 @@ function RunLogPanel({ rolls, expert }: { rolls: RollEntry[]; expert: boolean })
   if (rolls.length === 0) return null;
 
   const line = (r: RollEntry) => {
+    // The roll itself stands — "now" moved and the past was folded into history — so the
+    // row is kept and says what is missing, rather than borrowing the previous plan's
+    // figures, which is what it used to do.
+    if (r.failed) return `+${r.hours} h → ${r.nowLabel} · no plan — the re-solve did not finish`;
     if (!r.outcome) return `+${r.hours} h → ${r.nowLabel} · re-solving…`;
     const { services, carried, kept } = r.outcome;
     const keptPart =
@@ -1363,17 +1476,17 @@ function RunLogPanel({ rolls, expert }: { rolls: RollEntry[]; expert: boolean })
                 <tr key={i}>
                   <td>+{r.hours} h</td>
                   <td>{r.nowLabel}</td>
-                  <td>{r.outcome ? r.outcome.services : "…"}</td>
-                  <td>{r.outcome ? `${r.outcome.kept} / ${r.outcome.carried}` : "…"}</td>
+                  <td>{r.outcome ? r.outcome.services : r.failed ? "no plan" : "…"}</td>
+                  <td>{r.outcome ? `${r.outcome.kept} / ${r.outcome.carried}` : "—"}</td>
                   {/* Which arm this row is, so the columns beside it stay comparable
                       across a run where the setting changed. "cold" = nothing was
                       carried at all; "heuristic" is a carried plan priced at nothing. */}
-                  <td>{r.outcome ? (r.outcome.setting ?? "cold") : "…"}</td>
+                  <td>{r.outcome ? (r.outcome.setting ?? "cold") : "—"}</td>
                   <td>
-                    {r.outcome?.quality ? `[${r.outcome.quality.join(", ")}]` : "…"}
+                    {r.outcome?.quality ? `[${r.outcome.quality.join(", ")}]` : "—"}
                     {r.outcome && !r.outcome.optimal && " (best so far)"}
                   </td>
-                  <td>{r.outcome ? `${r.outcome.solveTimeS.toFixed(1)} s` : "…"}</td>
+                  <td>{r.outcome ? `${r.outcome.solveTimeS.toFixed(1)} s` : "—"}</td>
                 </tr>
               ))}
             </tbody>

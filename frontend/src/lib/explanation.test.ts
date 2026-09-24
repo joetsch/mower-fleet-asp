@@ -67,6 +67,23 @@ describe("explanationSentence", () => {
     const s = explanationSentence(edit({ outcome: "not_yet_found", conflicts: [] }));
     expect(s.toLowerCase()).toContain("had not found it yet");
   });
+
+  // "the search had not found it yet" rests on preferences outranking every service-quality
+  // level, which is only true at `top`. At the expert settings the optimiser may trade an
+  // edit away for plan quality at a *proven* optimum, so blaming the search is false — and
+  // in heuristic mode there is no preference objective at all.
+  it("does not blame the search when the setting lets quality outrank the edit", () => {
+    for (const level of ["high", "low", "avoid", "tiebreak"] as const) {
+      const s = explanationSentence(edit({ outcome: "not_yet_found", conflicts: [] }), level);
+      expect(s.toLowerCase(), level).not.toContain("had not found it yet");
+      expect(s.toLowerCase(), level).toContain("exist");
+    }
+  });
+
+  it("keeps the search wording at the default setting", () => {
+    const s = explanationSentence(edit({ outcome: "not_yet_found", conflicts: [] }), "top");
+    expect(s.toLowerCase()).toContain("had not found it yet");
+  });
 });
 
 describe("conflictText", () => {
@@ -114,18 +131,61 @@ describe("reinstatedSentence", () => {
     min_services: 2,
     submitted_count: 1,
     actual_count: 2,
+    forced_by_minimum: true,
     ...over,
   });
 
   it("names the minimum and how many the solver added back", () => {
     const s = reinstatedSentence(svc());
-    expect(s).toContain("Green 3");
     expect(s).toContain("2");
     expect(s.toLowerCase()).toContain("at least");
   });
 
   it("pluralises 'service' correctly at min_services = 1", () => {
     expect(reinstatedSentence(svc({ min_services: 1 }))).not.toMatch(/1 services\b/);
+  });
+
+  // The backend fires this row on a bare count mismatch; only `forced_by_minimum` says
+  // the floor actually bound. Naming the minimum otherwise asserts a cause nobody checked
+  // — and the common case (releasing a service from an area already at its minimum) is
+  // exactly the unforced one.
+  it("does not blame the minimum when the minimum was already met", () => {
+    const s = reinstatedSentence(
+      svc({ min_services: 2, submitted_count: 3, actual_count: 4, forced_by_minimum: false }),
+    );
+    expect(s.toLowerCase()).not.toContain("at least");
+    expect(s.toLowerCase()).not.toContain("needs");
+    expect(s).toContain("1");
+  });
+
+  // `ExplanationPanel` already prefixes the row with the area name.
+  it("does not repeat the area name the panel already prints", () => {
+    expect(reinstatedSentence(svc())).not.toContain("Green 3");
+  });
+
+  // Owner report, pre-workshop review 2026-09-24: `submitted_count` is now the plan
+  // *before* the re-solve (payload + released, ADR-0048 amendment), so it must never be
+  // worded as something the user asked for -- a released service is the opposite of that.
+  it("never says 'you asked for', in either variant", () => {
+    expect(reinstatedSentence(svc({ forced_by_minimum: true }))).not.toMatch(/asked for/);
+    expect(
+      reinstatedSentence(svc({ forced_by_minimum: false, submitted_count: 3, actual_count: 4 })),
+    ).not.toMatch(/asked for/);
+  });
+
+  it("says 'the plan had N' when the minimum forced it", () => {
+    const s = reinstatedSentence(svc({ forced_by_minimum: true, submitted_count: 4 }));
+    expect(s).toContain("the plan had 4");
+  });
+
+  // "back in the plan" implies a removal-then-return, which is not true of a genuinely
+  // new addition (an untouched area the user never released from at all).
+  it("never says 'back in the plan' for an unforced addition", () => {
+    const s = reinstatedSentence(
+      svc({ forced_by_minimum: false, submitted_count: 3, actual_count: 4 }),
+    );
+    expect(s).not.toMatch(/back in the plan/);
+    expect(s).toContain("not in the plan before");
   });
 });
 

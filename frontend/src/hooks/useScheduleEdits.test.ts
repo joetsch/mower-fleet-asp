@@ -61,6 +61,23 @@ describe("useScheduleEdits", () => {
     expect(result.current.dirty).toBe(false);
   });
 
+  it("drops a drag when the task is released, so a later 'keep' does not resurrect it", () => {
+    // Owner report, 2026-09-24: drag a bar, then release it. No preference is ever sent
+    // for a released task, so the drag was invisible to the solver either way -- but the
+    // task kept its dragged hour and `edited: true`. Clicking "keep" afterwards then
+    // resurrected the drag as if it had just been made.
+    const { result } = render();
+    act(() => result.current.moveTask("p0", 40));
+    expect(result.current.tasks[0]).toMatchObject({ start: 40, edited: true });
+
+    act(() => result.current.setPin("p0", "released"));
+    expect(result.current.tasks[0]).toMatchObject({ start: 2, end: 17, edited: false });
+
+    act(() => result.current.setPin("p0", "auto"));
+    expect(result.current.tasks[0]).toMatchObject({ start: 2, end: 17, edited: false });
+    expect(result.current.dirty).toBe(false);
+  });
+
   it("throws the whole working copy away on reset", () => {
     const { result } = render();
     act(() => result.current.moveTask("p0", 40));

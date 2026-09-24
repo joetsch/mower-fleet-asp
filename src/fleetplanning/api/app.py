@@ -269,7 +269,9 @@ def post_explain(request: ExplainRequest) -> ExplainResponse:
                 status_code=404, detail=f"unknown scenario {request.scenario_id!r}"
             ) from None
     kwargs = {} if request.budget_s is None else {"budget_s": request.budget_s}
-    report = explain_scenario(scenario, request.preferences, request.schedule, **kwargs)
+    report = explain_scenario(
+        scenario, request.preferences, request.schedule, released=request.released, **kwargs
+    )
     return ExplainResponse(report=report)
 
 

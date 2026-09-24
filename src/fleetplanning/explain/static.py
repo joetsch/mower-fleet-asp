@@ -53,7 +53,13 @@ def static_conflict(
         return None
     edit_row = _row(rows, edit.area, edit.mower, edit.start)
     if edit_row is None:
-        return StaticConflict(detail="no legal completion row for this (area, mower, start)")
+        # The edit has no placement at all, so there is no interval to compare and nothing
+        # it could "conflict" with. Tier 2 reaches the same conclusion unaided and says it
+        # properly: `individually_impossible` (ADR-0048's taxonomy). Answering here instead
+        # produced a `blocked_statically` with an empty conflict list, which the UI rendered
+        # as "conflicts with 0 kept tasks" *and* which suppressed the pre-solve row carrying
+        # the real reason. Fall through.
+        return None
     edit_end = edit_row.completion
 
     for other in kept:

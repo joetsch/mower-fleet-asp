@@ -45,14 +45,20 @@ export function weekdayAtMidnight(midnightOffset: number, horizonStartHour: numb
   return DAYS_SHORT[dayIndex];
 }
 
+/** The structural cap on a colorblind-safe categorical palette (dataviz skill) — a 9th
+ *  hue is never invented, so slots repeat past this count instead. */
+const MOWER_COLOR_SLOTS = 8;
+
 /**
- * Assign each mower a categorical colour slot in a fixed order (never cycled).
- * More than six mowers would need folding into "Other" — not a Phase 1 concern.
+ * Assign each mower a categorical colour slot in a fixed order. Mower 9+ repeats a
+ * slot (`(i % 8) + 1`) rather than folding into "Other" — the mower name is always
+ * shown alongside the colour (hover text, legend), so a repeat is a scan aid, not the
+ * only identifier.
  */
 export function mowerColors(scenario: Scenario): Map<string, string> {
   const names = [...scenario.mowers].map((m) => m.name).sort();
   const map = new Map<string, string>();
-  names.forEach((name, i) => map.set(name, `var(--series-${Math.min(i + 1, 6)})`));
+  names.forEach((name, i) => map.set(name, `var(--series-${(i % MOWER_COLOR_SLOTS) + 1})`));
   return map;
 }
 

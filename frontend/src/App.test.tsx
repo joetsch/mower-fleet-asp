@@ -1,4 +1,4 @@
-import { fireEvent, render, screen, waitFor, within } from "@testing-library/react";
+import { act, fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -6,6 +6,7 @@ import App from "./App";
 import * as client from "./api/client";
 import { makeCatalog, makeRollResponse, makeScenario, makeSolveResult } from "./lib/fixtures";
 import type {
+  ExplanationReport,
   PreferenceLevel,
   Scenario,
   ScenarioBundle,
@@ -714,6 +715,48 @@ describe("availability overlay on the Gantt", () => {
   });
 });
 
+describe("scenario tabs (UI review, 2026-09-24)", () => {
+  // Owner report: one of Areas / Fleet / Availability / History was always visible,
+  // cluttering the screen even when nobody had asked to see one.
+  it("starts with every tab collapsed, and toggles on a repeat click", async () => {
+    const user = userEvent.setup();
+    render(<App />);
+    await screen.findByRole("button", { name: "Edit scenario" });
+
+    expect(screen.getByRole("button", { name: "Areas" })).toHaveAttribute(
+      "aria-pressed",
+      "false",
+    );
+    expect(screen.queryByText("High")).not.toBeInTheDocument(); // A1's priority word
+
+    await user.click(screen.getByRole("button", { name: "Areas" }));
+    expect(screen.getByRole("button", { name: "Areas" })).toHaveAttribute(
+      "aria-pressed",
+      "true",
+    );
+    expect(screen.getByText("High")).toBeInTheDocument();
+
+    await user.click(screen.getByRole("button", { name: "Areas" }));
+    expect(screen.getByRole("button", { name: "Areas" })).toHaveAttribute(
+      "aria-pressed",
+      "false",
+    );
+    expect(screen.queryByText("High")).not.toBeInTheDocument();
+  });
+
+  it("Edit scenario opens the Areas tab, even collapsed to start", async () => {
+    const user = userEvent.setup();
+    render(<App />);
+    await user.click(await screen.findByRole("button", { name: "Edit scenario" }));
+
+    expect(screen.getByRole("button", { name: "Areas" })).toHaveAttribute(
+      "aria-pressed",
+      "true",
+    );
+    expect(screen.getByDisplayValue("A1")).toBeInTheDocument();
+  });
+});
+
 describe("per-row Undo", () => {
   it("restores a removed area and is sticky through a field edit", async () => {
     const user = userEvent.setup();
@@ -1037,6 +1080,33 @@ describe("moving time horizon (ADR-0042)", () => {
     expect(item).toHaveTextContent(/carried tasks kept/);
   });
 
+  // A roll's re-solve can end without producing a plan — stopped, or failed. The settle
+  // effect only checked "not solving, and a schedule exists", and after a stop `result` is
+  // still the *pre-roll* plan, so the row was filled in with the previous solve's figures:
+  // services, kept/carried, quality and solve time all describing a plan from before the
+  // roll. The row must say no plan came back instead.
+  it("does not fill a roll's run-log row with the previous solve's figures", async () => {
+    const user = userEvent.setup();
+    render(<App />);
+    await screen.findByRole("button", { name: "Edit scenario" });
+    await solveToCompletion(user); // this plan has 1 service and settles fine
+
+    // Roll, but let the re-solve hang, then stop it — no new plan is ever produced.
+    vi.mocked(client.advanceScenario).mockResolvedValue(
+      makeRollResponse(derivedFor(makeScenario())),
+    );
+    vi.mocked(client.startSolve).mockResolvedValue({ job_id: "roll1" });
+    vi.mocked(client.pollSolve).mockResolvedValue({ job_id: "roll1", done: false, result: null });
+    await user.click(screen.getByRole("button", { name: "Move forward" }));
+    await user.click(await screen.findByRole("button", { name: "Stop solving" }));
+
+    const item = await screen.findByRole("listitem");
+    expect(item).toHaveTextContent(/\+24 h/);
+    expect(item).not.toHaveTextContent(/carried tasks kept/);
+    expect(item).not.toHaveTextContent(/1 services/);
+    expect(item).toHaveTextContent(/no plan/i);
+  });
+
   it("drops the last run-log row on Undo", async () => {
     const user = userEvent.setup();
     render(<App />);
@@ -1194,6 +1264,41 @@ describe("replan mode", () => {
   });
 
   it("reports what survived, without promising anything", async () => {
+    // The "N of M preferences kept overall" clause is expert-only (owner report,
+    // 2026-09-24) -- this case is about what it says when shown, not where it shows.
+    const user = userEvent.setup();
+    render(<App />);
+    await screen.findByRole("button", { name: "Edit scenario" });
+    await user.click(screen.getByRole("switch", { name: /expert mode/i }));
+    await solveToCompletion(user);
+
+    const kept = makeSolveResult();
+    kept.preferences = {
+      agreement: {
+        total: 2,
+        time_kept: 1,
+        mower_total: 2,
+        mower_kept: 1,
+        by_origin: { frozen: { total: 2, time_kept: 1, mower_total: 2, mower_kept: 1 } },
+      },
+      dropped: [],
+      level: "top",
+      pref_level: 6,
+    };
+    vi.mocked(client.pollSolve).mockResolvedValue({ job_id: "j1", done: true, result: kept });
+    await user.click(screen.getByRole("button", { name: SOLVE_BUTTON }));
+
+    // This case used to expect "· 1 kept the hour but changed mower" — about the service
+    // that had in fact *missed* its hour (time_kept 1 of 2, and mower_kept <= time_kept).
+    // Mower churn among untouched services is no longer reported at all (ADR-0051).
+    expect(await screen.findByText("1 of 2 preferences kept overall")).toBeInTheDocument();
+    expect(screen.queryByText(/different mower|changed mower/)).not.toBeInTheDocument();
+  });
+
+  it("hides the overall preference count outside expert mode", async () => {
+    // Owner report, 2026-09-24: after a plain Move forward (no edits of the user's own)
+    // the default view showed "N of M preferences kept overall" with nothing to explain
+    // where the number came from -- confusing for a user who set no preferences at all.
     const user = userEvent.setup();
     render(<App />);
     await screen.findByRole("button", { name: "Edit scenario" });
@@ -1215,9 +1320,7 @@ describe("replan mode", () => {
     vi.mocked(client.pollSolve).mockResolvedValue({ job_id: "j1", done: true, result: kept });
     await user.click(screen.getByRole("button", { name: SOLVE_BUTTON }));
 
-    expect(
-      await screen.findByText(/1 of 2 tasks unchanged · 1 kept the hour but changed mower/),
-    ).toBeInTheDocument();
+    expect(screen.queryByText(/preferences kept overall/)).not.toBeInTheDocument();
   });
 
   it("does not claim a plain optimum when the optimum was constrained by the edits", async () => {
@@ -1235,7 +1338,10 @@ describe("replan mode", () => {
         time_kept: 2,
         mower_total: 2,
         mower_kept: 2,
-        by_origin: { frozen: { total: 2, time_kept: 2, mower_total: 2, mower_kept: 2 } },
+        by_origin: {
+          frozen: { total: 1, time_kept: 1, mower_total: 1, mower_kept: 1 },
+          edited: { total: 1, time_kept: 1, mower_total: 1, mower_kept: 1 },
+        },
       },
       dropped: [],
       level: "top",
@@ -1246,6 +1352,65 @@ describe("replan mode", () => {
 
     expect(await screen.findByText(/best that keeps your edits/i)).toBeInTheDocument();
     expect(screen.queryByText("yes")).not.toBeInTheDocument();
+  });
+
+  // A Move forward carries the plan as implicit preferences and no edits at all, so
+  // "keeps your edits" names something the user never did. The optimum is still
+  // constrained — by the carried plan — so neither a plain "yes" nor the edits wording
+  // is right.
+  it("does not mention edits when the payload carried none", async () => {
+    const user = userEvent.setup();
+    render(<App />);
+    await screen.findByRole("button", { name: "Edit scenario" });
+    await solveToCompletion(user);
+
+    const carried = makeSolveResult();
+    carried.preferences = {
+      agreement: {
+        total: 2,
+        time_kept: 2,
+        mower_total: 2,
+        mower_kept: 2,
+        by_origin: { frozen: { total: 2, time_kept: 2, mower_total: 2, mower_kept: 2 } },
+      },
+      dropped: [],
+      level: "top",
+      pref_level: 6,
+    };
+    vi.mocked(client.pollSolve).mockResolvedValue({ job_id: "j1", done: true, result: carried });
+    await user.click(screen.getByRole("button", { name: SOLVE_BUTTON }));
+
+    expect(await screen.findByText(/best that keeps this plan/i)).toBeInTheDocument();
+    expect(screen.queryByText(/your edits/i)).not.toBeInTheDocument();
+  });
+
+  // In heuristic mode the directives bias the search and leave the objective alone
+  // (ADR-0032), so a proven optimum is the plain optimum — and "Re-solve from scratch may
+  // score better" is false.
+  it("claims a plain optimum in heuristic mode, where the objective is untouched", async () => {
+    const user = userEvent.setup();
+    render(<App />);
+    await screen.findByRole("button", { name: "Edit scenario" });
+    await solveToCompletion(user);
+
+    const heur = makeSolveResult();
+    heur.preferences = {
+      agreement: {
+        total: 1,
+        time_kept: 1,
+        mower_total: 1,
+        mower_kept: 1,
+        by_origin: { edited: { total: 1, time_kept: 1, mower_total: 1, mower_kept: 1 } },
+      },
+      dropped: [],
+      level: null,
+      pref_level: null,
+    };
+    vi.mocked(client.pollSolve).mockResolvedValue({ job_id: "j1", done: true, result: heur });
+    await user.click(screen.getByRole("button", { name: SOLVE_BUTTON }));
+
+    expect(await screen.findByText("yes")).toBeInTheDocument();
+    expect(screen.queryByText(/best that keeps/i)).not.toBeInTheDocument();
   });
 
   it("surfaces a preference the solver could not even express", async () => {
@@ -1298,6 +1463,93 @@ describe("schedule editing", () => {
   const prefTasks = () =>
     vi.mocked(client.startSolve).mock.calls.at(-1)?.[1]?.preferences?.tasks ?? [];
 
+  // Editing the schedule is modal (ADR-0053). While it is on, every other action that
+  // would consume or discard the plan is unavailable, and Re-solve is the way out. This
+  // closes four defects at once: a release or an un-re-solved edit reaching Move forward,
+  // a client-side preview duration being written into the service history as though it
+  // had been measured, and edits being thrown away by a poll during a solve.
+  it("disables the other plan actions while the schedule is being edited", async () => {
+    const user = userEvent.setup();
+    await solvedTable(user);
+
+    expect(screen.getByRole("button", { name: "Move forward" })).toBeDisabled();
+    expect(screen.getByRole("button", { name: "Edit scenario" })).toBeDisabled();
+    expect(screen.getByRole("button", { name: /^scenario:/i })).toBeDisabled();
+    // The way out stays available.
+    expect(screen.getByRole("button", { name: SOLVE_BUTTON })).toBeEnabled();
+  });
+
+  it("shows the plan-discard prompt next to the toggle that raised it, not at the top of the page", async () => {
+    // Owner report, 2026-09-24: on a tall schedule the toggle sits below the fold, so a
+    // "Discard your edits to the plan?" prompt rendered at the top of the page (next to
+    // the header) was never seen.
+    const user = userEvent.setup();
+    await solvedTable(user);
+
+    const start = screen.getAllByLabelText(/start hour for A1/i)[0];
+    await user.clear(start);
+    await user.type(start, "40");
+    await user.tab();
+
+    await user.click(screen.getByRole("switch", { name: /edit schedule/i }));
+
+    const prompt = await screen.findByText(/Discard your edits to the plan\?/);
+    const toggle = screen.getByRole("switch", { name: /edit schedule/i });
+    expect(prompt.closest(".app-card")).toBe(toggle.closest(".app-card"));
+  });
+
+  it("re-solving finishes editing and carries the edits with it", async () => {
+    const user = userEvent.setup();
+    await solvedTable(user);
+
+    const start = screen.getAllByLabelText(/start hour for A1/i)[0];
+    await user.clear(start);
+    await user.type(start, "40");
+    await user.tab();
+
+    await user.click(screen.getByRole("button", { name: SOLVE_BUTTON }));
+
+    // The edit was sent...
+    expect(prefTasks()).toContainEqual(
+      expect.objectContaining({ area: "A1", start: 40, origin: "edited" }),
+    );
+    // ...and edit mode is over, so nothing can be typed while the solve runs.
+    await waitFor(() =>
+      expect(screen.getByRole("switch", { name: /edit schedule/i })).not.toBeChecked(),
+    );
+  });
+
+  // Since Re-solve is the commit path (ADR-0053), the toggle is the only way to throw plan
+  // edits away — so it asks first, the same two-step idiom as discarding a scenario draft.
+  it("asks before discarding plan edits, and keeps them if you decline", async () => {
+    const user = userEvent.setup();
+    await solvedTable(user);
+
+    const start = screen.getAllByLabelText(/start hour for A1/i)[0];
+    await user.clear(start);
+    await user.type(start, "40");
+    await user.tab();
+
+    await user.click(screen.getByRole("switch", { name: /edit schedule/i }));
+    expect(screen.getByText(/discard your edits to the plan/i)).toBeInTheDocument();
+
+    await user.click(screen.getByRole("button", { name: /keep editing/i }));
+    expect(screen.getAllByLabelText(/start hour for A1/i)[0]).toHaveValue(40);
+
+    await user.click(screen.getByRole("switch", { name: /edit schedule/i }));
+    await user.click(screen.getByRole("button", { name: /^discard$/i }));
+    expect(screen.getByRole("switch", { name: /edit schedule/i })).not.toBeChecked();
+  });
+
+  it("closes without asking when nothing was edited", async () => {
+    const user = userEvent.setup();
+    await solvedTable(user);
+
+    await user.click(screen.getByRole("switch", { name: /edit schedule/i }));
+    expect(screen.queryByText(/discard your edits to the plan/i)).not.toBeInTheDocument();
+    expect(screen.getByRole("switch", { name: /edit schedule/i })).not.toBeChecked();
+  });
+
   it("has no schedule editor until there is a schedule", async () => {
     render(<App />);
     await screen.findByRole("button", { name: "Edit scenario" });
@@ -1342,8 +1594,36 @@ describe("schedule editing", () => {
     await user.click(screen.getByRole("button", { name: SOLVE_BUTTON }));
     await user.click(await screen.findByRole("button", { name: /^Undo$/ }));
 
+    // Re-solve closed the editor (ADR-0053), so the hour is on screen as a label rather
+    // than a field; re-open to confirm the working copy itself carries the restored edit.
+    await user.click(screen.getByRole("switch", { name: /edit schedule/i }));
     expect(screen.getAllByLabelText(/start hour for A1/i)[0]).toHaveValue(40);
-    expect(screen.getByText(/re-solve to check the edited one/i)).toBeInTheDocument();
+    expect(screen.getByText(/issues are hidden while the plan is edited/i)).toBeInTheDocument();
+  });
+
+  it("keeps Move forward unreachable after Undo restores an un-re-solved edit", async () => {
+    // Owner report, 2026-09-24: solve -> edit -> re-solve -> Undo left the schedule editor
+    // closed (ADR-0053 only reopens it via the toggle) but the restored working copy still
+    // carried the edit, so `editingSchedule` alone no longer explained whether the plan on
+    // screen was safe to hand to a roll. Move forward must stay blocked until that edit is
+    // taken care of by a Re-solve — never bypassable by going through Undo.
+    const user = userEvent.setup();
+    await solvedTable(user);
+
+    const start = screen.getAllByLabelText(/start hour for A1/i)[0];
+    await user.clear(start);
+    await user.type(start, "40");
+    await user.tab();
+
+    const resolved = makeSolveResult();
+    resolved.schedule!.tasks = [{ task: 1, area: "A1", mower: "M1", start: 8, end: 23 }];
+    vi.mocked(client.startSolve).mockResolvedValue({ job_id: "j2" });
+    vi.mocked(client.pollSolve).mockResolvedValue({ job_id: "j2", done: true, result: resolved });
+    await user.click(screen.getByRole("button", { name: SOLVE_BUTTON }));
+    await user.click(await screen.findByRole("button", { name: /^Undo$/ }));
+
+    expect(screen.getByRole("switch", { name: /edit schedule/i })).not.toBeChecked();
+    expect(screen.getByRole("button", { name: "Move forward" })).toBeDisabled();
   });
 
   it("releases a task out of the payload and says what that means", async () => {
@@ -1486,7 +1766,10 @@ describe("schedule editing", () => {
     expect(screen.getByLabelText(/area for the new service/i)).toBeInTheDocument();
   });
 
-  it("freezes the add panel while a solve is in flight (code-review follow-up)", async () => {
+  // Originally this froze the add button while a solve ran. Since ADR-0053 a solve closes
+  // the editor outright, so the panel is not on screen at all — a stronger guarantee, and
+  // the reason edits can no longer be lost to a poll mid-solve.
+  it("takes the add panel off screen while a solve is in flight", async () => {
     const user = userEvent.setup();
     render(<App />);
     await screen.findByRole("button", { name: "Edit scenario" });
@@ -1496,7 +1779,8 @@ describe("schedule editing", () => {
     expect(screen.getByRole("button", { name: /^\+ add$/ })).toBeEnabled();
 
     await startEndlessSolve(user);
-    expect(screen.getByRole("button", { name: /^\+ add$/ })).toBeDisabled();
+    expect(screen.queryByRole("button", { name: /^\+ add$/ })).not.toBeInTheDocument();
+    expect(screen.getByRole("switch", { name: /edit schedule/i })).not.toBeChecked();
   });
 
   it("adding after releasing in the same area is a swap, not a forced +1 (code-review follow-up)", async () => {
@@ -1527,13 +1811,17 @@ describe("schedule editing", () => {
     expect(target.scenario.areas.find((a) => a.name === "A1")?.min_services).toBe(2);
   });
 
-  it("warns that the shown violations describe the plan before the edits", async () => {
+  // The line used to say the issues on screen were the *last solved plan's*. They are not
+  // shown at all once the working copy is edited — `violationsStale` suppresses them — and
+  // a bare release counts as an edit, so it fired with nothing on screen to be wrong about.
+  it("says issues are hidden once the plan is edited, and a release counts", async () => {
     const user = userEvent.setup();
     await solvedTable(user);
-    expect(screen.queryByText(/from the last solved plan/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/issues are hidden/i)).not.toBeInTheDocument();
 
     await user.click(screen.getAllByRole("button", { name: /^release$/ })[0]);
-    expect(await screen.findByText(/from the last solved plan/i)).toBeInTheDocument();
+    expect(await screen.findByText(/issues are hidden while the plan is edited/i)).toBeInTheDocument();
+    expect(screen.queryByText(/from the last solved plan/i)).not.toBeInTheDocument();
   });
 });
 
@@ -1685,8 +1973,11 @@ describe("schedule editing on the chart", () => {
 // to a greenkeeper, so the UI shows High / Medium / Low (ADR-0012 is unchanged).
 describe("priority labels", () => {
   it("the Areas tab reads priority as words, not numbers", async () => {
+    const user = userEvent.setup();
     render(<App />);
     await screen.findByRole("button", { name: "Edit scenario" });
+    // The tabs are collapsed by default (UI review, 2026-09-24).
+    await user.click(screen.getByRole("button", { name: "Areas" }));
 
     // fixture: A1 priority 1, A2 priority 2.
     expect(screen.getByText("High")).toBeInTheDocument();
@@ -1766,6 +2057,8 @@ describe("explainability (Iteration 6)", () => {
     // the instant this solve started (rather than alongside the next `result` that
     // actually lands), the trigger would recompute against the *old* schedule and vanish
     // mid-solve, before anything has actually changed on screen.
+    // The solve in the setup closed the editor (ADR-0053); re-open it to release.
+    await user.click(screen.getByRole("switch", { name: /edit schedule/i }));
     const releaseButtons = screen.getAllByRole("button", { name: /^release$/ });
     await user.click(releaseButtons[releaseButtons.length - 1]); // the added task, last row
 
@@ -1837,6 +2130,42 @@ describe("explainability (Iteration 6)", () => {
     expect(schedule).toEqual(resultWithDroppedAdd().schedule);
   });
 
+  it("sends the released count alongside the payload", async () => {
+    // Owner report, pre-workshop review 2026-09-24: the reinstated explanation used to
+    // compare only against the payload, so a released service the minimum brought back
+    // always read as "you asked for fewer" -- the opposite of what releasing means. The
+    // fix needs the frontend to tell the backend what was released; this checks it does.
+    const user = userEvent.setup();
+    render(<App />);
+    await screen.findByRole("button", { name: "Edit scenario" });
+    await solveToCompletion(user);
+    await user.click(screen.getByRole("button", { name: TABLE }));
+    await user.click(screen.getByRole("switch", { name: /edit schedule/i }));
+
+    // Release A1 (frozen -- not itself an edit) and edit A2's start (a genuine edit, so
+    // there is something for the "Why?" button to explain).
+    await user.click(screen.getAllByRole("button", { name: /^release$/ })[0]); // A1
+    const start = screen.getAllByLabelText(/start hour for A2/i)[0];
+    await user.clear(start);
+    await user.type(start, "50");
+    await user.tab();
+
+    vi.mocked(client.startSolve).mockResolvedValue({ job_id: "j2" });
+    vi.mocked(client.pollSolve).mockResolvedValue({
+      job_id: "j2",
+      done: true,
+      result: resultWithDroppedAdd(), // schedule unchanged: A1@2, A2@20 -- A2's edit is dropped
+    });
+    await user.click(screen.getByRole("button", { name: SOLVE_BUTTON }));
+
+    vi.mocked(client.explainSolve).mockResolvedValue(explainReport);
+    await user.click(await screen.findByRole("button", { name: /Why weren't 1 edit kept\?/i }));
+
+    await screen.findByText(/conflicts with a kept task/i);
+    const call = vi.mocked(client.explainSolve).mock.calls.at(-1)!;
+    expect(call[4]).toEqual({ A1: 1 });
+  });
+
   it("clears a previous explanation once a new solve replaces the plan", async () => {
     const user = userEvent.setup();
     await solveWithOneDroppedEdit(user);
@@ -1849,6 +2178,35 @@ describe("explainability (Iteration 6)", () => {
     // dropped edits of its own). The point is not what this plan has to explain; it is
     // that the *previous* plan's answer must not survive onto it regardless.
     await replanReturningExplain(user, resultWithDroppedAdd());
+
+    expect(screen.queryByText(/conflicts with a kept task/i)).not.toBeInTheDocument();
+  });
+
+  // The synchronous reset above only covers a report that had already arrived. "Why?" is
+  // deliberately clickable while a solve runs, and every poll installs a new incumbent, so
+  // an explain can resolve *after* the plan it was computed for is gone — and then be
+  // rendered beside a different plan, and suppress that plan's own "not applied" rows.
+  // `useSolveJob` re-checks its job identity after every await; this had no equivalent.
+  it("drops an explanation that arrives after the plan it was computed for", async () => {
+    const user = userEvent.setup();
+    await solveWithOneDroppedEdit(user);
+
+    let release!: (r: ExplanationReport) => void;
+    vi.mocked(client.explainSolve).mockReturnValue(
+      new Promise<ExplanationReport>((resolve) => {
+        release = resolve;
+      }),
+    );
+    await user.click(screen.getByRole("button", { name: /Why weren't 1 edit kept\?/i }));
+
+    // The plan changes while the explain is still in flight, then the answer lands.
+    // `act` flushes the resolution so the late `setReport` really is applied before the
+    // assertion — a bare `waitFor` on an absence passes on its first tick and proves
+    // nothing.
+    await replanReturningExplain(user, resultWithDroppedAdd());
+    await act(async () => {
+      release(explainReport);
+    });
 
     expect(screen.queryByText(/conflicts with a kept task/i)).not.toBeInTheDocument();
   });

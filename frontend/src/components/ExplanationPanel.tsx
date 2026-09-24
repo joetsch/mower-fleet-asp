@@ -10,7 +10,7 @@ import {
   reinstatedSentence,
   rippleSentence,
 } from "../lib/explanation";
-import type { EditExplanation, ExplanationReport } from "../types";
+import type { EditExplanation, ExplanationReport, PreferenceLevel } from "../types";
 
 export interface ExplanationPanelProps {
   /** How many currently-dropped edits an explain call would cover. */
@@ -18,6 +18,9 @@ export interface ExplanationPanelProps {
   loading: boolean;
   report: ExplanationReport | null;
   startHour: number;
+  /** The stability setting the re-solve ran at, from `PreferenceReport.level` (null in
+   *  heuristic mode). Only the "a schedule does exist" wording depends on it. */
+  level: PreferenceLevel | null;
   /** Solver diagnostics (solve time, minimality, the budget field) are expert-only —
    *  ADR-0011's progressive-disclosure rule; the plain-language answer stays default view. */
   expert: boolean;
@@ -32,6 +35,7 @@ export function ExplanationPanel({
   report,
   startHour,
   expert,
+  level,
   explainBudget,
   onExplainBudgetChange,
   onExplain,
@@ -84,6 +88,7 @@ export function ExplanationPanel({
               edit={edit}
               startHour={startHour}
               expert={expert}
+              level={level}
             />
           ))}
           {report.reinstated.map((r) => (
@@ -113,16 +118,19 @@ function EditExplanationRow({
   edit,
   startHour,
   expert,
+  level,
 }: {
   edit: EditExplanation;
   startHour: number;
   expert: boolean;
+  /** What the re-solve ran at — only `not_yet_found`'s wording depends on it. */
+  level: PreferenceLevel | null;
 }) {
   const caveat = minimalCaveat(edit);
   return (
     <li>
       {edit.area}, {clockLabel(edit.start, startHour)}
-      {edit.mower ? ` (${edit.mower})` : ""}: {explanationSentence(edit)}
+      {edit.mower ? ` (${edit.mower})` : ""}: {explanationSentence(edit, level)}
       {edit.conflicts.length > 0 && <> — {conflictText(edit.conflicts, startHour)}</>}
       {expert && edit.solve_time_s != null && (
         <span className="muted"> ({edit.solve_time_s.toFixed(2)}s)</span>

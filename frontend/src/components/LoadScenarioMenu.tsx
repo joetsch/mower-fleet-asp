@@ -9,6 +9,9 @@ interface Props {
   onSelect: (id: string) => void;
   /** "New scenario…" — a command below the list (ADR-0027). Omitted = no entry. */
   onNew?: () => void;
+  /** Switching scenario while the schedule editor is open would discard the edits
+   *  silently, so the whole menu closes down for the duration (ADR-0053). */
+  disabled?: boolean;
 }
 
 /** One-line factual summary — computed from the scenario data, never authored, so it
@@ -24,7 +27,7 @@ function summaryLine(s: ScenarioSummary): string {
  * pick, on Escape, and on a click outside. Save / Save as… / Delete live in the
  * Scenario card's edit toolbar, not here (ADR-0026).
  */
-export function LoadScenarioMenu({ scenarios, currentId, onSelect, onNew }: Props) {
+export function LoadScenarioMenu({ scenarios, currentId, onSelect, onNew, disabled }: Props) {
   const [open, setOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
 
@@ -51,6 +54,7 @@ export function LoadScenarioMenu({ scenarios, currentId, onSelect, onNew }: Prop
         className="load-menu-button"
         aria-haspopup="menu"
         aria-expanded={open}
+        disabled={disabled}
         onClick={() => setOpen((v) => !v)}
       >
         scenario: <strong>{currentId ?? "…"}</strong> <span aria-hidden="true">▾</span>

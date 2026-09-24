@@ -26,6 +26,12 @@ type PendingAction = "none" | "stop" | "supersede";
 export interface SolveRequestInfo {
   target: SolveTarget;
   preferences: SolvePreferences;
+  /** Area name -> count released from it before this solve (ADR-0035 decision 3's "out of
+   *  the payload"), for `POST /api/explain`'s `released` field (2026-09-24 amendment) —
+   *  the backend has no other way to see a release, since it is an absence, not a value in
+   *  `preferences`. `{}` for a solve nothing was released before (a first solve, "Re-solve
+   *  from scratch", a plain Move forward). */
+  released: Record<string, number>;
 }
 
 export interface SolveJob {
@@ -44,6 +50,7 @@ export interface SolveJob {
     timeLimitS: number,
     clingoArgs?: string[],
     preferences?: SolvePreferences,
+    released?: Record<string, number>,
   ) => Promise<void>;
   /** The Stop button: end the search early, keep whatever schedule is showing. */
   stop: () => Promise<void>;
@@ -115,6 +122,7 @@ export function useSolveJob({
       timeLimitS: number,
       clingoArgs?: string[],
       preferences?: SolvePreferences,
+      released?: Record<string, number>,
     ) => {
       setSolving(true);
       onError(null);
@@ -128,7 +136,11 @@ export function useSolveJob({
       // screen for the whole window until the next poll (or forever, if Stop lands before
       // any model does) — exactly the stale-pairing bug `POST /api/explain`'s "exact
       // triple" contract exists to prevent.
-      const requestInfo: SolveRequestInfo = { target, preferences: preferences ?? NO_PREFERENCES };
+      const requestInfo: SolveRequestInfo = {
+        target,
+        preferences: preferences ?? NO_PREFERENCES,
+        released: released ?? {},
+      };
       try {
         const { job_id: jobId } = await startSolve(target, {
           timeLimitS,

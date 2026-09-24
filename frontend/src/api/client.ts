@@ -169,6 +169,11 @@ export function explainSolve(
   preferences: SolvePreferences,
   schedule: Schedule,
   budgetS?: number,
+  // Area name -> count released from it before this solve (2026-09-24 amendment): the
+  // backend has no other way to see a release, since it is an absence, not a value in
+  // `preferences`. Omitted (not even `{}`) when there is nothing to report, matching every
+  // other optional field here.
+  released?: Record<string, number>,
   signal?: AbortSignal,
 ): Promise<ExplanationReport> {
   const targetBody =
@@ -180,6 +185,7 @@ export function explainSolve(
       preferences,
       schedule,
       ...(budgetS !== undefined ? { budget_s: budgetS } : {}),
+      ...(released && Object.keys(released).length > 0 ? { released } : {}),
     }),
     signal,
   }).then((r) => r.report);

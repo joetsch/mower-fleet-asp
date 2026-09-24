@@ -6,6 +6,7 @@ import {
   agreementSentence,
   isInPayload,
   preferencesFor,
+  releasedCounts,
   summariseAgreement,
   toPreferences,
 } from "./schedulePreferences";
@@ -21,6 +22,7 @@ const task = (over: Partial<PlanTask> = {}): PlanTask => ({
   edited: false,
   added: false,
   sourceTask: 1,
+  solved: { start: 2, end: 17, mower: "M1" },
   ...over,
 });
 
@@ -117,6 +119,29 @@ describe("toPreferences", () => {
   });
 });
 
+describe("releasedCounts", () => {
+  // The counterpart to toPreferences' payload -- what the backend cannot otherwise see,
+  // since a release is the absence of a task, not a value in the payload (2026-09-24).
+  it("counts released tasks per area, ignoring kept ones", () => {
+    const tasks = [
+      task({ uid: "t0", area: "A1", pin: "released" }),
+      task({ uid: "t1", area: "A1", pin: "released" }),
+      task({ uid: "t2", area: "A2", pin: "released" }),
+      task({ uid: "t3", area: "A1" }), // kept
+    ];
+    expect(releasedCounts(tasks)).toEqual({ A1: 2, A2: 1 });
+  });
+
+  it("is empty when nothing was released", () => {
+    expect(releasedCounts(plan)).toEqual({});
+  });
+
+  it("does not count a released task that was added -- it never had a solved position", () => {
+    const added = task({ uid: "t9", area: "A1", added: true, pin: "released" });
+    expect(releasedCounts([added])).toEqual({});
+  });
+});
+
 describe("preferencesFor", () => {
   // The Move-forward path carries `PreferredTask`s straight off the roll, never `PlanTask`s,
   // so the mechanism decision has to live somewhere both call sites reach.
@@ -148,25 +173,32 @@ describe("preferencesFor", () => {
   });
 });
 
-const report = (over: Partial<PreferenceReport["agreement"]> = {}): PreferenceReport => ({
-  agreement: {
-    total: 0,
-    time_kept: 0,
-    mower_total: 0,
-    mower_kept: 0,
-    by_origin: {},
-    ...over,
-  },
-  dropped: [],
-  level: "top",
-  pref_level: 6,
-});
+/** The top-level counters are the sum over the origin buckets — `preference_agreement`
+ *  increments both together, so a fixture that sets only `by_origin` describes a report
+ *  the backend cannot produce. Derive them here unless a case overrides them explicitly;
+ *  the audit found an unreachable fixture hiding a real defect, so this matters. */
+const report = (over: Partial<PreferenceReport["agreement"]> = {}): PreferenceReport => {
+  const buckets = Object.values(over.by_origin ?? {});
+  const sum = (f: "total" | "time_kept" | "mower_total" | "mower_kept") =>
+    buckets.reduce((n, b) => n + (b?.[f] ?? 0), 0);
+  return {
+    agreement: {
+      total: sum("total"),
+      time_kept: sum("time_kept"),
+      mower_total: sum("mower_total"),
+      mower_kept: sum("mower_kept"),
+      by_origin: {},
+      ...over,
+    },
+    dropped: [],
+    level: "top",
+    pref_level: 6,
+  };
+};
 
 describe("summariseAgreement", () => {
-  it("splits the user's own edits from the rest of the plan", () => {
+  it("splits the user's own edits from the whole preference set", () => {
     const r = report({
-      total: 44,
-      time_kept: 44,
       by_origin: {
         edited: { total: 3, time_kept: 3, mower_total: 3, mower_kept: 3 },
         frozen: { total: 44, time_kept: 41, mower_total: 44, mower_kept: 44 },
@@ -174,8 +206,8 @@ describe("summariseAgreement", () => {
     });
     expect(summariseAgreement(r)).toEqual({
       edits: { kept: 3, total: 3 },
-      rest: { kept: 41, total: 44 },
-      movedToAnotherMower: 0,
+      overall: { kept: 44, total: 47 },
+      editsOnAnotherMower: 0,
     });
   });
 
@@ -189,11 +221,31 @@ describe("summariseAgreement", () => {
     expect(summariseAgreement(r)?.edits).toEqual({ kept: 2, total: 3 });
   });
 
-  it("reports a kept hour on a different mower separately", () => {
+  it("counts an edit that kept its hour on another mower, and only edits", () => {
     const r = report({
-      by_origin: { frozen: { total: 5, time_kept: 5, mower_total: 5, mower_kept: 3 } },
+      by_origin: {
+        edited: { total: 3, time_kept: 3, mower_total: 3, mower_kept: 1 },
+        frozen: { total: 5, time_kept: 5, mower_total: 5, mower_kept: 3 },
+      },
     });
-    expect(summariseAgreement(r)?.movedToAnotherMower).toBe(2);
+    expect(summariseAgreement(r)?.editsOnAnotherMower).toBe(2);
+  });
+
+  // The derivation leans on a backend invariant — `mower_kept <= time_kept`, because the
+  // mower half is keyed on the requested hour. Should that ever stop holding, report
+  // nothing rather than a negative or silently wrong count.
+  it("is null for the mower count when mower_kept exceeds time_kept", () => {
+    const r = report({
+      by_origin: { edited: { total: 3, time_kept: 2, mower_total: 3, mower_kept: 3 } },
+    });
+    expect(summariseAgreement(r)?.editsOnAnotherMower).toBeNull();
+  });
+
+  it("is null for the mower count when an edit named no mower", () => {
+    const r = report({
+      by_origin: { edited: { total: 2, time_kept: 2, mower_total: 1, mower_kept: 1 } },
+    });
+    expect(summariseAgreement(r)?.editsOnAnotherMower).toBeNull();
   });
 
   it("is null when the solve carried no preferences at all", () => {
@@ -203,33 +255,101 @@ describe("summariseAgreement", () => {
 });
 
 describe("agreementSentence", () => {
-  it("says all when every edit survived, and does not say 'other'", () => {
+  // Two quantities, because they answer different questions: what happened to what I
+  // explicitly asked for, and how much of everything I sent survived. The second is the
+  // optimisation score itself — a re-solve is MaxSAT over the preferences, and untouched
+  // services are preferences too, just implicit ones (ADR-0051).
+  it("reports the user's own edits and the overall preference count", () => {
     const r = report({
+      total: 47,
+      time_kept: 44,
       by_origin: {
         edited: { total: 3, time_kept: 3, mower_total: 3, mower_kept: 3 },
         frozen: { total: 44, time_kept: 41, mower_total: 44, mower_kept: 44 },
       },
     });
-    expect(agreementSentence(r)).toBe("All 3 of your edits kept · 41 of 44 tasks unchanged");
+    expect(agreementSentence(r)).toBe(
+      "All 3 of your edits kept · 44 of 47 preferences kept overall",
+    );
   });
 
   it("counts the shortfall plainly when an edit did not survive", () => {
     const r = report({
-      by_origin: { edited: { total: 3, time_kept: 2, mower_total: 3, mower_kept: 3 } },
+      by_origin: { edited: { total: 3, time_kept: 2, mower_total: 3, mower_kept: 2 } },
     });
     expect(agreementSentence(r)).toBe("2 of 3 of your edits kept");
   });
 
-  it("adds the different-mower note when there is one", () => {
+  // The mower half is keyed on the *requested* hour in the backend
+  // (`preferences.py::preference_agreement`), so `mower_kept` implies `time_kept`. Summing
+  // `mower_total - mower_kept` therefore mixed "kept the hour, different mower" with
+  // "missed the hour entirely" and labelled the sum with the first. Found while writing
+  // the TAASP Fig. 1 caption: the shipped line read "0 of 2 of your edits kept · 2 kept
+  // the hour but changed mower" about the same two edits.
+  it("never says an edit kept its hour when it missed the hour entirely", () => {
     const r = report({
-      by_origin: { frozen: { total: 5, time_kept: 5, mower_total: 5, mower_kept: 3 } },
+      by_origin: { edited: { total: 2, time_kept: 0, mower_total: 2, mower_kept: 0 } },
+    });
+    expect(agreementSentence(r)).not.toMatch(/kept the hour/);
+    expect(agreementSentence(r)).toBe("0 of 2 of your edits kept");
+  });
+
+  it("reports an edit that kept its hour but landed on another mower", () => {
+    const r = report({
+      by_origin: { edited: { total: 2, time_kept: 2, mower_total: 2, mower_kept: 1 } },
     });
     expect(agreementSentence(r)).toBe(
-      "5 of 5 tasks unchanged · 2 kept the hour but changed mower",
+      "All 2 of your edits kept · 1 of those on a different mower",
     );
+  });
+
+  // Mower churn outside the user's own edits is visible in the bar colours and was never
+  // what the line is for; reporting it invited the reader to attach it to their edits.
+  it("does not report mower changes among services the user did not touch", () => {
+    const r = report({
+      total: 5,
+      time_kept: 5,
+      by_origin: { frozen: { total: 5, time_kept: 5, mower_total: 5, mower_kept: 3 } },
+    });
+    expect(agreementSentence(r)).toBe("5 of 5 preferences kept overall");
+  });
+
+  // `time_kept - mower_kept` is only the different-mower count when every preference named
+  // a mower. A time-only preference ("keep the hour, any mower", ADR-0031) breaks that, so
+  // the clause is dropped rather than guessed.
+  it("omits the mower clause when an edit did not name a mower", () => {
+    const r = report({
+      by_origin: { edited: { total: 2, time_kept: 2, mower_total: 1, mower_kept: 0 } },
+    });
+    expect(agreementSentence(r)).toBe("All 2 of your edits kept");
   });
 
   it("is null when there is nothing to report", () => {
     expect(agreementSentence(null)).toBeNull();
+  });
+
+  // Owner report, 2026-09-24: the default view showed "N of M preferences kept overall"
+  // after every re-solve, including a plain Move forward where the user made no edits at
+  // all -- confusing, since nothing was explicitly asked for. The clause is expert-only.
+  it("drops the overall clause when showOverall is false", () => {
+    const r = report({
+      total: 47,
+      time_kept: 44,
+      by_origin: {
+        edited: { total: 3, time_kept: 3, mower_total: 3, mower_kept: 3 },
+        frozen: { total: 44, time_kept: 41, mower_total: 44, mower_kept: 44 },
+      },
+    });
+    expect(agreementSentence(r, false)).toBe("All 3 of your edits kept");
+  });
+
+  it("is null with showOverall false when the only thing to report was the overall count", () => {
+    // A plain roll: no edits of the user's own, only frozen (implicit) preferences.
+    const r = report({
+      total: 5,
+      time_kept: 5,
+      by_origin: { frozen: { total: 5, time_kept: 5, mower_total: 5, mower_kept: 3 } },
+    });
+    expect(agreementSentence(r, false)).toBe("");
   });
 });

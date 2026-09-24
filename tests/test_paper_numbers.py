@@ -31,20 +31,6 @@ CITATIONS = [
     "kept up to {replan.heur.best_kept_unproven} of edits but guarantee nothing: they kept "
     "every edit in at most {replan.heur.best_all_kept_runs} of {replan.runs} runs, weak@top in all "
     "{replan.weak_top.all_kept_runs}",
-    "fell from {optmode.opt} to {optmode.ignore}",
-    "overturned {explain.local_sat_overturned} of {explain.local_sat} such answers",
-    "{core.fresh_solves:word} fresh solves of one hand-built conflict returned "
-    "{core.portfolio_distinct:word} cores under the portfolio but "
-    "{core.deterministic_distinct:word} single-threaded",
-    "all {explain.conflicts} conflicts across the {explain.scenarios:word} scenarios were "
-    "identical over {explain.stability_repeats:word} repeats",
-    "reduced up to {explain.largest_raw_set} assumed edits to a conflict of "
-    "{explain.its_minimised_size}",
-    "Of {explain.dropped} dropped edits the static check answered {explain.static_share} and "
-    "the solver the rest in a median of {explain.solver_median}",
-    "none hit the {explain.refute_budget} budget",
-    "All {explain.free_unproven} satisfiable answers in the pilot came from plans that were "
-    "not proven optimal",
 ]
 
 #: Claims the paper words without a digit; the value they rest on is pinned here instead.
@@ -53,9 +39,6 @@ WORDED = {
         "replan.weak_top.kept_proven": "100%",
         "replan.weak_top.kept_unproven": "100%",
     },
-    "all {explain.conflicts} conflicts": {"explain.conflicts_stable": "37"},
-    "All {explain.free_unproven} satisfiable answers": {"explain.free": "41"},
-    "none hit the": {"explain.not_determined": "0", "explain.not_determined_scenarios": "0"},
 }
 
 

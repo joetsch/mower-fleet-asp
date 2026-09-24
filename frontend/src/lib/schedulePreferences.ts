@@ -54,6 +54,12 @@ export interface PlanTask {
    *  can be joined on. Null for an added task. Never used as an identity: the next solve
    *  renumbers freely (ADR-0031), which is why `uid` exists. */
   sourceTask: number | null;
+  /** Where the solver actually put this task — `null` for one the user added, which the
+   *  solver never placed. Releasing a task restores it here and clears `edited` (owner
+   *  report, 2026-09-24: drag, then release, otherwise left the dragged hour and
+   *  `edited: true` sitting under a released task with no preference behind either — a
+   *  click on "keep" would silently resurrect the drag as an edit). */
+  solved: { start: number; end: number; mower: string } | null;
 }
 
 /** `mode: "off"` with no tasks — the payload that leaves the solve byte-identical to one
@@ -116,6 +122,22 @@ export function preferencesFor(
     : { mode: "weak", level: setting, tasks };
 }
 
+/** Area name -> count of tasks released from it (`pin === "released"`) in this working
+ *  copy — the counterpart to `toPreferences`' payload, for `POST /api/explain`'s
+ *  `released` field (2026-09-24 amendment). The backend has no other way to see a
+ *  release: it is the *absence* of a task from the payload, not a value in it, and
+ *  without this the `reinstated` explanation reads a released service as "you asked for
+ *  fewer" — the opposite of what releasing means. An added task released before ever
+ *  being solved is not counted here — it never had a "before" position to explain. */
+export function releasedCounts(tasks: PlanTask[]): Record<string, number> {
+  const counts: Record<string, number> = {};
+  for (const t of tasks) {
+    if (t.pin !== "released" || t.added) continue;
+    counts[t.area] = (counts[t.area] ?? 0) + 1;
+  }
+  return counts;
+}
+
 /** The re-solve payload: every task the user has not released, under the stability setting
  *  (expert mode; `top` — today's behaviour — everywhere else). */
 export function toPreferences(
@@ -133,13 +155,17 @@ export function toPreferences(
   );
 }
 
-/** What became of the payload, split the way the user thinks about it: their own edits
- *  on one side, the rest of the plan on the other. */
+/** What became of the payload. Two quantities, because they answer different questions:
+ *  what happened to what the user explicitly asked for, and how much of everything sent
+ *  survived — the latter being the optimisation score itself, since a re-solve is MaxSAT
+ *  over the preferences and an untouched service is an implicit preference (ADR-0051). */
 export interface AgreementSummary {
   edits: { kept: number; total: number };
-  rest: { kept: number; total: number };
-  /** Preferences whose hour survived but whose mower did not. */
-  movedToAnotherMower: number;
+  /** Every preference, explicit and implicit alike. */
+  overall: { kept: number; total: number };
+  /** The user's own edits whose hour survived but whose mower did not — partial success,
+   *  which ADR-0031 scores as such. `null` when it cannot be derived (see below). */
+  editsOnAnotherMower: number | null;
 }
 
 const EMPTY = { total: 0, time_kept: 0, mower_total: 0, mower_kept: 0 };
@@ -149,21 +175,58 @@ export function summariseAgreement(report: PreferenceReport | null): AgreementSu
   const by = report.agreement.by_origin ?? {};
   const edited = by.edited ?? EMPTY;
   const added = by.added ?? EMPTY;
-  const frozen = by.frozen ?? EMPTY;
   const edits = {
     kept: edited.time_kept + added.time_kept,
     total: edited.total + added.total,
   };
-  const rest = { kept: frozen.time_kept, total: frozen.total };
-  if (edits.total === 0 && rest.total === 0) return null;
-  const mowerTotal = edited.mower_total + added.mower_total + frozen.mower_total;
-  const mowerKept = edited.mower_kept + added.mower_kept + frozen.mower_kept;
-  return { edits, rest, movedToAnotherMower: mowerTotal - mowerKept };
+  const overall = { kept: report.agreement.time_kept, total: report.agreement.total };
+  if (overall.total === 0) return null;
+  // The backend keys the mower half on the *requested* hour, so `mower_kept` already
+  // implies `time_kept`, and `time_kept - mower_kept` is exactly "kept the hour, different
+  // mower" — under two conditions, both checked rather than assumed: every edit named a
+  // mower (`toPreferences` always sends one; a time-only preference, ADR-0031, would not),
+  // and that backend invariant still holds. Otherwise report nothing: a missing clause is
+  // honest, a wrong count is the bug this replaced (ADR-0051).
+  const named = edited.mower_total + added.mower_total;
+  const mowerKept = edited.mower_kept + added.mower_kept;
+  const editsOnAnotherMower =
+    named === edits.total && mowerKept <= edits.kept ? edits.kept - mowerKept : null;
+  return { edits, overall, editsOnAnotherMower };
+}
+
+/** Whether this re-solve's payload actually constrained the optimum, and whether it
+ *  carried any of the user's own edits — the two facts the "proven optimal" wording needs
+ *  (ADR-0051).
+ *
+ *  Both were previously assumed from "a payload exists", which overclaimed twice: in
+ *  heuristic mode the directives bias the search and leave the objective alone (ADR-0032),
+ *  so a proven optimum is the plain one; and a Move forward carries the whole plan as
+ *  implicit preferences with no edit anywhere in it, so "keeps your edits" named something
+ *  the user never did. */
+export function optimumContext(report: PreferenceReport | null): {
+  constrained: boolean;
+  hasEdits: boolean;
+} {
+  if (!report) return { constrained: false, hasEdits: false };
+  const by = report.agreement.by_origin ?? {};
+  const edits = (by.edited?.total ?? 0) + (by.added?.total ?? 0);
+  return { constrained: report.level !== null, hasEdits: edits > 0 };
 }
 
 /** The one line shown after a re-solve. Deliberately factual — never "held" or "locked",
- *  which would promise something a weak constraint does not (ADR-0031). */
-export function agreementSentence(report: PreferenceReport | null): string | null {
+ *  which would promise something a weak constraint does not (ADR-0031).
+ *
+ *  `showOverall` gates the "N of M preferences kept overall" clause — the churn count
+ *  across *every* service, edited or not. Default view drops it: with no edits of their
+ *  own (the common case — a plain Move forward, or a first solve) the sentence would open
+ *  with a number the user never asked about and cannot place the source of (owner report,
+ *  2026-09-24 — "I'm not sure we should have it in standard-user mode ... he doesn't know
+ *  where this is coming from"). Expert mode is where churn-vs-stability is the point
+ *  (ADR-0043), so it stays there. */
+export function agreementSentence(
+  report: PreferenceReport | null,
+  showOverall: boolean = true,
+): string | null {
   const s = summariseAgreement(report);
   if (!s) return null;
   const parts: string[] = [];
@@ -174,11 +237,15 @@ export function agreementSentence(report: PreferenceReport | null): string | nul
         : `${s.edits.kept} of ${s.edits.total} of your edits kept`,
     );
   }
-  // "other tasks" asked the reader to hold two categories in mind (ADR-0038 decision 4);
-  // the count of tasks that stayed put is the whole point, so say just that.
-  if (s.rest.total > 0) parts.push(`${s.rest.kept} of ${s.rest.total} tasks unchanged`);
-  if (s.movedToAnotherMower > 0) {
-    parts.push(`${s.movedToAnotherMower} kept the hour but changed mower`);
+  if (s.editsOnAnotherMower) {
+    parts.push(`${s.editsOnAnotherMower} of those on a different mower`);
+  }
+  // The overall count, which is what the solver actually optimised. Never "unchanged":
+  // only the hour is checked, so a service on a different mower still counts as kept
+  // here, and the mower qualifier above is the only place that distinction is made.
+  // Suppressed when every preference *is* an edit — it would restate the first clause.
+  if (showOverall && s.overall.total > s.edits.total) {
+    parts.push(`${s.overall.kept} of ${s.overall.total} preferences kept overall`);
   }
   return parts.join(" · ");
 }

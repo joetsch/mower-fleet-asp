@@ -27,10 +27,18 @@ def ripple_moves(preferences: Sequence[PreferredTask], schedule: Schedule) -> li
     edited_areas = {p.area for p in edited}
     # One representative edited area per mower, for the attribution text — several edits
     # could share a mower; naming one is enough to make the sentence concrete.
+    #
+    # Keyed on the mower the plan *gave* the edit, not the one it asked for. `weak@top`
+    # routinely keeps an edit's hour and puts it on another mower, and the sentence names a
+    # mower, so the requested one would attribute the move to an edit that is not there —
+    # while the edit it really shares a mower with went unmentioned. Falls back to the
+    # request for an edit that was not placed at all, which is the only mower it has.
+    placed = {(t.area, t.start): t.mower for t in schedule.tasks}
     area_by_mower: dict[str, str] = {}
     for p in edited:
-        if p.mower is not None:
-            area_by_mower.setdefault(p.mower, p.area)
+        mower = placed.get((p.area, p.start), p.mower)
+        if mower is not None:
+            area_by_mower.setdefault(mower, p.area)
 
     out: list[RippleMove] = []
     for p in preferences:

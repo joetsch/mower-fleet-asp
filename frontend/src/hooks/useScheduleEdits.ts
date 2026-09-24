@@ -64,7 +64,20 @@ function fromResult(result: SolveResult | null): PlanTask[] {
     edited: false,
     added: false,
     sourceTask: t.task,
+    solved: { start: t.start, end: t.end, mower: t.mower },
   }));
+}
+
+/** Releasing a task takes it out of the payload; it should not *also* carry a drag or
+ *  reassignment nobody asked to keep (owner report, 2026-09-24). A task the solver placed
+ *  (`solved` non-null) snaps back to that position and loses its `edited` mark, so
+ *  releasing it is identical to releasing it before it was ever touched — a later "keep"
+ *  does not resurrect the drag as an edit. An *added* task has no solved position to snap
+ *  back to; it is left as-is (a separate, already-known gap: releasing it does not undo
+ *  the service-count minimum "Add a service" raised). */
+function released(t: PlanTask): PlanTask {
+  if (!t.solved) return { ...t, pin: "released" };
+  return { ...t, pin: "released", edited: false, ...t.solved };
 }
 
 export function useScheduleEdits(result: SolveResult | null): ScheduleEdits {
@@ -118,8 +131,11 @@ export function useScheduleEdits(result: SolveResult | null): ScheduleEdits {
     // Pinning is not an edit: the user has not asked for anything to *change*, only for
     // this task to be in (or out of) the payload. Keeping the two separate is what lets
     // the banner say "all 3 of your edits kept" without counting pins as edits.
-    setPin: (uid, pin) => patch(uid, (t) => ({ ...t, pin })),
-    setAllPins: (pin) => setTasks((current) => current.map((t) => ({ ...t, pin }))),
+    setPin: (uid, pin) => patch(uid, (t) => (pin === "released" ? released(t) : { ...t, pin })),
+    setAllPins: (pin) =>
+      setTasks((current) =>
+        current.map((t) => (pin === "released" ? released(t) : { ...t, pin })),
+      ),
     addTask: (area, start, mower, scenario) => {
       // Minted outside the updater, so the updater stays a pure function of `current`.
       const uid = `a${nextAdded.current++}`;
@@ -135,6 +151,7 @@ export function useScheduleEdits(result: SolveResult | null): ScheduleEdits {
           edited: false,
           added: true,
           sourceTask: null,
+          solved: null,
         },
       ]);
     },

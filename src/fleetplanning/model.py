@@ -599,16 +599,32 @@ class EditExplanation(BaseModel):
 
 
 class ReinstatedService(BaseModel):
-    """An area whose schedule carries more tasks than the user's submitted plan named for
-    it — almost always a released task the area's own service-count minimum brought back.
+    """An area whose schedule carries more tasks than its *baseline* named for it —
+    services the solver added beyond what the plan before the re-solve already had.
     Invisible to the kept/dropped count (there is no negative preference, ADR-0035
     decision 3: release means "out of the payload", not "never do this"), so this is the
-    one explanation class that needs no dropped edit to trigger."""
+    one explanation class that needs no dropped edit to trigger.
+
+    A released service brought straight back by the area's own service-count minimum is
+    *not* reported — that is exactly what release means may happen, not a mismatch to
+    explain (amendment, 2026-09-24: ``submitted_count`` folds in whatever was released from
+    the area, so the baseline is the plan before the re-solve, not the payload alone)."""
 
     area: str
     min_services: int
-    submitted_count: int
+    submitted_count: int = Field(
+        description="The plan before this re-solve: the payload's count for this area plus "
+        "whatever was released from it. Not literally 'submitted' any more — kept the name "
+        "since the frontend and ADR-0048 already read it that way."
+    )
     actual_count: int
+    forced_by_minimum: bool = Field(
+        default=False,
+        description="Whether the area's service-count minimum actually required the extra "
+        "service (``submitted_count < min_services``). When False the minimum was already "
+        "met and the solver added it for its own reasons — the max-interval objective, "
+        "typically. The UI must not name the minimum as the cause in that case.",
+    )
 
 
 class RippleMove(BaseModel):

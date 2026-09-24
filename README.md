@@ -64,45 +64,52 @@ This prints one line per number cited in the paper: the value as printed, then t
 recomputed from the recorded outputs in `experiments/`. It exits non-zero on any
 mismatch. The test suite runs the same check.
 
-### Step 2 — re-run the experiments (optional)
+### Step 2 — re-run the experiment (optional)
 
-| Paper paragraph | Command | Time |
-|---|---|---|
-| *Editing and re-planning* (6 scenarios, 7 mechanisms) | `uv run python experiments/run.py replan --out /tmp/replan` | ~2.5 h |
-| *Explaining dropped edits*, on the recorded plans | `uv run python experiments/run.py explain --replay --out /tmp/explain` | ~2 min |
-| *Explaining dropped edits*, on new plans | `uv run python experiments/run.py explain --out /tmp/explain-new` | ~5 min |
-| `--opt-mode=ignore` timings | `uv run python experiments/run.py optmode --out /tmp/optmode` | ~15 min |
-| raw-core stability, portfolio vs. single thread | `uv run python experiments/core_stability.py` | seconds |
-
-For a long run, keep the machine awake (`caffeinate -i …` on macOS) and don't run anything
-heavy alongside it, because the timings depend on it.
-
-Then compare a fresh run with the paper:
+The paper's numbers all come from the re-planning experiment:
 
 ```sh
-uv run python experiments/paper_numbers.py \
-    --replan-csv  /tmp/replan/pref-study/summary.csv \
-    --explain-csv /tmp/explain/summary.csv \
-    --results     /tmp/optmode
+uv run python experiments/run.py replan --out /tmp/replan      # ~2.5 h
+```
+
+For a long run, keep the machine awake (`caffeinate -i …` on macOS) and don't run anything
+heavy alongside it, because the timings depend on it. Then compare with the paper:
+
+```sh
+uv run python experiments/paper_numbers.py --replan-csv /tmp/replan/pref-study/summary.csv
 uv run python experiments/replan-pilot/analyse.py /tmp/replan/pref-study   # full tables
 ```
 
-For the core-stability numbers, compare the script's output with
+**Re-planning results vary** between runs: the comparison is made on clingo's
+multi-threaded portfolio, which is not deterministic. Timings depend on the machine.
+
+### The explanation experiment
+
+The explanation runners and their recorded outputs ship here too, but **the paper cites no
+numbers from them**, and the recorded outputs should not be read as evidence.
+
+An audit in September 2026 found that both explanation tiers assumed each kept service on
+the mower it had been *requested* on rather than the one the plan actually gave it. Where
+those differ the assumed set can be unsatisfiable on its own, and every dropped edit then
+yields a "conflict" whose minimised core need not involve the edit at all. Every conflict
+the recorded run reports came from the cells where that held; re-run on the corrected code
+it reports none. The defect is fixed here, and the paper's explanation section argues the
+mechanism instead.
+
+The runners remain reproducible if you want to look:
+
+```sh
+uv run python experiments/run.py explain --replay --out /tmp/explain    # ~2 min
+uv run python experiments/run.py explain --out /tmp/explain-new         # ~5 min
+uv run python experiments/core_stability.py                             # seconds
+```
+
+`--replay` explains the recorded plans (`experiments/explain-pilot/cells.json`) rather than
+solving fresh ones, so the comparison holds the plans fixed; without it, a different set of
+edits is dropped each run and the counts move.
+
+For the core-stability measurement, compare the script's output with
 `experiments/results/core_stability.txt`.
-
-**What reproduces exactly, and what doesn't.**
-
-- **Explanations reproduce exactly.** The plans being edited come from clingo's
-  multi-threaded portfolio (`-t4`) under a time limit, as in the demonstrator. That
-  portfolio is not deterministic, so the plans are recorded
-  (`experiments/explain-pilot/cells.json`). The explanation checks over them are
-  single-threaded and deterministic, so `explain --replay` gives the recorded outcomes
-  again (up to timings). `optmode` always replays, so both modes explain the same edits.
-- **New plans give new counts.** `explain` without `--replay` drops a different set of
-  edits each run, so the counts move while the findings should hold.
-- **Re-planning results vary.** `replan` compares mechanisms on the portfolio itself, so
-  its agreement values vary between runs.
-- **Timings depend on the machine.**
 
 ### What is where
 
@@ -113,7 +120,7 @@ For the core-stability numbers, compare the script's output with
 | `experiments/core_stability.py` | the raw-core stability measurement |
 | `experiments/replan-pilot/` | the six frozen scenarios (`instances/`), the recorded `summary.csv` + `meta.json`, and the analysis script as it was run |
 | `experiments/explain-pilot/` | the recorded plans (`cells.json`), `summary.csv` + `meta.json` (its scenarios are in the demo library) |
-| `experiments/results/` | the recorded `--opt-mode` runs and core-stability output |
+| `experiments/results/` | recorded `--opt-mode` runs and core-stability output (not cited) |
 | `src/fleetplanning/generator/{pref_study,explain_study}.py` | the study runners |
 
 The six re-planning scenarios came from a scenario generator that is not included. They

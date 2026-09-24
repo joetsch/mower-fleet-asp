@@ -27,6 +27,7 @@ than there, to avoid a circular import).
 from __future__ import annotations
 
 import time
+from collections.abc import Sequence
 
 from fleetplanning.explain.counterfactual import explain_edit, ground_for_explanation
 from fleetplanning.explain.reinstated import reinstated_services
@@ -35,8 +36,10 @@ from fleetplanning.explain.static import static_conflict
 from fleetplanning.model import (
     EditExplanation,
     ExplanationReport,
+    PreferredTask,
     Scenario,
     Schedule,
+    ScheduledTask,
     SolvePreferences,
 )
 from fleetplanning.solver.completion_table import build_completion_table
@@ -49,12 +52,37 @@ from fleetplanning.solver.completion_table import build_completion_table
 DEFAULT_EXPLAIN_BUDGET_S = 8.0
 
 
+def plan_consistent_kept(
+    tasks: Sequence[PreferredTask], scheduled: Sequence[ScheduledTask]
+) -> list[PreferredTask]:
+    """The kept preferences, re-expressed as the plan actually realises them.
+
+    Kept = the plan has a service for that area at that hour (a preference names a
+    position, not a task — ADR-0031). The mower is the separately-scored second half and
+    may differ from the requested one; this returns the *scheduled* mower, so every
+    assumption built from the result is one the plan itself witnesses.
+
+    Shared with ``generator/explain_study.py`` on purpose: that module is otherwise a
+    standalone copy of this logic, and the audit found the same defect living in both
+    copies because only one had been looked at.
+    """
+    by_position = {(t.area, t.start): t.mower for t in scheduled}
+    out = []
+    for pref in tasks:
+        mower = by_position.get((pref.area, pref.start))
+        if mower is None:
+            continue
+        out.append(pref if pref.mower == mower else pref.model_copy(update={"mower": mower}))
+    return out
+
+
 def explain_scenario(
     scenario: Scenario,
     preferences: SolvePreferences,
     schedule: Schedule,
     *,
     budget_s: float = DEFAULT_EXPLAIN_BUDGET_S,
+    released: dict[str, int] | None = None,
 ) -> ExplanationReport:
     """Explain one solve result relative to what the user asked for.
 
@@ -65,14 +93,20 @@ def explain_scenario(
     wall-clock deadline enforced across every edit, not a per-edit one — the whole call
     degrades honestly to ``not_determined`` rather than summing per-edit budgets past what
     the caller asked to wait.
+
+    ``released`` (area name -> count) is never derivable from ``preferences`` alone — a
+    release is the *absence* of a task from the payload, and the backend has no other
+    record of it. It comes from the frontend, which is the only side that knows what was
+    released, and it is what lets :func:`.reinstated.reinstated_services` compare against
+    the plan before the re-solve rather than the payload alone (2026-09-24 amendment).
     """
     deadline = time.perf_counter() + budget_s
 
-    reinstated = reinstated_services(scenario, preferences.tasks, schedule)
+    reinstated = reinstated_services(scenario, preferences.tasks, schedule, released=released)
     ripple = ripple_moves(preferences.tasks, schedule)
 
     kept_starts = {(t.area, t.start) for t in schedule.tasks}
-    kept = [p for p in preferences.tasks if (p.area, p.start) in kept_starts]
+    kept = plan_consistent_kept(preferences.tasks, schedule.tasks)
     dropped = [
         p
         for p in preferences.tasks
@@ -82,6 +116,9 @@ def explain_scenario(
     edits: list[EditExplanation] = []
     if dropped:
         rows = build_completion_table(scenario)
+        # Ground against the kept set *as the plan realises it* plus the edits as
+        # requested, so every kept assumption is one the plan itself satisfies.
+        grounding_payload = preferences.model_copy(update={"tasks": [*kept, *dropped]})
         needs_tier2 = []
         for edit in dropped:
             tier1 = static_conflict(edit, kept, rows)
@@ -100,7 +137,7 @@ def explain_scenario(
             )
 
         if needs_tier2:
-            g = ground_for_explanation(scenario, rows, preferences)
+            g = ground_for_explanation(scenario, rows, grounding_payload)
             for edit in needs_tier2:
                 edits.append(explain_edit(edit, kept, g, deadline=deadline))
 

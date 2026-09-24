@@ -33,8 +33,12 @@ def service_bounds(
     """``{area_name: (min_starts, max_starts)}``.
 
     An area's explicit ``min_services`` / ``max_services`` override the derived value;
-    either may be set alone, with the other falling back to the derivation. Pass
-    ``completion_rows`` to reuse an already-built table (the instance emitter does).
+    either may be set alone, with the other falling back to the derivation. An explicit
+    value always wins over a derived one, in both directions: an explicit max below the
+    derived min pulls the min down (not just the reverse) -- otherwise "drop a service"
+    (the editor sets only ``max_services``, one below the plan's current count) would have
+    the derived min silently override it and the dropped service would come straight back.
+    Pass ``completion_rows`` to reuse an already-built table (the instance emitter does).
     """
     explicit_min = {a.name: a.min_services for a in scenario.areas if a.min_services is not None}
     explicit_max = {a.name: a.max_services for a in scenario.areas if a.max_services is not None}
@@ -47,7 +51,14 @@ def service_bounds(
         lo, hi = derived[area.name]
         lo = explicit_min.get(area.name, lo)
         hi = explicit_max.get(area.name, hi)
-        out[area.name] = (lo, max(lo, hi))
+        if lo > hi:
+            # Whichever bound the caller did NOT set explicitly is the derived one, so it
+            # is the one that yields.
+            if area.name in explicit_max and area.name not in explicit_min:
+                lo = hi
+            else:
+                hi = lo
+        out[area.name] = (lo, hi)
     return out
 
 

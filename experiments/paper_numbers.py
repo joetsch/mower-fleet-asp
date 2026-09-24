@@ -13,7 +13,6 @@ from __future__ import annotations
 import argparse
 import csv
 import json
-import re
 import statistics as st
 import sys
 from collections import defaultdict
@@ -22,8 +21,6 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 # --- data locations ---
 REPLAN_CSV = ROOT / "experiments/replan-pilot/summary.csv"
-EXPLAIN_CSV = ROOT / "experiments/explain-pilot/summary.csv"
-RESULTS = ROOT / "experiments/results"
 # --- end data locations ---
 
 #: The values as printed in the paper, keyed by claim.
@@ -44,31 +41,6 @@ PAPER: dict[str, str] = {
     "replan.runs": "18",
     "replan.weak_top.all_kept_runs": "18",
     "replan.heur.best_all_kept_runs": "6",
-    # Explaining dropped edits — explanation pilot, recorded run (2026-09-16).
-    "explain.scenarios": "4",
-    "explain.dropped": "163",
-    "explain.static_share": "52%",
-    "explain.solver_median": "0.2 s",
-    "explain.not_determined": "0",
-    "explain.not_determined_scenarios": "0",
-    "explain.refute_budget": "10 s",
-    "explain.conflicts": "37",
-    "explain.conflicts_stable": "37",
-    "explain.stability_repeats": "5",
-    "explain.largest_raw_set": "42",
-    "explain.its_minimised_size": "2",
-    "explain.local_sat": "66",
-    "explain.local_sat_overturned": "25",
-    "explain.free": "41",
-    "explain.free_unproven": "41",
-    # --opt-mode ablation over the two hardest scenarios (results/opt-mode-*): the explanation
-    # phase only (grounding + checks), both modes replaying the same recorded cells.
-    "optmode.opt": "412/373 s",
-    "optmode.ignore": "62/52 s",
-    # Raw-core stability (results/core_stability.txt).
-    "core.fresh_solves": "6",
-    "core.portfolio_distinct": "4",
-    "core.deterministic_distinct": "1",
 }
 
 HARD = ("balanced-four-hole", "six-hole-course")
@@ -149,90 +121,17 @@ def replan_meta(path: Path) -> dict[str, str]:
     return {"replan.budget": f"{meta['budget_s']:g} s"}
 
 
-def explain(path: Path) -> dict[str, str]:
-    rows = _rows(path)
-    solver = [float(r["refute_time_s"]) for r in rows if r["refute_time_s"]]
-    undetermined = [r for r in rows if r["outcome"] == "not_determined"]
-    conflicts = [r for r in rows if r["outcome"] == "conflicts_with"]
-    largest = max(conflicts, key=lambda r: int(r["raw_core_size"]), default={})
-    # A local (pruned) check that came back satisfiable was then confirmed against every
-    # kept edit: overturned ones became conflicts (pruning_missed), the rest stayed free.
-    overturned = sum(r["pruning_missed"] == "True" for r in rows)
-    confirmed_free = sum(r["outcome"] == "free_but_untaken" for r in rows)
-    return {
-        "explain.scenarios": str(len({r["scenario"] for r in rows})),
-        "explain.dropped": str(len(rows)),
-        "explain.static_share": _pct(
-            sum(r["outcome"] == "blocked_statically" for r in rows) / len(rows)
-        ),
-        "explain.solver_median": f"{st.median(solver):.1f} s" if solver else "n/a",
-        "explain.not_determined": str(len(undetermined)),
-        "explain.not_determined_scenarios": str(len({r["scenario"] for r in undetermined})),
-        "explain.conflicts": str(len(conflicts)),
-        "explain.conflicts_stable": str(sum(r["stable"] == "True" for r in conflicts)),
-        "explain.stability_repeats": str(
-            max((int(r["stability_repeats"]) for r in conflicts), default=0)
-        ),
-        "explain.largest_raw_set": largest.get("raw_core_size", "n/a"),
-        "explain.its_minimised_size": largest.get("min_core_size", "n/a"),
-        "explain.local_sat": str(overturned + confirmed_free),
-        "explain.local_sat_overturned": str(overturned),
-        "explain.free": str(confirmed_free),
-        "explain.free_unproven": str(
-            sum(r["outcome"] == "free_but_untaken" and r["parent_optimal"] == "False"
-                for r in rows)
-        ),
-    }
-
-
-def explain_meta(path: Path) -> dict[str, str]:
-    meta = json.loads(path.read_text(encoding="utf-8"))
-    return {"explain.refute_budget": f"{meta['refute_time_limit_s']:g} s"}
-
-
-def optmode(results: Path) -> dict[str, str]:
-    out = {}
-    for mode in ("opt", "ignore"):
-        wall = json.loads((results / f"opt-mode-{mode}" / "meta.json").read_text())[
-            "explain_s_by_scenario"
-        ]
-        out[f"optmode.{mode}"] = "/".join(f"{round(wall[s])}" for s in HARD) + " s"
-    return out
-
-
-def core(results: Path) -> dict[str, str]:
-    text = (results / "core_stability.txt").read_text(encoding="utf-8")
-    found = re.findall(r"^(portfolio|deterministic).*?: (\d+) distinct raw core\(s\) over (\d+)",
-                       text, re.MULTILINE)
-    by = {label: (n, repeats) for label, n, repeats in found}
-    return {
-        "core.fresh_solves": by["portfolio"][1],
-        "core.portfolio_distinct": by["portfolio"][0],
-        "core.deterministic_distinct": by["deterministic"][0],
-    }
-
-
-def compute(
-    replan_csv: Path = REPLAN_CSV, explain_csv: Path = EXPLAIN_CSV, results: Path = RESULTS
-) -> dict[str, str]:
-    values = replan(replan_csv) | replan_meta(replan_csv.with_name("meta.json"))
-    values |= explain(explain_csv) | explain_meta(explain_csv.with_name("meta.json"))
-    if all((results / f"opt-mode-{m}" / "meta.json").exists() for m in ("opt", "ignore")):
-        values |= optmode(results)
-    if (results / "core_stability.txt").exists():
-        values |= core(results)
-    return values
+def compute(replan_csv: Path = REPLAN_CSV) -> dict[str, str]:
+    return replan(replan_csv) | replan_meta(replan_csv.with_name("meta.json"))
 
 
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     ap.add_argument("--replan-csv", type=Path, default=REPLAN_CSV)
-    ap.add_argument("--explain-csv", type=Path, default=EXPLAIN_CSV)
-    ap.add_argument("--results", type=Path, default=RESULTS)
     ap.add_argument("--check", action="store_true", help="exit 1 unless data == paper")
     args = ap.parse_args()
 
-    values = compute(args.replan_csv, args.explain_csv, args.results)
+    values = compute(args.replan_csv)
     bad = 0
     for key, printed in PAPER.items():
         got = values.get(key, "(no data)")

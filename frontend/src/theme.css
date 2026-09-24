@@ -14,13 +14,17 @@
   --baseline:        #c3c2b7;
   --border:          rgba(11, 11, 11, 0.10);
 
-  /* categorical — mower identity (fixed order, never cycled) */
+  /* categorical — mower identity (fixed order, never cycled). 8 is the structural
+     cap for a colorblind-safe categorical palette (dataviz skill); a 9th mower
+     repeats a slot rather than adding a hue — see lib/schedule.ts mowerColors(). */
   --series-1: #2a78d6;
   --series-2: #eb6834;
   --series-3: #1baf7a;
   --series-4: #eda100;
   --series-5: #e87ba4;
   --series-6: #008300;
+  --series-7: #4a3aa7;
+  --series-8: #e34948;
 
   /* status — schedule constraint violations (always with a label, never colour alone) */
   --status-critical: #d03b3b;  /* max-interval violation */
@@ -49,6 +53,8 @@
     --series-4: #c98500;
     --series-5: #d55181;
     --series-6: #008300;
+    --series-7: #9085e9;
+    --series-8: #e66767;
 
     --status-critical: #d03b3b;
     --status-warning:  #fab219;
@@ -76,6 +82,8 @@
   --series-4: #c98500;
   --series-5: #d55181;
   --series-6: #008300;
+  --series-7: #9085e9;
+  --series-8: #e66767;
 
   --status-critical: #d03b3b;
   --status-warning:  #fab219;

@@ -104,6 +104,7 @@ export function ScheduleTable({
                     onCommit={(h) => onMove(t.uid, h)}
                     label={`start hour for ${t.area}`}
                     commitOnChange
+                    max={scenario.horizon_hours - 1}
                   />
                 ) : (
                   <>

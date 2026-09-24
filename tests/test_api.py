@@ -707,3 +707,39 @@ def test_explain_endpoint_reports_nothing_when_every_edit_was_kept():
     assert report["edits"] == []
     assert report["reinstated"] == []
     assert report["ripple"] == []
+
+
+def test_explain_endpoint_folds_released_into_the_reinstated_baseline():
+    # Owner report, pre-workshop review 2026-09-24: a released service the area's own
+    # minimum brings back must not be reported at all -- `released` is how the frontend
+    # tells the endpoint what it cannot otherwise see (a release is an absence, not a
+    # value in `preferences`).
+    scenario = toy_course()
+    area = "Hole1_Fairway"  # derived minimum is 7 (ADR-0017)
+    submitted = [
+        PreferredTask(area=area, start=s, mower="Mower A", origin="frozen")
+        for s in (10, 30, 50, 70, 90)
+    ]
+    preferences = SolvePreferences(mode="weak", level="top", tasks=submitted)
+    schedule = Schedule(
+        tasks=[
+            ScheduledTask(area=area, task=1, mower="Mower A", start=s, end=s + 4)
+            for s in (10, 30, 50, 70, 90, 110, 130)
+        ],
+        violations=[],
+        cost=[],
+    )
+    body = {
+        "scenario": scenario.model_dump(mode="json"),
+        "preferences": preferences.model_dump(mode="json"),
+        "schedule": schedule.model_dump(mode="json"),
+    }
+
+    without_released = client.post("/api/explain", json=body).json()["report"]
+    assert len(without_released["reinstated"]) == 1
+    assert without_released["reinstated"][0]["forced_by_minimum"] is True
+
+    with_released = client.post(
+        "/api/explain", json={**body, "released": {area: 2}}
+    ).json()["report"]
+    assert with_released["reinstated"] == []

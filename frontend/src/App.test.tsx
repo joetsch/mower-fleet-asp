@@ -972,7 +972,7 @@ describe("moving time horizon (ADR-0042)", () => {
 
   it("carries no preferences on a roll at the 'cold' stability setting", async () => {
     // UI review 2026-09-10: 'cold' is "no stability" — the roll's re-solve must send the
-    // no-payload form, the same one "Re-solve from scratch" uses, not weak@cold.
+    // no-payload form, the same one "Solve from scratch" uses, not weak@cold.
     const user = userEvent.setup();
     render(<App />);
     await screen.findByRole("button", { name: "Edit scenario" });
@@ -1252,13 +1252,13 @@ describe("replan mode", () => {
     expect(prefsOf()?.level).toBe("top");
   });
 
-  it("'Re-solve from scratch' sends no payload at all (ADR-0038)", async () => {
+  it("'Solve from scratch' sends no payload at all (ADR-0038)", async () => {
     const user = userEvent.setup();
     render(<App />);
     await screen.findByRole("button", { name: "Edit scenario" });
     await solveToCompletion(user);
 
-    await user.click(screen.getByRole("button", { name: "Re-solve from scratch" }));
+    await user.click(screen.getByRole("button", { name: "Solve from scratch" }));
 
     expect(sendsNothing()).toBe(true);
   });
@@ -1385,7 +1385,7 @@ describe("replan mode", () => {
   });
 
   // In heuristic mode the directives bias the search and leave the objective alone
-  // (ADR-0032), so a proven optimum is the plain optimum — and "Re-solve from scratch may
+  // (ADR-0032), so a proven optimum is the plain optimum — and "Solve from scratch may
   // score better" is false.
   it("claims a plain optimum in heuristic mode, where the objective is untouched", async () => {
     const user = userEvent.setup();
@@ -1745,6 +1745,23 @@ describe("schedule editing", () => {
     expect(prefTasks()).toContainEqual({ area: "A2", start: 100, mower: "M1", origin: "added" });
     const target = vi.mocked(client.startSolve).mock.calls.at(-1)?.[0] as { scenario: Scenario };
     expect(target.scenario.areas.find((a) => a.name === "A2")?.min_services).toBe(2);
+  });
+
+  it("adds a time-only service when the mower is left as \"(any mower)\" (ADR-0031)", async () => {
+    const user = userEvent.setup();
+    await solvedTable(user);
+    await openAddPanel(user);
+
+    await user.selectOptions(screen.getByLabelText(/area for the new service/i), "A2");
+    await user.selectOptions(screen.getByLabelText(/mower for the new service/i), "(any mower)");
+    const hour = screen.getByLabelText(/start hour for the new service/i);
+    await user.clear(hour);
+    await user.type(hour, "100");
+    await user.click(screen.getByRole("button", { name: /^\+ add$/ }));
+
+    await user.click(screen.getByRole("button", { name: SOLVE_BUTTON }));
+
+    expect(prefTasks()).toContainEqual({ area: "A2", start: 100, mower: null, origin: "added" });
   });
 
   it("only offers the add panel while editing the schedule", async () => {

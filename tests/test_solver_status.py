@@ -109,7 +109,11 @@ def test_status_optimal():
 
 
 def test_status_satisfiable_on_timeout_with_a_best_so_far():
-    out = solve_scenario(toy_course(), time_limit_s=3.0, threads=1)
+    # 1.0s, not 3.0s: ADR-0055's layered max-interval grading proves toy_course's optimum
+    # faster even at threads=1 (jumpy) -- ~2.6s now, where a flat penalty took longer than
+    # 3s. Checked empirically (satisfiable, consistently, across repeats) rather than
+    # picking a number close to the new boundary.
+    out = solve_scenario(toy_course(), time_limit_s=1.0, threads=1)
     assert out.status == "satisfiable"
     assert out.solved is True
     assert out.optimal is False

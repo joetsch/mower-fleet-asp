@@ -67,6 +67,16 @@ export function mowerColors(scenario: Scenario): Map<string, string> {
  *  greenkeeper, so the UI shows High / Medium / Low. */
 export const PRIORITY_LABEL: Record<number, string> = { 1: "High", 2: "Medium", 3: "Low" };
 
+/** One hue, light → dark (dataviz skill: an ordinal tier takes a sequential ramp, not a
+ *  categorical one) — darker/more saturated reads as "more important". Falls back to the
+ *  lowest step for anything outside 1–3 (validated range, but the Gantt chart draws
+ *  whatever `Scenario.areas` holds without re-checking it). */
+export const PRIORITY_COLOR: Record<number, string> = {
+  1: "var(--priority-high)",
+  2: "var(--priority-medium)",
+  3: "var(--priority-low)",
+};
+
 export const VIOLATION_LABEL: Record<Violation["kind"], string> = {
   max_interval: "Max-interval exceeded",
   min_interval: "Min-interval undercut",
@@ -78,3 +88,11 @@ export const VIOLATION_COLOR: Record<Violation["kind"], string> = {
   min_interval: "var(--status-warning)",
   avoid_zone: "var(--status-serious)",
 };
+
+/** Plain-English span for an elapsed hour count: "29h", or "1d 5h" once it clears a day. */
+export function durationLabel(hours: number): string {
+  if (hours < 24) return `${hours}h`;
+  const days = Math.floor(hours / 24);
+  const rem = hours % 24;
+  return rem === 0 ? `${days}d` : `${days}d ${rem}h`;
+}

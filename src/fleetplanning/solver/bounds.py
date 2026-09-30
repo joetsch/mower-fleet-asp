@@ -15,13 +15,22 @@ Approach
 --------
 ``cadence(A)``    — services at ``max_interval`` spacing from the first deadline: the
                    fewest starts that give area A zero max-interval violations *in
-                   isolation* (the old ``min_starts``).
+                   isolation*.
 ``greedy(A)``     — how often the greedy baseline (``solver/greedy.py``) actually served A.
                    The greedy schedule is a concrete, always-feasible witness.
 
-``min_starts(A) = min(cadence(A), greedy(A))``
-    Feasible by construction: take the greedy schedule and drop services from any area
-    where greedy over-served. Never UNSAT.
+``min_starts(A) = min(1, cadence(A), greedy(A))``
+    The floor is **not** the zero-violation cadence (ADR-0017 amendment): with a shared
+    fleet, a contended area's optimum often can't afford full cadence, and forcing that
+    many starts in anyway bought nothing on the max-interval objective (one gap over the
+    limit costs the same whether or not a later, now-redundant task follows) while
+    manufacturing awkward min-interval undercuts as the solver parks the forced task
+    wherever is cheapest. One start is the real floor: it is enough to switch on the
+    area's max-interval boundary terms (``first_over``/``last_under`` in the encoding)
+    so it isn't invisible to the objective, and the optimizer decides from there how many
+    *more* are worth adding. Still feasible by construction (a single start is never
+    denser than the old, already-feasible floor) and never UNSAT: an area with cadence or
+    greedy count 0 (not due, or no feasible start) still gets ``min_starts = 0``.
 
 ``max_starts(A) = min(physical_max(A), n_feasible_starts(A), max(cadence, greedy) + SLACK)``
     Contains the optimum: beyond ``cadence`` a denser schedule only adds avoid hours and
@@ -81,7 +90,7 @@ def service_count_bounds(
         feasible = n_feasible.get(area.name, 0)
         greedy = greedy_counts.get(area.name, 0)
 
-        min_starts = min(cadence, greedy)
+        min_starts = min(1, cadence, greedy)
         if tight:
             max_starts = min(physical, feasible, max(cadence, greedy) + SLACK)
         else:

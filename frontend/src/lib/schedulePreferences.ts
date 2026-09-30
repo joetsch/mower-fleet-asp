@@ -4,7 +4,7 @@
 // The mechanism is always the pilot's choice — weak constraints — over one payload: every
 // task on screen the user has not *released*. There is no longer a mode enum (ADR-0038
 // dropped "keep my edits" and made "from scratch" a one-shot button); a re-solve either
-// keeps the plan or, from the "Re-solve from scratch" button, carries no payload at all.
+// keeps the plan or, from the "Solve from scratch" button, carries no payload at all.
 //
 // What *is* adjustable, in expert mode only, is the **stability setting**: the priority
 // level those weak constraints sit at — how much one churned task is worth against the
@@ -42,7 +42,10 @@ export type TaskPinState = "auto" | "pinned" | "released";
 export interface PlanTask {
   uid: string;
   area: string;
-  mower: string;
+  /** `null` only for an added, not-yet-solved task whose mower the user left up to the
+   *  solver (a time-only preference, ADR-0031) — every solved task always names one, since
+   *  the backend never returns a null mower. */
+  mower: string | null;
   start: number;
   end: number;
   pin: TaskPinState;
@@ -63,7 +66,7 @@ export interface PlanTask {
 }
 
 /** `mode: "off"` with no tasks — the payload that leaves the solve byte-identical to one
- *  carrying no preferences at all (ADR-0031 decision 5). Sent by "Re-solve from scratch",
+ *  carrying no preferences at all (ADR-0031 decision 5). Sent by "Solve from scratch",
  *  and by the first solve (empty plan). */
 export const NO_PREFERENCES: SolvePreferences = { tasks: [], mode: "off", level: "top" };
 
@@ -87,7 +90,7 @@ export function isInPayload(t: PlanTask): boolean {
  *  at 0.69 agreement (ADR-0043) — and a greenkeeper who does not care about churn is
  *  better served by paying neither that nor the weak-constraint distortion. It is the
  *  study's own baseline made reachable: `preferencesFor` collapses it to `NO_PREFERENCES`,
- *  so a roll at `cold` reaches the wire byte-identical to "Re-solve from scratch".
+ *  so a roll at `cold` reaches the wire byte-identical to "Solve from scratch".
  *
  *  `tiebreak` is deliberately absent — ADR-0034 decision 2 measured it as indistinguishable
  *  from ignoring the plan on any instance the solver cannot prove within budget. The API

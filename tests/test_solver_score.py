@@ -61,25 +61,82 @@ def test_empty_schedule_scores_all_zero():
 
 
 def test_gap_history_and_horizon_violations_land_in_the_right_slots():
-    # task1 @10, task2 @40: gap 30 > max_interval 24 -> one max@P1; start 10 < -6+18 ->
-    # first_task_too_early -> min; last start 40 < 167-24 -> last_task_too_early -> max@P1.
+    # task1 @10, task2 @40: gap 30 > max_interval 24, excess 6h -> ceil(6/24)=1 at max@P1;
+    # start 10 < -6+18 -> first_task_too_early -> min; last start 40 < 167-24=143 ->
+    # last_task_too_early, excess 103h -> ceil(103/24)=5 at max@P1 (ADR-0055: layered, not
+    # a flat 1 each) -> 1+5=6 total at max@P1.
     tasks = [
         ScheduledTask(area="F", task=1, mower="M", start=10, end=16),
         ScheduledTask(area="F", task=2, mower="M", start=40, end=46),
     ]
     sv = score_schedule(_one_area_scenario(), tasks)
-    assert sv.slots == [2, 0, 0, 0, 1]
+    assert sv.slots == [6, 0, 0, 0, 1]
     assert sv.detail["max_interval"] == 1
     assert sv.detail["last_task_too_early"] == 1
     assert sv.detail["first_task_too_early"] == 1
 
 
+def test_gap_violation_carries_its_elapsed_window():
+    # first task @15 (inside [h+min, h+max] = [12,18], so no boundary violation of its
+    # own), second @45: gap 30 > max_interval 24 -> a max_interval violation on task 1
+    # with a concrete window this week: overdue from 15+24=39 until serviced at 45.
+    tasks = [
+        ScheduledTask(area="F", task=1, mower="M", start=15, end=21),
+        ScheduledTask(area="F", task=2, mower="M", start=45, end=51),
+    ]
+    sv = score_schedule(_one_area_scenario(), tasks)
+    v = next(v for v in sv.violations if v.kind == "max_interval" and v.task == 1)
+    assert (v.since, v.until) == (39, 45)
+
+
+def test_first_task_too_late_carries_its_elapsed_window():
+    # first (and only) task @50, far past h + max_interval (-6+24=18) -> first_task_too_late,
+    # overdue from 18 until serviced at 50.
+    tasks = [ScheduledTask(area="F", task=1, mower="M", start=50, end=56)]
+    sv = score_schedule(_one_area_scenario(), tasks)
+    v = next(v for v in sv.violations if v.kind == "max_interval" and v.task == 1)
+    assert (v.since, v.until) == (18, 50)
+
+
+def test_last_task_too_early_carries_no_window():
+    # A risk into next week's cycle, not an elapsed window inside this horizon (see
+    # Violation.since's docstring) -- gap is exactly max_interval (no gap violation), and
+    # the boundary violation is last_task_too_early, which has no concrete window.
+    tasks = [
+        ScheduledTask(area="F", task=1, mower="M", start=15, end=21),
+        ScheduledTask(area="F", task=2, mower="M", start=39, end=45),
+    ]
+    sv = score_schedule(_one_area_scenario(), tasks)
+    v = next(v for v in sv.violations if v.kind == "max_interval" and v.task == 2)
+    assert (v.since, v.until) == (None, None)
+
+
+def test_a_gap_several_intervals_over_costs_proportionally_more_not_a_flat_one():
+    # ADR-0055: max-interval grading is layered, ceil(excess_hours / max_interval), not a
+    # flat 1 regardless of size. first task @15 (inside [h+min,h+max]=[12,18], no boundary
+    # violation of its own); second (and last) task @143 == latest_start(167) -
+    # max_interval(24), so it sits exactly *at* the last-task-too-early threshold (the
+    # condition is a strict "<", so landing on it triggers no *second* violation) -- the
+    # only violation in this schedule is the 128h gap between the two, 104h over the
+    # 24h limit. ceil(104/24) = 5, not the flat 1 a binary count would give.
+    tasks = [
+        ScheduledTask(area="F", task=1, mower="M", start=15, end=21),
+        ScheduledTask(area="F", task=2, mower="M", start=143, end=149),
+    ]
+    sv = score_schedule(_one_area_scenario(), tasks)
+    assert sv.max_by_priority == (5, 0, 0)
+    assert sv.detail["max_interval"] == 1  # exactly one violation source ...
+    v = next(v for v in sv.violations if v.kind == "max_interval")
+    assert (v.since, v.until) == (39, 143)  # ... whose window is the full 104h overshoot
+
+
 def test_priority_routes_to_its_own_max_slot():
-    # single task @100: > history deadline (first_task_too_late) AND < 167-24
-    # (last_task_too_early) -> two max-interval units, both charged to P3's slot.
+    # single task @100: > history deadline (first_task_too_late), excess 82h ->
+    # ceil(82/24)=4; AND < 167-24=143 (last_task_too_early), excess 43h -> ceil(43/24)=2
+    # (ADR-0055) -> 4+2=6, both charged to P3's slot.
     tasks = [ScheduledTask(area="F", task=1, mower="M", start=100, end=106)]
     sv = score_schedule(_one_area_scenario(priority=3), tasks)
-    assert sv.max_by_priority == (0, 0, 2)  # P3 -> slot index 2
+    assert sv.max_by_priority == (0, 0, 6)  # P3 -> slot index 2
 
 
 def test_avoid_hours_count_once_per_task():

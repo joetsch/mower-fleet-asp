@@ -64,7 +64,7 @@ describe("toPreferences", () => {
 
   it("emits no payload when every task is released — byte-identical to a cold solve", () => {
     // ADR-0031 decision 5: "release all" then Re-solve must reach the wire the same as
-    // "Re-solve from scratch", so the plan is discarded rather than sent and ignored.
+    // "Solve from scratch", so the plan is discarded rather than sent and ignored.
     const allReleased = plan.map((t) => ({ ...t, pin: "released" as const }));
     expect(toPreferences(allReleased)).toEqual(NO_PREFERENCES);
   });
@@ -88,7 +88,7 @@ describe("toPreferences", () => {
 
   it("carries nothing at all for the cold setting, even with a full plan", () => {
     // UI review 2026-09-10: `cold` is "no stability" — no weak constraints, no heuristic.
-    // A re-solve at this setting must reach the wire the same as "Re-solve from scratch".
+    // A re-solve at this setting must reach the wire the same as "Solve from scratch".
     expect(toPreferences(plan, "cold")).toEqual(NO_PREFERENCES);
   });
 

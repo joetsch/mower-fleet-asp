@@ -12,6 +12,7 @@ import {
   toggleCapability,
   updateMower,
 } from "../../lib/scenarioEdits";
+import { mowerColors } from "../../lib/schedule";
 import { errorFor } from "../../lib/scenarioValidation";
 import type { Catalog, Scenario } from "../../types";
 import { NameCell, NumCell } from "../cells";
@@ -50,6 +51,8 @@ export function FleetTab({
     return out;
   }, [scenario]);
 
+  const colors = useMemo(() => mowerColors(scenario), [scenario]);
+
   if (!editing) {
     return (
       <section>
@@ -79,6 +82,38 @@ export function FleetTab({
             );
           })}
         </ul>
+
+        <p className="muted cap-grid-caption">Which mower can service which area</p>
+        <div className="summary-table-scroll">
+          <table className="summary-table cap-grid cap-grid-readonly">
+            <thead>
+              <tr>
+                <th>Area</th>
+                {scenario.mowers.map((m, mi) => (
+                  <th key={mowerKey(m, mi)}>{m.name}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {areas.map((a, ai) => (
+                <tr key={areaKey(a, ai)}>
+                  <td>{a.name}</td>
+                  {scenario.mowers.map((m, mi) => (
+                    <td key={mowerKey(m, mi)} className="cap-cell cap-cell-readonly">
+                      {m.can_mow.includes(a.name) && (
+                        <span
+                          className="cap-dot"
+                          style={{ background: colors.get(m.name) }}
+                          aria-label={`${m.name} can service ${a.name}`}
+                        />
+                      )}
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </section>
     );
   }

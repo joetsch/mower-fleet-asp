@@ -44,7 +44,9 @@ counted. Computing this table in Python keeps the encoding free of calendar arit
 - **Soft constraints (weak constraints, lexicographic):**
   - level `5 − P` ∈ {4, 3, 2} — *max-interval* violations of a priority-`P` area,
     including a first service that comes too late after the history and a last service
-    that leaves too long a gap before the end of the horizon;
+    that leaves too long a gap before the end of the horizon; graded, not flat — a gap
+    that is `k` times over the limit costs `k`, not the same 1 point as a gap that is
+    only just over;
   - level 1 — services that touch *avoid* hours;
   - level 0 — *min-interval* violations (services too close together), including a first
     service too early after the history.

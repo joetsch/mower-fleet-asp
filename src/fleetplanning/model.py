@@ -419,6 +419,22 @@ class Violation(BaseModel):
     kind: str = Field(description="max_interval | min_interval | avoid_zone")
     area: str
     task: int | None = None
+    since: int | None = Field(
+        default=None,
+        description="Hour offset from t=0 when this max-interval violation's elapsed "
+        "window began — the latest moment the area could still have been serviced on "
+        "time. Set only for a violation with a concrete window inside this horizon (a "
+        "gap between two scheduled tasks, or the first task starting too late against "
+        "service history); None for every other violation kind, and for the "
+        "last-task-too-early wraparound case, whose 'violation' is a risk into next "
+        "week's cycle rather than an elapsed window this week.",
+    )
+    until: int | None = Field(
+        default=None,
+        description="Hour offset when the elapsed window named in `since` ended — the "
+        "start of the task that finally serviced the area. None under the same "
+        "conditions as `since`.",
+    )
 
 
 class Schedule(BaseModel):

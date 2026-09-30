@@ -23,8 +23,9 @@ _WORDS = {"0": "zero", "1": "one", "2": "two", "3": "three", "4": "four", "5": "
 #: Each cited sentence, with ``{key}`` (as printed) or ``{key:word}`` (spelled out).
 CITATIONS = [
     "({replan.scenarios} scenarios, {replan.pinned} of services pinned, {replan.budget})",
-    "for {replan.weak_top.extra_time} more solve time than re-planning from scratch",
-    "a median of {replan.weak_top.extra_p1_violations:word} and at most "
+    "for {replan.weak_top.extra_time} {replan.weak_top.extra_time_word} solve time than "
+    "re-planning from scratch",
+    "a median of {replan.weak_top.extra_p1_violations} and at most "
     "{replan.weak_top.worst_p1_violations:word} extra maximum-interval violations",
     "but only {replan.weak_tiebreak.kept_unproven} when it was not",
     "ignoring the edits ({replan.cold.kept_unproven})",
@@ -41,6 +42,20 @@ WORDED = {
     },
 }
 
+#: Table~\ref{tab:pilot-outcomes} and its caption (App. C) — one row per mechanism, plus
+#: the caption's own proven/not-proven split. `{key}` cells only; no spelled-out numbers.
+APP_C_TABLE = [
+    "by scenario stratum ({replan.strata})",
+    "\\texttt{weak@top} & {replan.weak_top.kept_proven} & {replan.weak_top.kept_unproven} & "
+    "{replan.weak_top.all_kept_runs}/{replan.runs}",
+    "\\texttt{weak@tiebreak} & {replan.weak_tiebreak.kept_proven} & "
+    "{replan.weak_tiebreak.kept_unproven} & {replan.weak_tiebreak.all_kept_runs}/{replan.runs}",
+    "re-plan from scratch (\\texttt{cold}) & {replan.cold.kept_proven} & "
+    "{replan.cold.kept_unproven} & {replan.cold.all_kept_runs}/{replan.runs}",
+    "heuristic & {replan.heur.best_kept_proven} & {replan.heur.best_kept_unproven} & "
+    "{replan.heur.best_all_kept_runs}/{replan.runs}",
+]
+
 
 def _load() -> SimpleNamespace:
     # runpy compiles from source every time; an importlib load can reuse a stale .pyc when
@@ -53,11 +68,13 @@ def _tex(value: str) -> str:
 
 
 def _render(template: str, paper: dict[str, str]) -> str:
+    # Every real PAPER key is dotted ("replan.xxx.yyy"); requiring a dot keeps this from
+    # also matching a literal `\texttt{cold}` or similar in a template's own LaTeX.
     def sub(m: re.Match[str]) -> str:
         value = paper[m.group(1)]
         return _WORDS[value] if m.group(2) else _tex(value)
 
-    return re.sub(r"\{([a-z0-9_.]+)(:word)?\}", sub, template)
+    return re.sub(r"\{([a-z0-9_]+\.[a-z0-9_.]+)(:word)?\}", sub, template)
 
 
 def test_recorded_data_recomputes_to_the_papers_numbers() -> None:
@@ -73,8 +90,8 @@ def test_every_number_is_cited_in_the_paper_as_recorded() -> None:
     tex = " ".join(MAIN_TEX.read_text(encoding="utf-8").split())
     tex = re.sub(r"\\allowbreak\s*", "", tex)
     cited: set[str] = set()
-    for template in CITATIONS + list(WORDED):
-        cited |= set(re.findall(r"\{([a-z0-9_.]+)", template))
+    for template in CITATIONS + APP_C_TABLE + list(WORDED):
+        cited |= set(re.findall(r"\{([a-z0-9_]+\.[a-z0-9_.]+)", template))
         sentence = _render(template, pn.PAPER)
         assert sentence in tex, f"not in main.tex: {sentence!r}"
     for pins in WORDED.values():

@@ -70,9 +70,38 @@ last_task_too_early(A) :- last_task(A,T), max_interval(A,I),
 :- priority(_,P), P > 3.
 
 % optimize the schedule by minimizing the total violation
-:~ max_interval_violation(A,T), priority(A,P). [1@5-P, A, T]
-:~ first_task_too_late(A), priority(A,P). [1@5-P, A]
-:~ last_task_too_early(A), priority(A,P). [1@5-P, A]
+%
+% max-interval grading (ADR-0055): layered, not flat. Layer K is violated once the
+% overshoot exceeds K full max_interval-sized steps, so a gap/boundary that is only
+% just over the limit still costs 1 (layer 1 fires under the exact same condition as
+% the flat rule it replaces, verified: gap_over(A,T,1) is "> I", identical to
+% max_interval_violation's own "> I"; likewise for the other two), while one that is
+% e.g. 3x over costs 3 instead of the same flat 1 — no more free ride once a gap is
+% already violated. mi_layer/2's second rule guarantees layer 1 always exists even if
+% the natural bound N0 computes below 1 (a very short horizon/history relative to
+% max_interval) — belt-and-braces so today's coverage is never silently lost.
+mi_layer(A,1..N0) :- max_interval(A,I), latest_start(A,L), last(A,_,S,_),
+                     N0 = (L-S-I)/I+1, N0 >= 1.
+mi_layer(A,1) :- area(A).
+
+gap_over(A,T,K) :- task(A,T), task(A,T+1), max_interval(A,I), mi_layer(A,K),
+                   &sum{ start(A,T+1) - start(A,T) } > K*I.
+
+first_over(A,K) :- task(A,1), max_interval(A,I), mi_layer(A,K), last(A,_,S,_),
+                   &sum { start(A,1) } > S+K*I.
+
+last_under(A,K) :- last_task(A,T), max_interval(A,I), mi_layer(A,K), latest_start(A,L),
+                   &sum { start(A,T) } < L-K*I.
+
+% first_over/2 and last_under/2 carry a trailing marker (`first`/`last`) so their weak-
+% constraint elements can never alias each other's: without it, an area whose first task
+% is too late AND whose last task is too early at the same layer K produced the identical
+% element `1@5-P, A, K` from both rules, and ASP's weak-constraint element-SET semantics
+% collapsed the two into one instead of summing them (ADR-0056). gap_over/3 never had this
+% problem — its extra T term already makes every element distinct.
+:~ gap_over(A,T,K), priority(A,P). [1@5-P, A, T, K]
+:~ first_over(A,K), priority(A,P). [1@5-P, A, K, first]
+:~ last_under(A,K), priority(A,P). [1@5-P, A, K, last]
 
 avoid_zone_violation(A,T) :- start_info(A,T,_,AH), AH > 0.
 :~ avoid_zone_violation(A,T). [1@1, A, T]

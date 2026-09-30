@@ -12,16 +12,19 @@ import {
   snapHour,
 } from "../lib/ganttScale";
 import {
+  PRIORITY_COLOR,
+  PRIORITY_LABEL,
   VIOLATION_COLOR,
   VIOLATION_LABEL,
   clockLabel,
+  durationLabel,
   firstMidnightOffset,
   mowerColors,
   weekdayAtMidnight,
 } from "../lib/schedule";
 import type { PlanTask } from "../lib/schedulePreferences";
 import { visibleRunTrack } from "../lib/runTrack";
-import type { Scenario, ScheduledTask, Violation } from "../types";
+import type { Area, Scenario, ScheduledTask, Violation } from "../types";
 import { Switch } from "./Switch";
 import "./GanttSchedule.css";
 
@@ -71,8 +74,61 @@ interface Props {
 interface Tip {
   x: number;
   y: number;
-  task: PlanTask;
+  area: string;
+  mower: string;
+  /** Preformatted time text — the exact wording differs for a planned task, a run-log
+   *  entry and a pre-t=0 history event, but the tip renders it the same way for all
+   *  three so history bars read with the same interaction as regular tasks. */
+  time: string;
   violations: Violation[];
+}
+
+/** What an area's row-label hover shows: every max-interval violation this week,
+ *  summarised rather than shown per-task — the greenkeeper's question is "how is this
+ *  area doing", not "which one task tripped the rule" (owner request, 2026-09-28). */
+interface AreaMaxIntervalSummary {
+  /** Violations with a concrete elapsed window this week: a gap between two scheduled
+   *  tasks, or the first task starting too late against service history. */
+  windows: Array<{ since: number; until: number }>;
+  /** Count of last-task-too-early violations — a risk into *next* week's cycle, not an
+   *  elapsed window inside this one (`Violation.since`'s backend docstring); reported as
+   *  a plain count since there is no window to show. */
+  wraparound: number;
+}
+
+/** Row-label hover tip: the area's requirements (owner request, 2026-09-28) plus, when
+ *  there are any, this week's max-interval violations. Shown on every area, not only the
+ *  ones with a violation. */
+interface AreaTip extends AreaMaxIntervalSummary {
+  x: number;
+  y: number;
+  area: string;
+  size_m2: number | null;
+  priority: number;
+  min_interval: number;
+  max_interval: number;
+  mowers: string[];
+}
+
+function areaTipData(
+  x: number,
+  y: number,
+  area: Area,
+  mowers: string[],
+  summary: AreaMaxIntervalSummary | undefined,
+): AreaTip {
+  return {
+    x,
+    y,
+    area: area.name,
+    size_m2: area.size_m2 ?? null,
+    priority: area.priority,
+    min_interval: area.min_interval,
+    max_interval: area.max_interval,
+    mowers,
+    windows: summary?.windows ?? [],
+    wraparound: summary?.wraparound ?? 0,
+  };
 }
 
 /** Edit state cannot be a fill: `--series-*` means "which mower", `--status-*` means
@@ -97,6 +153,7 @@ export function GanttSchedule({
 }: Props) {
   const colors = useMemo(() => mowerColors(scenario), [scenario]);
   const [tip, setTip] = useState<Tip | null>(null);
+  const [areaTip, setAreaTip] = useState<AreaTip | null>(null);
   const svgRef = useRef<SVGSVGElement>(null);
   const [drag, setDrag] = useState<DragState | null>(null);
   // pointerup is followed by a synthetic click on the same element; after a real drag we
@@ -120,6 +177,17 @@ export function GanttSchedule({
     [scenario],
   );
 
+  const areaMowers = useMemo(() => {
+    const map = new Map<string, string[]>();
+    for (const area of scenario.areas) {
+      map.set(
+        area.name,
+        scenario.mowers.filter((m) => m.can_mow.includes(area.name)).map((m) => m.name),
+      );
+    }
+    return map;
+  }, [scenario]);
+
   const violationsByTask = useMemo(() => {
     const map = new Map<string, Violation[]>();
     for (const v of violations) {
@@ -130,6 +198,21 @@ export function GanttSchedule({
     }
     return map;
   }, [violations]);
+
+  // Same staleness rule as the per-task rings above: after an edit, `violations` describes
+  // a plan the user has already changed, so nothing is attributed to an area either.
+  const areaMaxIntervalSummary = useMemo(() => {
+    const map = new Map<string, AreaMaxIntervalSummary>();
+    if (violationsStale) return map;
+    for (const v of violations) {
+      if (v.kind !== "max_interval") continue;
+      const entry = map.get(v.area) ?? { windows: [], wraparound: 0 };
+      if (v.since !== null && v.until !== null) entry.windows.push({ since: v.since, until: v.until });
+      else entry.wraparound += 1;
+      map.set(v.area, entry);
+    }
+    return map;
+  }, [violations, violationsStale]);
 
   const { xMin, xMax } = useMemo(() => {
     const ends = tasks.map((t) => t.end);
@@ -273,6 +356,8 @@ export function GanttSchedule({
             const y = TOP + i * ROW_H;
             const rowTasks = tasks.filter((t) => t.area === area.name);
             const rowHistory = scenario.history.filter((h) => h.area === area.name);
+            const summary = areaMaxIntervalSummary.get(area.name);
+            const hasSummary = !!summary && (summary.windows.length > 0 || summary.wraparound > 0);
             return (
               <g key={area.name}>
                 {i % 2 === 1 && (
@@ -307,7 +392,49 @@ export function GanttSchedule({
                         </title>
                       </rect>
                     ))}
-                <text x={GANTT_LEFT - 10} y={y + ROW_H / 2} className="gantt-rowlabel">
+                {/* Area row-label hover (owner request, 2026-09-28): size, priority,
+                    interval bounds and capable mowers for every area, plus — when there
+                    are any — this week's max-interval violations. A plain hit-rect rather
+                    than the label text itself, so a generous target and so hovering
+                    between glyph strokes doesn't drop the tip. */}
+                <rect
+                  x={0}
+                  y={y}
+                  width={GANTT_LEFT}
+                  height={ROW_H}
+                  fill="transparent"
+                  className="gantt-area-hit"
+                  onMouseEnter={(e) =>
+                    setAreaTip(
+                      areaTipData(e.clientX, e.clientY, area, areaMowers.get(area.name) ?? [], summary),
+                    )
+                  }
+                  onMouseMove={(e) =>
+                    setAreaTip(
+                      areaTipData(e.clientX, e.clientY, area, areaMowers.get(area.name) ?? [], summary),
+                    )
+                  }
+                  onMouseLeave={() => setAreaTip(null)}
+                />
+                <circle
+                  cx={GANTT_LEFT - 8}
+                  cy={y + ROW_H / 2}
+                  r={3}
+                  className="gantt-priority-dot"
+                  fill={PRIORITY_COLOR[area.priority] ?? PRIORITY_COLOR[3]}
+                >
+                  <title>{`${PRIORITY_LABEL[area.priority] ?? area.priority} priority`}</title>
+                </circle>
+                <text
+                  x={GANTT_LEFT - 18}
+                  y={y + ROW_H / 2}
+                  className="gantt-rowlabel"
+                  style={
+                    hasSummary
+                      ? { fill: VIOLATION_COLOR.max_interval, pointerEvents: "none" }
+                      : { pointerEvents: "none" }
+                  }
+                >
                   {area.name}
                 </text>
 
@@ -323,14 +450,30 @@ export function GanttSchedule({
                       height={BAR_H - 2}
                       rx={3}
                       className="gantt-history"
-                    >
-                      <title>
-                        {`${area.name} · ${t.mower} · ${clockLabel(
-                          t.start,
-                          scenario.horizon_start_hour,
-                        )} (executed)`}
-                      </title>
-                    </rect>
+                      onMouseEnter={(e) =>
+                        !drag &&
+                        setTip({
+                          x: e.clientX,
+                          y: e.clientY,
+                          area: t.area,
+                          mower: t.mower,
+                          time: `${clockLabel(t.start, scenario.horizon_start_hour)} (executed)`,
+                          violations: [],
+                        })
+                      }
+                      onMouseMove={(e) =>
+                        !drag &&
+                        setTip({
+                          x: e.clientX,
+                          y: e.clientY,
+                          area: t.area,
+                          mower: t.mower,
+                          time: `${clockLabel(t.start, scenario.horizon_start_hour)} (executed)`,
+                          violations: [],
+                        })
+                      }
+                      onMouseLeave={() => !drag && setTip(null)}
+                    />
                   ))}
 
                 {rowHistory.map((h, hi) => (
@@ -342,6 +485,29 @@ export function GanttSchedule({
                     height={BAR_H - 2}
                     rx={3}
                     className="gantt-history"
+                    onMouseEnter={(e) =>
+                      !drag &&
+                      setTip({
+                        x: e.clientX,
+                        y: e.clientY,
+                        area: h.area,
+                        mower: h.mower,
+                        time: `${clockLabel(h.start, scenario.horizon_start_hour)} → ${clockLabel(h.completion, scenario.horizon_start_hour)} (past service)`,
+                        violations: [],
+                      })
+                    }
+                    onMouseMove={(e) =>
+                      !drag &&
+                      setTip({
+                        x: e.clientX,
+                        y: e.clientY,
+                        area: h.area,
+                        mower: h.mower,
+                        time: `${clockLabel(h.start, scenario.horizon_start_hour)} → ${clockLabel(h.completion, scenario.horizon_start_hour)} (past service)`,
+                        violations: [],
+                      })
+                    }
+                    onMouseLeave={() => !drag && setTip(null)}
                   />
                 ))}
 
@@ -362,17 +528,36 @@ export function GanttSchedule({
                         width={Math.max(2, x(s1) - x(s0) - 2)}
                         height={BAR_H - 2}
                         rx={4}
-                        fill={colors.get(t.mower)}
+                        // No mower yet (an added task left it up to the solver, ADR-0031)
+                        // reuses the neutral "past service" fill rather than a mower's
+                        // colour it does not have.
+                        fill={t.mower ? colors.get(t.mower) : "var(--history-fill)"}
                         stroke={ring}
                         strokeWidth={ring ? 2 : 0}
                         className={`${barClass(t)}${
                           editing && onMoveTask ? " gantt-bar-draggable" : ""
                         }${beingDragged ? " gantt-bar-dragging" : ""}`}
                         onMouseEnter={(e) =>
-                          !drag && setTip({ x: e.clientX, y: e.clientY, task: t, violations: vs })
+                          !drag &&
+                          setTip({
+                            x: e.clientX,
+                            y: e.clientY,
+                            area: t.area,
+                            mower: t.mower ?? "(any mower)",
+                            time: `${clockLabel(t.start, scenario.horizon_start_hour)} → ${clockLabel(t.end, scenario.horizon_start_hour)} (${t.end - t.start} h elapsed)`,
+                            violations: vs,
+                          })
                         }
                         onMouseMove={(e) =>
-                          !drag && setTip({ x: e.clientX, y: e.clientY, task: t, violations: vs })
+                          !drag &&
+                          setTip({
+                            x: e.clientX,
+                            y: e.clientY,
+                            area: t.area,
+                            mower: t.mower ?? "(any mower)",
+                            time: `${clockLabel(t.start, scenario.horizon_start_hour)} → ${clockLabel(t.end, scenario.horizon_start_hour)} (${t.end - t.start} h elapsed)`,
+                            violations: vs,
+                          })
                         }
                         onMouseLeave={() => !drag && setTip(null)}
                         onPointerDown={(e) => beginDrag(t, e)}
@@ -431,16 +616,50 @@ export function GanttSchedule({
           style={{ left: tip.x + 14, top: tip.y + 14 }}
           role="tooltip"
         >
-          <strong>{tip.task.area}</strong> · {tip.task.mower}
+          <strong>{tip.area}</strong> · {tip.mower}
           <br />
-          {clockLabel(tip.task.start, scenario.horizon_start_hour)} →{" "}
-          {clockLabel(tip.task.end, scenario.horizon_start_hour)} ({tip.task.end - tip.task.start} h
-          elapsed)
+          {tip.time}
           {tip.violations.map((v, i) => (
             <div key={i} className="gantt-tip-viol">
               ▲ {VIOLATION_LABEL[v.kind]}
             </div>
           ))}
+        </div>
+      )}
+
+      {areaTip && (
+        <div
+          className="gantt-tip"
+          style={{ left: areaTip.x + 14, top: areaTip.y + 14 }}
+          role="tooltip"
+        >
+          <strong>{areaTip.area}</strong>
+          <br />
+          {PRIORITY_LABEL[areaTip.priority] ?? areaTip.priority} priority
+          {areaTip.size_m2 != null ? ` · ${areaTip.size_m2.toLocaleString()} m²` : ""}
+          <br />
+          every {areaTip.min_interval}–{areaTip.max_interval} h
+          <br />
+          {areaTip.mowers.length > 0 ? areaTip.mowers.join(", ") : "no capable mower"}
+          {(areaTip.windows.length > 0 || areaTip.wraparound > 0) && (
+            <>
+              <br />
+              {areaTip.windows.length + areaTip.wraparound} max-interval violation
+              {areaTip.windows.length + areaTip.wraparound === 1 ? "" : "s"} this week
+              {areaTip.windows.map((w, i) => (
+                <div key={i} className="gantt-tip-viol">
+                  ▲ {clockLabel(w.since, scenario.horizon_start_hour)} –{" "}
+                  {clockLabel(w.until, scenario.horizon_start_hour)} ·{" "}
+                  {durationLabel(w.until - w.since)} overdue
+                </div>
+              ))}
+              {areaTip.wraparound > 0 && (
+                <div className="gantt-tip-viol">
+                  ▲ last service may leave too long a gap into next week ({areaTip.wraparound})
+                </div>
+              )}
+            </>
+          )}
         </div>
       )}
     </figure>
@@ -457,6 +676,9 @@ function Legend({
   violations: Violation[];
 }) {
   const kinds = Array.from(new Set(violations.map((v) => v.kind)));
+  const priorities = Array.from(new Set(scenario.areas.map((a) => a.priority))).sort(
+    (a, b) => a - b,
+  );
   return (
     <div className="gantt-legend">
       {[...scenario.mowers]
@@ -472,6 +694,15 @@ function Legend({
         <span className="gantt-swatch gantt-swatch-history" />
         past service
       </span>
+      {priorities.map((p) => (
+        <span key={`prio-${p}`} className="gantt-legend-item">
+          <span
+            className="gantt-swatch gantt-swatch-round"
+            style={{ background: PRIORITY_COLOR[p] ?? PRIORITY_COLOR[3] }}
+          />
+          {PRIORITY_LABEL[p] ?? p} priority
+        </span>
+      ))}
       {kinds.map((k) => (
         <span key={k} className="gantt-legend-item">
           <span className="gantt-swatch gantt-swatch-ring" style={{ borderColor: VIOLATION_COLOR[k] }} />

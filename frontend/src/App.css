@@ -202,6 +202,9 @@
 }
 
 .solve-bar button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   font: inherit;
   font-weight: 600;
   background: var(--series-1);
@@ -210,6 +213,16 @@
   border-radius: 8px;
   padding: 8px 18px;
   cursor: pointer;
+}
+
+/* The primary Solve/Re-solve/Stop button's transport glyph — same family as the Move
+   forward chevrons, sized down to sit with this button's smaller text. Buttons without a
+   glyph (Solve from scratch, Undo) are unaffected since they render no <svg>. */
+.solve-bar button svg {
+  width: 14px;
+  height: 10px;
+  fill: currentColor;
+  flex-shrink: 0;
 }
 
 .solve-bar button:disabled {
@@ -408,7 +421,7 @@
   max-width: 46ch;
 }
 
-/* Re-plan controls (ADR-0038): a secondary "Re-solve from scratch" button and a one-line
+/* Re-plan controls (ADR-0038): a secondary "Solve from scratch" button and a one-line
    reminder of what plain Re-solve does. */
 .solve-bar button.secondary {
   background: transparent;

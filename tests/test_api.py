@@ -715,7 +715,7 @@ def test_explain_endpoint_folds_released_into_the_reinstated_baseline():
     # tells the endpoint what it cannot otherwise see (a release is an absence, not a
     # value in `preferences`).
     scenario = toy_course()
-    area = "Hole1_Fairway"  # derived minimum is 7 (ADR-0017)
+    area = "Hole1_Fairway"  # derived minimum is now 1 (bounds.py's min_starts relaxation)
     submitted = [
         PreferredTask(area=area, start=s, mower="Mower A", origin="frozen")
         for s in (10, 30, 50, 70, 90)
@@ -737,7 +737,9 @@ def test_explain_endpoint_folds_released_into_the_reinstated_baseline():
 
     without_released = client.post("/api/explain", json=body).json()["report"]
     assert len(without_released["reinstated"]) == 1
-    assert without_released["reinstated"][0]["forced_by_minimum"] is True
+    # 5 submitted already meets the (now relaxed) minimum of 1 -- the two extra services
+    # are the max-interval objective's own choice, not the floor's.
+    assert without_released["reinstated"][0]["forced_by_minimum"] is False
 
     with_released = client.post(
         "/api/explain", json={**body, "released": {area: 2}}

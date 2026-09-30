@@ -26,21 +26,28 @@ REPLAN_CSV = ROOT / "experiments/replan-pilot/summary.csv"
 #: The values as printed in the paper, keyed by claim.
 PAPER: dict[str, str] = {
     # Editing and re-planning — preference-mechanism pilot re-run on current code
-    # (2026-09-16), -t4 portfolio rows.
+    # (2026-09-29, post-ADR-0055/0056/0057), -t4 portfolio rows.
     "replan.scenarios": "6",
     "replan.pinned": "30%",
     "replan.budget": "60 s",
     "replan.weak_top.kept_proven": "100%",
     "replan.weak_top.kept_unproven": "100%",
-    "replan.weak_top.extra_time": "2%",
-    "replan.weak_top.extra_p1_violations": "0",
+    "replan.weak_top.extra_time": "15%",
+    "replan.weak_top.extra_time_word": "less",
+    "replan.weak_top.extra_p1_violations": "0.5",
     "replan.weak_top.worst_p1_violations": "3",
-    "replan.weak_tiebreak.kept_unproven": "8%",
-    "replan.cold.kept_unproven": "13%",
-    "replan.heur.best_kept_unproven": "91%",  # the better of the two heuristic variants
-    "replan.runs": "18",
     "replan.weak_top.all_kept_runs": "18",
-    "replan.heur.best_all_kept_runs": "6",
+    "replan.weak_tiebreak.kept_proven": "100%",
+    "replan.weak_tiebreak.kept_unproven": "10%",
+    "replan.weak_tiebreak.all_kept_runs": "6",
+    "replan.cold.kept_proven": "14%",
+    "replan.cold.kept_unproven": "7%",
+    "replan.cold.all_kept_runs": "0",
+    "replan.heur.best_kept_proven": "95%",  # the better of the two heuristic variants
+    "replan.heur.best_kept_unproven": "70%",
+    "replan.heur.best_all_kept_runs": "2",
+    "replan.runs": "18",
+    "replan.strata": "2 proven, 4 not proven",
 }
 
 HARD = ("balanced-four-hole", "six-hole-course")
@@ -95,24 +102,35 @@ def replan(path: Path) -> dict[str, str]:
 
     pinned = {r["edit_set"] for r in rows}
     p1_price = [best_p1(s, "weak@top") - best_p1(s, "cold") for s in scenarios]
+    # weak@top's time cost relative to cold can land on either side of zero (it did,
+    # between the 2026-09-16 and 2026-09-29 re-runs) -- pin the direction word alongside
+    # the unsigned percentage rather than baking a sign into prose that assumes "more".
+    time_delta = time_ratio("weak@top") - 1
+    # "the better of the two heuristic variants" (App. C's single "heuristic" row) is one
+    # arm's full stats, not each column's own max across the two -- otherwise a tie on one
+    # column and a split on another could report a combination neither variant produced.
+    best_heur = max(("heur[1,true]", "heur[10,true]"), key=lambda a: stratum(a, False) or 0.0)
     return {
         "replan.scenarios": str(len(scenarios)),
         "replan.pinned": ", ".join(sorted(_pct(float(e.split("@")[1])) for e in pinned)),
         "replan.weak_top.kept_proven": _pct(stratum("weak@top", True)),
         "replan.weak_top.kept_unproven": _pct(stratum("weak@top", False)),
-        "replan.weak_top.extra_time": _pct(time_ratio("weak@top") - 1),
+        "replan.weak_top.extra_time": _pct(abs(time_delta)),
+        "replan.weak_top.extra_time_word": "less" if time_delta < 0 else "more",
         "replan.weak_top.extra_p1_violations": f"{st.median(p1_price):g}",
         "replan.weak_top.worst_p1_violations": f"{max(p1_price):g}",
-        "replan.weak_tiebreak.kept_unproven": _pct(stratum("weak@tiebreak", False)),
-        "replan.cold.kept_unproven": _pct(stratum("cold", False)),
-        "replan.heur.best_kept_unproven": _pct(
-            max(stratum(a, False) or 0.0 for a in ("heur[1,true]", "heur[10,true]"))
-        ),
-        "replan.runs": str(len(cell[(scenarios[0], "cold")]) * len(scenarios)),
         "replan.weak_top.all_kept_runs": all_kept_runs("weak@top"),
-        "replan.heur.best_all_kept_runs": str(
-            max(int(all_kept_runs(a)) for a in ("heur[1,true]", "heur[10,true]"))
-        ),
+        "replan.weak_tiebreak.kept_proven": _pct(stratum("weak@tiebreak", True)),
+        "replan.weak_tiebreak.kept_unproven": _pct(stratum("weak@tiebreak", False)),
+        "replan.weak_tiebreak.all_kept_runs": all_kept_runs("weak@tiebreak"),
+        "replan.cold.kept_proven": _pct(stratum("cold", True)),
+        "replan.cold.kept_unproven": _pct(stratum("cold", False)),
+        "replan.cold.all_kept_runs": all_kept_runs("cold"),
+        "replan.heur.best_kept_proven": _pct(stratum(best_heur, True)),
+        "replan.heur.best_kept_unproven": _pct(stratum(best_heur, False)),
+        "replan.heur.best_all_kept_runs": all_kept_runs(best_heur),
+        "replan.runs": str(len(cell[(scenarios[0], "cold")]) * len(scenarios)),
+        "replan.strata": f"{len(proves)} proven, {len(scenarios) - len(proves)} not proven",
     }
 
 

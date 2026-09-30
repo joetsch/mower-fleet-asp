@@ -32,6 +32,11 @@
   --status-serious:  #ec835a;  /* avoid-zone violation    */
 
   --history-fill: #c3c2b7;
+
+  /* ordinal — area priority (sequential, one hue, light → dark: High is darkest) */
+  --priority-high:   #3d4b91;
+  --priority-medium: #7d87c9;
+  --priority-low:    #c1c6e8;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -61,6 +66,11 @@
     --status-serious:  #ec835a;
 
     --history-fill: #383835;
+
+    /* anchor flips in dark: High stays the salient (brightest) step against a dark surface */
+    --priority-high:   #aab3f2;
+    --priority-medium: #7d87c9;
+    --priority-low:    #4c5386;
   }
 }
 
@@ -90,6 +100,10 @@
   --status-serious:  #ec835a;
 
   --history-fill: #383835;
+
+  --priority-high:   #aab3f2;
+  --priority-medium: #7d87c9;
+  --priority-low:    #4c5386;
 }
 
 * {

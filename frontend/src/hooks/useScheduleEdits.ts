@@ -36,18 +36,24 @@ export interface ScheduleEdits {
   setPin: (uid: string, pin: TaskPinState) => void;
   /** Set every task's keep state at once — the "release all" / "keep all" toggle. */
   setAllPins: (pin: TaskPinState) => void;
-  /** Ask for a service that was not in the solved plan (`origin: "added"`). */
-  addTask: (area: string, start: number, mower: string, scenario: Scenario) => void;
+  /** Ask for a service that was not in the solved plan (`origin: "added"`). A `null`
+   *  mower is a time-only preference — the solver picks (ADR-0031). */
+  addTask: (area: string, start: number, mower: string | null, scenario: Scenario) => void;
 }
 
 /** Hours this mower needs for this area — the scenario's own `base_durations` when it has
  *  the pair, else the same size/rate default the scenario editor fills in (ADR-0024).
- *  Only ever a *preview*: the solver recomputes the real completion from its own table. */
-function durationFor(scenario: Scenario, area: string, mower: string): number {
-  const given = scenario.base_durations?.find((d) => d.area === area && d.mower === mower);
+ *  Only ever a *preview*: the solver recomputes the real completion from its own table.
+ *  A `null` mower (the user left it up to the solver) previews against the area's first
+ *  capable mower — any capable one is as good a guess as another for display purposes. */
+function durationFor(scenario: Scenario, area: string, mower: string | null): number {
+  const resolved =
+    mower ?? scenario.mowers.find((m) => m.can_mow.includes(area))?.name ?? null;
+  if (resolved == null) return FALLBACK_DURATION_H;
+  const given = scenario.base_durations?.find((d) => d.area === area && d.mower === resolved);
   if (given) return given.hours;
   const size = scenario.areas.find((a) => a.name === area)?.size_m2;
-  const rate = scenario.mowers.find((m) => m.name === mower)?.area_capacity_m2_per_day;
+  const rate = scenario.mowers.find((m) => m.name === resolved)?.area_capacity_m2_per_day;
   if (size == null || rate == null) return FALLBACK_DURATION_H;
   return defaultDurationHours(size, rate);
 }

@@ -38,9 +38,30 @@ def test_area_whose_first_start_is_past_the_horizon_gets_zero_bounds():
 
 def test_known_bounds_for_the_toy_scenario():
     bounds = service_count_bounds(toy_course())
-    # toy_course is uncontended, so the derived bounds match the old cadence formula.
-    assert bounds["Hole1_Fairway"] == (7, 9)
-    assert bounds["Hole2_SemiroughC"] == (2, 4)
+    # The floor is now 1 (see test_min_starts_is_never_more_than_one below): the objective,
+    # not the floor, decides how densely a contended area gets served. Only the ceiling
+    # still matches the old cadence-based max.
+    assert bounds["Hole1_Fairway"] == (1, 9)
+    assert bounds["Hole2_SemiroughC"] == (1, 4)
+
+
+def test_min_starts_is_never_more_than_one():
+    # An area whose cadence (and greedy witness) both call for several services a week
+    # used to get min_starts == cadence, forcing that many tasks in even when the
+    # optimum doesn't want them (owner report, compact-single-mower/H2_SR2: a forced
+    # 4th task there produced an awkward min-interval undercut for no cost benefit).
+    # The floor now only ensures the area is *represented* at all -- one task is enough
+    # to switch on its max-interval objective terms -- and leaves how many more to add
+    # to the optimizer.
+    scenario = Scenario(
+        name="s",
+        areas=[_area("A", min_interval=39, max_interval=48)],
+        mowers=[Mower(name="M", can_mow=["A"])],
+        history=[ServiceEvent(area="A", mower="M", start=-45, completion=-41)],
+        horizon_hours=168,
+    )
+    bounds = service_count_bounds(scenario)
+    assert bounds["A"][0] == 1  # cadence here is 4 -- the old floor would have been 4
 
 
 def test_derived_bounds_bracket_the_greedy_witness_for_every_area():

@@ -56,9 +56,22 @@
   dominant-baseline: middle;
 }
 
+/* Hit target for the area-level max-interval hover (owner request, 2026-09-28) — wider
+   than the label text itself so hovering between glyph strokes doesn't drop the tip. */
+.gantt-area-hit {
+  cursor: help;
+}
+
+.gantt-priority-dot {
+  stroke: none;
+}
+
 .gantt-history {
   fill: var(--history-fill);
   opacity: 0.55;
+}
+.gantt-history:hover {
+  opacity: 0.8;
 }
 
 .gantt-bar {
@@ -115,6 +128,10 @@
   height: 12px;
   border-radius: 3px;
   display: inline-block;
+}
+
+.gantt-swatch-round {
+  border-radius: 50%;
 }
 
 .gantt-swatch-history {

@@ -13,16 +13,14 @@
   "max_minimise_total_s": 15.0,
   "stability_repeats": 5,
   "opt_mode": "opt",
-  "skipped": [
-    "balanced-four-hole/seed1: no re-plan within 20 s"
-  ],
+  "skipped": [],
   "explain_s_by_scenario": {
-    "balanced-four-hole": 412.5,
-    "six-hole-course": 373.2
+    "balanced-four-hole": 138.0,
+    "six-hole-course": 282.6
   },
-  "n_records": 118,
-  "generated_at": "2026-09-16T16:46:53.957813+00:00",
-  "host": "macOS-26.6.2-arm64-arm-64bit",
+  "n_records": 114,
+  "generated_at": "2026-09-29T14:43:28.153279+00:00",
+  "host": "macOS-26.7-arm64-arm-64bit",
   "tool_versions": {
     "python": "3.11.15",
     "clingo": "5.8.2",

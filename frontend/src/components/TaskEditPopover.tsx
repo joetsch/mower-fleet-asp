@@ -94,10 +94,14 @@ export function TaskEditPopover({
         <span>mower</span>
         <select
           aria-label={`mower for ${task.area}`}
-          value={task.mower}
+          value={task.mower ?? ""}
           disabled={mowers.length < 2}
           onChange={(e) => onReassign(e.target.value)}
         >
+          {/* Only an added, not-yet-solved task can still be "(any)" — see
+              PlanTask.mower. Picking a real option below is an ordinary reassign; there
+              is no way back to "(any)" once one is picked. */}
+          {task.mower === null && <option value="">(any)</option>}
           {mowers.map((m) => (
             <option key={m.name} value={m.name}>
               {m.name}

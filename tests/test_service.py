@@ -132,6 +132,29 @@ def test_solve_result_from_optimal_maps_status_and_schedule(toy_scenario):
     assert out.solver == _INFO
 
 
+def test_solve_result_from_attaches_elapsed_windows_to_max_interval_violations(toy_scenario):
+    """The real solver's own violation atoms (parse.py) carry no timing — `service.py`
+    must enrich them with the elapsed window `score_schedule` recomputes (ADR-0054)."""
+    # Hole1_Fairway: history start=-10, max_interval=24 -> h+max_interval=14; scheduling
+    # its first task at 20 is first_task_too_late, with the overdue window [14, 20).
+    raw = ClingconResult(
+        status="optimal",
+        atoms=[
+            clingo.parse_term('schedule("Hole1_Fairway",1,"Mower A",20,26)'),
+            clingo.parse_term('first_task_too_late("Hole1_Fairway")'),
+        ],
+        cost=[0, 0, 0, 0, 1],
+        solve_time_s=2.0,
+    )
+    out = solve_result_from(toy_scenario, raw, _INFO)
+    v = next(
+        v
+        for v in out.schedule.violations
+        if v.kind == "max_interval" and v.area == "Hole1_Fairway"
+    )
+    assert (v.since, v.until) == (14, 20)
+
+
 def test_solve_result_carries_the_fixed_5_slot_quality_vector(toy_scenario):
     """`quality` is score.py's instance-independent vector, not the raw clingcon cost —
     it is what a rolling horizon compares across rolls (ADR-0042)."""

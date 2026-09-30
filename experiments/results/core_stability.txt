@@ -1,11 +1,11 @@
 conflict: Hole1_Fairway and Hole1_SemiroughA both on Mower A at hour 2; 4 assumptions
-clingo 5.8.2, clingcon 5.2.1.post2, macOS-26.6.2-arm64-arm-64bit
+clingo 5.8.2, clingcon 5.2.1.post2, macOS-26.7-arm64-arm-64bit
 
 portfolio (-t4 --configuration=many): 4 distinct raw core(s) over 6 fresh solves (sizes 2, 3, 3, 4)
-  2x  pref_mower_met("Hole1_SemiroughA",2,"Mower A") pref_time_met("Hole1_Fairway",2)
+  1x  pref_time_met("Hole1_Fairway",2) pref_time_met("Hole1_SemiroughA",2)
   1x  pref_mower_met("Hole1_Fairway",2,"Mower A") pref_time_met("Hole1_Fairway",2) pref_time_met("Hole1_SemiroughA",2)
-  2x  pref_mower_met("Hole1_SemiroughA",2,"Mower A") pref_time_met("Hole1_Fairway",2) pref_time_met("Hole1_SemiroughA",2)
-  1x  pref_mower_met("Hole1_Fairway",2,"Mower A") pref_mower_met("Hole1_SemiroughA",2,"Mower A") pref_time_met("Hole1_Fairway",2) pref_time_met("Hole1_SemiroughA",2)
+  1x  pref_mower_met("Hole1_SemiroughA",2,"Mower A") pref_time_met("Hole1_Fairway",2) pref_time_met("Hole1_SemiroughA",2)
+  3x  pref_mower_met("Hole1_Fairway",2,"Mower A") pref_mower_met("Hole1_SemiroughA",2,"Mower A") pref_time_met("Hole1_Fairway",2) pref_time_met("Hole1_SemiroughA",2)
 
-deterministic (-t1 --configuration=jumpy): 1 distinct raw core(s) over 6 fresh solves (sizes 3)
-  6x  pref_mower_met("Hole1_SemiroughA",2,"Mower A") pref_time_met("Hole1_Fairway",2) pref_time_met("Hole1_SemiroughA",2)
+deterministic (-t1 --configuration=jumpy): 1 distinct raw core(s) over 6 fresh solves (sizes 4)
+  6x  pref_mower_met("Hole1_Fairway",2,"Mower A") pref_mower_met("Hole1_SemiroughA",2,"Mower A") pref_time_met("Hole1_Fairway",2) pref_time_met("Hole1_SemiroughA",2)

@@ -50,10 +50,12 @@ def test_an_extra_task_beyond_what_was_submitted_is_reported():
 def test_it_says_whether_the_minimum_actually_forced_the_extra_service():
     """The row must carry *why*, because the UI states a cause.
 
-    ``Hole1_Fairway``'s derived minimum is 7 (ADR-0017). Submitting 8 and getting 9 back
-    is not the minimum's doing — the extra service is the optimiser's own choice, driven
-    by the max-interval objective. The sentence on screen said "needs at least 7 …, so the
-    solver added 1 back" either way, asserting a cause nobody checked.
+    ``Hole1_Fairway``'s derived minimum is now 1 (bounds.py's min_starts relaxation --
+    the floor only guarantees the area is represented at all, not a full cadence).
+    Submitting 8 and getting 9 back is not the minimum's doing — the extra service is the
+    optimiser's own choice, driven by the max-interval objective. The sentence on screen
+    said "needs at least 1 …, so the solver added 1 back" either way, asserting a cause
+    nobody checked.
     """
     scenario = toy_course()
     submitted = [
@@ -68,23 +70,26 @@ def test_it_says_whether_the_minimum_actually_forced_the_extra_service():
     (row,) = reinstated_services(scenario, submitted, schedule)
     assert row.submitted_count == 8
     assert row.actual_count == 9
-    assert row.min_services == 7
-    assert row.forced_by_minimum is False, "8 submitted already meets the minimum of 7"
+    assert row.min_services == 1
+    assert row.forced_by_minimum is False, "8 submitted already meets the minimum of 1"
 
 
 def test_the_minimum_is_reported_as_the_cause_when_it_really_is():
+    """The only way the now-relaxed floor of 1 genuinely forces a service back is a
+    baseline of 0 for the area -- nothing submitted, nothing released."""
     scenario = toy_course()
-    submitted = [
-        PreferredTask(area="Hole1_Fairway", start=s, mower="Mower A", origin="frozen")
-        for s in (10, 30)
-    ]
+    submitted = [PreferredTask(area="Hole2_Fairway", start=10, mower="Mower A", origin="frozen")]
     schedule = Schedule(
-        tasks=[_task("Hole1_Fairway", s) for s in (10, 30, 50)], violations=[], cost=[]
+        tasks=[_task("Hole2_Fairway", s) for s in (10,)]
+        + [_task("Hole1_Fairway", 30)],
+        violations=[],
+        cost=[],
     )
 
-    (row,) = reinstated_services(scenario, submitted, schedule)
-    assert row.submitted_count == 2
-    assert row.min_services == 7
+    result = reinstated_services(scenario, submitted, schedule)
+    (row,) = [r for r in result if r.area == "Hole1_Fairway"]
+    assert row.submitted_count == 0
+    assert row.min_services == 1
     assert row.forced_by_minimum is True
 
 

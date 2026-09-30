@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import type { Scenario } from "../types";
-import { mowerColors } from "./schedule";
+import { durationLabel, mowerColors } from "./schedule";
 
 // mowerColors only reads scenario.mowers[].name — a minimal cast keeps these focused.
 function scenarioWithMowers(names: string[]): Scenario {
@@ -22,5 +22,21 @@ describe("mowerColors", () => {
     expect(colors.get("I")).toBe("var(--series-1)"); // 9th
     expect(colors.get("J")).toBe("var(--series-2)"); // 10th
     expect(colors.get("K")).toBe("var(--series-3)"); // 11th
+  });
+});
+
+describe("durationLabel", () => {
+  it("shows plain hours under a day", () => {
+    expect(durationLabel(1)).toBe("1h");
+    expect(durationLabel(23)).toBe("23h");
+  });
+
+  it("shows whole days with no remainder", () => {
+    expect(durationLabel(24)).toBe("1d");
+    expect(durationLabel(48)).toBe("2d");
+  });
+
+  it("shows days plus the remaining hours", () => {
+    expect(durationLabel(29)).toBe("1d 5h");
   });
 });

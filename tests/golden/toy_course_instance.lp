@@ -66,23 +66,23 @@ last("Hole3_SemiroughB","Mower D",-8,-2).
 last("Hole3_SemiroughC","Mower C",-25,-18).
 
 % --- service-count bounds ---
-min_starts("Hole1_Fairway",7).
+min_starts("Hole1_Fairway",1).
 max_starts("Hole1_Fairway",9).
-min_starts("Hole1_SemiroughA",3).
+min_starts("Hole1_SemiroughA",1).
 max_starts("Hole1_SemiroughA",4).
-min_starts("Hole1_SemiroughB",3).
+min_starts("Hole1_SemiroughB",1).
 max_starts("Hole1_SemiroughB",4).
-min_starts("Hole2_Fairway",7).
+min_starts("Hole2_Fairway",1).
 max_starts("Hole2_Fairway",10).
-min_starts("Hole2_SemiroughA",3).
+min_starts("Hole2_SemiroughA",1).
 max_starts("Hole2_SemiroughA",4).
-min_starts("Hole2_SemiroughC",2).
+min_starts("Hole2_SemiroughC",1).
 max_starts("Hole2_SemiroughC",4).
-min_starts("Hole3_Fairway",7).
+min_starts("Hole3_Fairway",1).
 max_starts("Hole3_Fairway",10).
-min_starts("Hole3_SemiroughB",3).
+min_starts("Hole3_SemiroughB",1).
 max_starts("Hole3_SemiroughB",4).
-min_starts("Hole3_SemiroughC",2).
+min_starts("Hole3_SemiroughC",1).
 max_starts("Hole3_SemiroughC",4).
 
 % --- completion table ---

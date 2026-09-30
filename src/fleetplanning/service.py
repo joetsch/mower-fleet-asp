@@ -33,7 +33,7 @@ from fleetplanning.solver.instance import render_instance
 from fleetplanning.solver.parse import parse_schedule
 from fleetplanning.solver.preferences import preference_agreement, render_preferences
 from fleetplanning.solver.runner import ClingconResult, ClingconSolver
-from fleetplanning.solver.score import score_schedule
+from fleetplanning.solver.score import attach_violation_windows, score_schedule
 
 ENCODING = "golf_schedule_forward_model.lp"
 
@@ -275,6 +275,11 @@ def solve_result_from(
         )
 
     schedule = parse_schedule(result.atoms, result.cost)
+    score = score_schedule(scenario, schedule.tasks)
+    # Enrich the real solver's own violation atoms with the elapsed-window bounds
+    # score_schedule works out along the way (area report hover, ADR-0054) — display
+    # metadata only, never a second opinion on which violations exist.
+    schedule.violations = attach_violation_windows(schedule.violations, score.violations)
     return SolveResult(
         scenario_name=scenario.name,
         horizon_hours=scenario.horizon_hours,
@@ -287,7 +292,7 @@ def solve_result_from(
         # The instance-independent quality axis (ADR-0016) — comparable across rolls where
         # the raw `schedule.cost` is not (its length tracks the priorities present, and
         # `weak@top` prepends a slot).
-        quality=score_schedule(scenario, schedule.tasks).slots,
+        quality=score.slots,
         preferences=report(schedule.tasks),
     )
 

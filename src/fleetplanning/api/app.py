@@ -14,12 +14,21 @@ search starts, not when it finishes. There is at most one live job — see
 one. The handlers are plain ``def`` so FastAPI runs them in a worker thread; grounding
 (synchronous, fast at this demonstrator's scale) happens on that thread inside
 ``solve_jobs.start``, the search itself runs on clingo's own thread.
+
+If a built frontend is found (``frontend/dist``, packaged by ``scripts/package_demo.py``
+for a local-run zip, ADR-0058), it's also served from here at every non-``/api`` path —
+see ``_resolve_static_dir`` / ``_mount_static`` below. In normal dev, Vite serves the
+frontend on :5173 instead and this mount doesn't happen.
 """
 
 from __future__ import annotations
 
+import os
+from pathlib import Path
+
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 
 from fleetplanning import __version__, derived, solve_jobs
 from fleetplanning.api.schemas import (
@@ -275,8 +284,51 @@ def post_explain(request: ExplainRequest) -> ExplainResponse:
     return ExplainResponse(report=report)
 
 
+def _resolve_static_dir() -> Path | None:
+    """Where the built frontend lives, if it's been built at all (ADR-0058).
+
+    ``FLEETPLANNING_STATIC_DIR`` wins when set (how ``scripts/package_demo.py`` points at
+    the bundled ``frontend/dist`` it ships); otherwise we look for ``frontend/dist`` next
+    to the current working directory, which is where a packaged zip's start scripts `cd`
+    before running ``uv run fleetplanning-api``. Local dev never has either — the frontend
+    only exists as Vite's dev server — so this returns ``None`` and nothing is mounted.
+    """
+    raw = os.environ.get("FLEETPLANNING_STATIC_DIR")
+    candidate = Path(raw) if raw else Path.cwd() / "frontend" / "dist"
+    return candidate if (candidate / "index.html").is_file() else None
+
+
+def _mount_static(app: FastAPI, static_dir: Path) -> None:
+    """Serve the built frontend from ``static_dir`` at every path the API doesn't claim.
+
+    Must be called last: Starlette tries routes in registration order, so the ``/api/...``
+    routes above still match first and this mount only ever sees what's left over. The
+    frontend has no client-side routing (no react-router), so plain
+    ``StaticFiles(html=True)`` — which serves ``index.html`` for ``/`` and 404s on anything
+    else missing — is enough; there's no second page to fall back to.
+    """
+    app.mount("/", StaticFiles(directory=static_dir, html=True), name="frontend")
+
+
+_static_dir = _resolve_static_dir()
+if _static_dir is not None:
+    _mount_static(app, _static_dir)
+
+
 def run() -> None:
-    """Entry point for ``uv run fleetplanning-api``."""
+    """Entry point for ``uv run fleetplanning-api``.
+
+    In a packaged run (``FLEETPLANNING_OPEN_BROWSER=1``, set by the zip's start scripts,
+    ADR-0058) this also opens the browser on the app once the server is up, so a
+    double-click is the whole experience. Local dev (`uv run fleetplanning-api` on its
+    own, Vite dev server on :5173) leaves this off by default.
+    """
+    import threading
+    import webbrowser
+
     import uvicorn
 
-    uvicorn.run(app, host="127.0.0.1", port=8000)
+    host, port = "127.0.0.1", 8000
+    if os.environ.get("FLEETPLANNING_OPEN_BROWSER") == "1":
+        threading.Timer(1.0, lambda: webbrowser.open(f"http://{host}:{port}")).start()
+    uvicorn.run(app, host=host, port=port)

@@ -84,9 +84,13 @@ export function ScheduleTable({
                 {editing && options.length > 1 ? (
                   <select
                     aria-label={`mower for ${t.area} at hour ${t.start}`}
-                    value={t.mower}
+                    value={t.mower ?? ""}
                     onChange={(e) => onReassign(t.uid, e.target.value)}
                   >
+                    {/* Only an added, not-yet-solved task can still be "(any)" — see
+                        PlanTask.mower. Picking a real option below is an ordinary
+                        reassign; there is no way back to "(any)" once one is picked. */}
+                    {t.mower === null && <option value="">(any)</option>}
                     {options.map((m) => (
                       <option key={m} value={m}>
                         {m}
@@ -94,7 +98,7 @@ export function ScheduleTable({
                     ))}
                   </select>
                 ) : (
-                  t.mower
+                  (t.mower ?? "(any)")
                 )}
               </td>
               <td>

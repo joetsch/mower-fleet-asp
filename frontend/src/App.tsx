@@ -74,7 +74,7 @@ const DEFAULT_CLINGO_ARGS = "-t4 --configuration=many";
 //
 // The sixth, `cold`, is **no stability at all** (UI review 2026-09-10): the week is
 // re-planned from scratch each step. `preferencesFor` collapses it to `NO_PREFERENCES`, so
-// it reaches the wire exactly like "Re-solve from scratch". It is here because the
+// it reaches the wire exactly like "Solve from scratch". It is here because the
 // heuristic mechanism has a measured price (6× the solve time at 0.69 agreement, ADR-0043)
 // and a greenkeeper who does not care about churn should pay neither that nor the
 // weak-constraint distortion.
@@ -299,7 +299,7 @@ export default function App() {
   // in nothing (a timeout with no model, or Stop before the first one) is undoable too —
   // that is exactly the case where the user most wants the old plan back.
   //
-  // `cold` is the "Re-solve from scratch" button (ADR-0038): send no payload and ignore the
+  // `cold` is the "Solve from scratch" button (ADR-0038): send no payload and ignore the
   // plan on screen. Plain "Re-solve" keeps the plan — every task the user has not released.
   // The first solve (empty working copy) is cold either way: `toPreferences([])` is already
   // the no-payload form.
@@ -319,7 +319,7 @@ export default function App() {
       timeLimit,
       expert ? clingoArgsTokens : undefined,
       cold ? NO_PREFERENCES : toPreferences(planTasks, stability),
-      // "Re-solve from scratch" ignores the plan on screen entirely, releases included —
+      // "Solve from scratch" ignores the plan on screen entirely, releases included —
       // there is nothing for `POST /api/explain`'s `reinstated` check to compare against.
       cold ? undefined : releasedCounts(planTasks),
     );
@@ -351,7 +351,7 @@ export default function App() {
 
   // "Add a service" (the add panel): record the requested slot as a weak preference AND
   // raise the area's floor by one so the solver must produce it — an unsaved draft.
-  const addService = (area: string, start: number, mower: string) => {
+  const addService = (area: string, start: number, mower: string | null) => {
     if (!workingScenario || !bundle) return;
     // Count only the area's services that will survive the next Re-solve — a released one
     // is on its way out, so releasing one and adding one in the same area is a *swap*, not
@@ -370,7 +370,11 @@ export default function App() {
     setError(null);
     const executedPlan = planTasks.map((t) => ({
       area: t.area,
-      mower: t.mower,
+      // A null mower only exists on an added task before its first re-solve, and editing
+      // is modal (ADR-0053) — Move forward is disabled while the editor is open, and
+      // Re-solve is the only way out of it, which always returns a concrete mower
+      // (`fromResult`). So every task here has already been solved at least once.
+      mower: t.mower ?? "",
       start: t.start,
       end: t.end,
       task: t.sourceTask ?? 1, // rank is not read by the roll; a placeholder is fine
@@ -605,7 +609,7 @@ export default function App() {
         <div>
           <h1>Fleet-Planning Demonstrator</h1>
           <p className="app-sub">
-            Resource-based weekly scheduling for a robotic mower fleet · Phase 1
+            Resource-based weekly scheduling for a robotic mower fleet
           </p>
         </div>
         <div className="header-controls">
@@ -738,7 +742,9 @@ export default function App() {
                   onClick={() => {
                     if (editing) return stopEditing();
                     startEditing(scenario);
-                    setScenarioTab("areas"); // otherwise editing opens with nothing visible
+                    // Only default to Areas if no tab was already open — don't clobber
+                    // whatever the user had open before toggling editing off and back on.
+                    setScenarioTab((prev) => prev ?? "areas");
                   }}
                   disabled={solving || persisting || editingSchedule}
                 >
@@ -872,6 +878,16 @@ export default function App() {
                   !solving && (fieldErrors.length > 0 || workingScenario.areas.length === 0)
                 }
               >
+                {/* Same transport-key glyph family as Move forward's fast-forward
+                    chevrons: a single triangle to start/generate, a square to stop —
+                    aria-hidden, the accessible name stays the plain label. */}
+                <svg viewBox="0 0 24 16" aria-hidden="true" focusable="false">
+                  {solving ? (
+                    <rect x="7" y="4" width="10" height="8" rx="1" />
+                  ) : (
+                    <path d="M6 1 L20 8 L6 15 Z" />
+                  )}
+                </svg>
                 {solving ? "Stop solving" : result ? "Re-solve" : "Solve schedule"}
               </button>
               {result && !solving && (
@@ -880,7 +896,7 @@ export default function App() {
                   onClick={() => doSolve(true)}
                   title="Ignore the plan on screen and solve cold. Undo brings it back."
                 >
-                  Re-solve from scratch
+                  Solve from scratch
                 </button>
               )}
               {history.canUndo && (
@@ -1104,7 +1120,7 @@ export default function App() {
                     }
                     hint={
                       result.optimal && constrainedOptimum
-                        ? `Optimal within the ${carriedEdits ? "edits" : "plan"} you asked to keep — Re-solve from scratch may score better.`
+                        ? `Optimal within the ${carriedEdits ? "edits" : "plan"} you asked to keep — Solve from scratch may score better.`
                         : undefined
                     }
                   />
